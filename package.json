@@ -1,0 +1,40 @@
+{
+  "name": "bk-electron",
+  "version": "0.0.1",
+  "description": "betterkonachan electron version",
+  "main": "main.js",
+  "scripts": {
+    "dev": "webpack-dev-server --inline --config ./webpack/dev.js"
+  },
+  "keywords": [
+    "betterkonachan",
+    "electron"
+  ],
+  "author": "Franciscowxp@github.com",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "typescript": "^3.3.3333"
+  },
+  "devDependencies": {
+    "@types/node": "^11.11.1",
+    "@types/react": "^16.8.7",
+    "@types/react-dom": "^16.8.2",
+    "@types/webpack-env": "^1.13.9",
+    "awesome-typescript-loader": "^5.2.1",
+    "css-loader": "^2.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "postcss-color-function": "^4.0.1",
+    "postcss-import": "^12.0.1",
+    "postcss-loader": "^3.0.0",
+    "postcss-normalize": "^7.0.1",
+    "postcss-preset-env": "^6.6.0",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.1"
+  }
+}
