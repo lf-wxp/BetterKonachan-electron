@@ -4,11 +4,9 @@ const basicConfig = require('./basic');
 
 module.exports = merge(basicConfig, {
   mode: 'development',
-  entry: [
-    'webpack-dev-server/client?http://localhost:9999',
-    'webpack/hot/only-dev-server',
-    './index.tsx'
-  ],
+  entry: {
+    index: './index.tsx',
+  },
   output: {
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -24,6 +22,7 @@ module.exports = merge(basicConfig, {
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map',
+  target: 'electron-renderer',
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // enable HMR globally
     new webpack.NamedModulesPlugin(), // prints more readable module names in the browser console on HMR updates

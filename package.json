@@ -2,29 +2,39 @@
   "name": "bk-electron",
   "version": "0.0.1",
   "description": "betterkonachan electron version",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "dev": "webpack-dev-server --inline --config ./webpack/dev.js"
+    "render:dev": "webpack-dev-server --inline --config ./webpack/dev.js",
+    "build": "tsc",
+    "watch": "tsc -w main.ts --outDir ./dist",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "main:start": "electron .",
+    "main:dev": "cross-env NODE_ENV=development nodemon --watch main.ts --watch module/*.ts --exec 'electron .'",
+    "dev": "concurrently --kill-others \"npm run render:dev\" \"npm run watch\" \"npm run main:dev\""
   },
   "keywords": [
     "betterkonachan",
     "electron"
   ],
-  "author": "Franciscowxp@github.com",
+  "author": "franciscowxp@github.com",
   "license": "MIT",
   "dependencies": {
+    "electron": "^4.0.8",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "typescript": "^3.3.3333"
   },
   "devDependencies": {
-    "@types/node": "^11.11.1",
-    "@types/react": "^16.8.7",
+    "@types/node": "^11.11.3",
+    "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.2",
     "@types/webpack-env": "^1.13.9",
     "awesome-typescript-loader": "^5.2.1",
+    "concurrently": "^4.1.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
+    "nodemon": "^1.18.10",
     "postcss-color-function": "^4.0.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",

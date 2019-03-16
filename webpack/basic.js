@@ -44,7 +44,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: 'index.html', }),
+    new HtmlWebpackPlugin({ template: resolve(__dirname, '../assets/src/index.html') }),
   ],
   performance: {
     hints: false,
