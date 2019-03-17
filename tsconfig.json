@@ -4,11 +4,12 @@
         "target": "es5",
         "module": "commonjs",
         "sourceMap": true,
+        "esModuleInterop": true,
         "noEmitHelpers": true,
         "importHelpers": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "allowSyntheticDefaultImports":true,
+        "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": true,
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
@@ -31,6 +32,18 @@
             "electron"
         ],
         "paths": {
+            "~util": ["util/index"],
+            "~module/*": ["module/*"],
+            "~type": ["util/type"],
+            "~model/*": ["model/*"],
+            "~config": ["config/index"],
+            "~component/*": ["assets/src/component/*"],
+            "~service": ["assets/src/service"],
+            "~cModule/*": ["assets/src/module/*"],
+            "~cModel/*": ["assets/src/model/*"],
+            "~css/*": ["assets/src/css"],
+            "~src/*": ["assets/src/*"],
+            "~image/*": ["assets/src/image/*"]
         }
     },
     "exclude": [

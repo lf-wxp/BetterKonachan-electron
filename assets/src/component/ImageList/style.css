@@ -1,0 +1,53 @@
+figure {
+  margin: 0;
+  border: calc(var(--themeListGap) / 2) solid transparent;
+  box-sizing: border-box;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  &:hover {
+      @nest & :matches(.lImg, .lTool) {
+          transform: translateY(calc(var(--themeListToolHeight) * -1));
+      }
+  }
+}
+.lTool {
+  position: absolute;
+  display: flex;
+  height: var(--themeListToolHeight);
+  inline-size: 100%;
+  justify-content: flex-start;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  transition: transform 0.2s ease;
+  background: var(--themeListToolBgColor);
+}
+.lInfo {
+  flex: 1 1 auto;
+  font-size: 12px;
+  color: white;
+  line-height: var(--themeListToolHeight);
+  text-align: center;
+}
+.lDown {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  inline-size: var(--themeListToolHeight);
+  color: white;
+  font-size: 14px;
+  & i {
+      flex: 0 0 auto;
+  }
+}
+.lImg {
+  display: block;
+  inline-size: 100%;
+  box-sizing: border-box;
+  block-size: 100%;
+  border-radius: 2px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}

@@ -22,7 +22,7 @@ module.exports = merge(basicConfig, {
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map',
-  target: 'electron-renderer',
+  // target: 'electron-renderer',
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // enable HMR globally
     new webpack.NamedModulesPlugin(), // prints more readable module names in the browser console on HMR updates
