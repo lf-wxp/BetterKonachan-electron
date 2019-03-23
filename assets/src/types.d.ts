@@ -20,9 +20,3 @@ declare module '*.jpg' {
     export default value;
 }
 
-declare module 'react-stack-grid' {
-    const StackGrid: any;
-    const transitions: any;
-    export { transitions };
-    export default StackGrid;
-}
