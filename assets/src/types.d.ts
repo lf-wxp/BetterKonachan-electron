@@ -20,3 +20,7 @@ declare module '*.jpg' {
     export default value;
 }
 
+declare module 'react-perfect-scrollbar' {
+    const PerfectScrollbar: any;
+    export default PerfectScrollbar;
+}

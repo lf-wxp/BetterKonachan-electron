@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import Context from '~src/context';
+import { FaDownload } from 'react-icons/fa';
 import './style.css';
 
 import { IImageDom } from '~cModel/imageDom';
@@ -60,7 +61,7 @@ const calcList = (items: IImage[], width: number): IImageDom[] => {
     newItem.style = {
         width: `${width}px`,
         height: `${h}px`,
-        transform: `translate(${x}px, ${y}px)`
+        transform: `translateX(${x}px) translateY(${y}px)`
     };
 
     return newItem;
@@ -96,7 +97,7 @@ export default React.memo(() => {
     }
     handler = window.setTimeout(() => {
       setList(updateLayout(items as IImage[]));
-    }, 500);
+    }, 100);
   }
 
   useEffect((): () => void => {
@@ -104,21 +105,21 @@ export default React.memo(() => {
     return () => {
       window.removeEventListener('resize', debounceHandler);
     }
-  }, [list]);
+  }, []);
 
   return (
-    <Flipper flipKey={list} className="listWrap">
+    <Flipper flipKey={list} className="listWrap" spring="veryGentle">
       {list.map((item: IImageDom, key: number) => (
-        <Flipped key={key}>
+        <Flipped key={key} flipId={`${key}`} translate>
           <figure style={item.style} className="listItem">
-            <img className="listImg" src={item.url}/>
+            <img className="listImg" src={item.preview} />
             <div className="listTool">
               <p className="listInfo">{item.width} / {item.height}</p>
               <a href={item.url} download className="listDown" target="_blank">
-                <i className="icon-download" />
+                <FaDownload />
               </a>
             </div>
-          </figure >
+          </figure>
         </Flipped>
       ))}
     </Flipper>

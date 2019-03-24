@@ -1,16 +1,17 @@
 .listWrap {
   position: relative;
   background: none;
-  min-block-size: 100vh;
+  min-block-size: calc(100vh - var(--themeBarHeight));
 }
-.listItem{
+.listItem {
   margin: 0;
   border: calc(var(--themeListGap) / 2) solid transparent;
   box-sizing: border-box;
   border-radius: 2px;
   overflow: hidden;
   position: absolute;
-  transition: transform 0.5s ease-in-out;
+  /* transition: transform, height, width 0.5s ease-in-out; */
+  transform-origin: center;
   inset-inline-start: 0;
   inset-block-start: 0;
   &:hover {
@@ -18,6 +19,12 @@
           transform: translateY(calc(var(--themeListToolHeight) * -1));
       }
   }
+}
+.listItem-full {
+  width: 100vw!important;
+  height: 100vh!important;
+  transform: translate(0,0)!important;
+  z-index: 30;
 }
 .listTool {
   position: absolute;

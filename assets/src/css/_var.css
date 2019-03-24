@@ -27,4 +27,6 @@
   --themeListToolHeight: 25px;
   --themeListToolBgColor: color(#39cccc alpha(50%));
   --themeListGap: 10px;
+
+  --themeBarHeight: 30px;
 }

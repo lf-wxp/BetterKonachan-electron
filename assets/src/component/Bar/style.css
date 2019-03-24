@@ -1,0 +1,24 @@
+.bar {
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  display: flex;
+  block-size: var(--themeBarHeight);
+  inline-size: 100%;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+.barDrag {
+  block-size: 100%;
+  flex: 1 1 auto;
+  line-height: var(--themeBarHeight);
+  color: gray;
+  padding: 0 0 0 5px;
+  -webkit-app-region: drag;
+}
+.barIcon {
+  flex: 0 0 auto;
+  color: gray;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+}

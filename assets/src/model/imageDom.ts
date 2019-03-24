@@ -8,4 +8,5 @@ export interface IImageDom extends IImage {
     width: string;
     transform: string;
   };
+  full?: boolean;
 }

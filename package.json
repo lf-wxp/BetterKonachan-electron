@@ -19,10 +19,13 @@
   "author": "franciscowxp@github.com",
   "license": "MIT",
   "dependencies": {
+    "@types/react-icons": "^3.0.0",
     "electron": "^4.0.8",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-flip-toolkit": "^6.5.7",
+    "react-icons": "^3.5.0",
+    "react-perfect-scrollbar": "^1.4.4",
     "typescript": "^3.3.3333"
   },
   "devDependencies": {
