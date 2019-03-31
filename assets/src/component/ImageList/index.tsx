@@ -7,31 +7,43 @@ import './style.css';
 import { IImageDom } from '~cModel/imageDom';
 import { IImage } from '~model/image';
 
-const { useEffect, useState, useContext } = React;
+const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
+  return dom !== null && dom.parentElement !== null;
+}
+
+const { useEffect, useState, useContext, useRef } = React;
 let columnArray: number[] = [0];
 const maxWidth: number = 300;
 const minWidth: number = 200;
 
-const calcColumnWidth = (): { column: number; width: number } => {
-  const w: number = document.body.clientWidth;
-  const l: number = w % maxWidth;
-  let column: number;
-  let width: number;
-  if (l) {
-    column = Math.ceil(w / maxWidth);
-    width = w / column;
-  } else {
-    column = w / maxWidth;
-    width = maxWidth;
-  }
-  if (width < minWidth) {
-    column = 1;
-    width = w;
-  }
+const calcColumnWidth = (dom: HTMLElement | null): { column: number; width: number } => {
+  if (isValidDom(dom)) {
+    dom.parentElement
+    const w: number = (dom.parentElement as HTMLElement).clientWidth;
+    const l: number = w % maxWidth;
+    let column: number;
+    let width: number;
+    if (l) {
+      column = Math.ceil(w / maxWidth);
+      width = w / column;
+    } else {
+      column = w / maxWidth;
+      width = maxWidth;
+    }
+    if (width < minWidth) {
+      column = 1;
+      width = w;
+    }
 
-  return {
-    column,
-    width,
+    return {
+      column,
+      width,
+    }
+  } else {
+    return {
+      column: 0,
+      width: 0
+    }
   }
 }
 const calcColumnArray = (h: number): void => {
@@ -79,8 +91,8 @@ const shortestColumn = (): { height: number; index: number} => {
   }
 };
 
-const updateLayout = (items: IImage[]) => {
-  const { column, width } = calcColumnWidth();
+const updateLayout = (items: IImage[], dom: HTMLElement | null) => {
+  const { column, width } = calcColumnWidth(dom);
   columnArray = new Array(column).fill(0);
   const list = calcList(items, width);
   return list;
@@ -88,7 +100,8 @@ const updateLayout = (items: IImage[]) => {
 
 export default React.memo(() => {
   const { state: { items } } = useContext(Context);
-  const [list, setList] = useState(updateLayout(items as IImage[]));
+  const refDom = useRef(null);
+  const [list, setList] = useState(updateLayout(items as IImage[], refDom.current));
   let handler: number;
 
   const debounceHandler = () => {
@@ -96,32 +109,36 @@ export default React.memo(() => {
       clearTimeout(handler);
     }
     handler = window.setTimeout(() => {
-      setList(updateLayout(items as IImage[]));
+      setList(updateLayout(items as IImage[], refDom.current));
     }, 100);
   }
 
   useEffect((): () => void => {
     window.addEventListener('resize', debounceHandler);
+    console.log('dom', refDom.current);
+    setList(updateLayout(items as IImage[], refDom.current));
     return () => {
       window.removeEventListener('resize', debounceHandler);
     }
   }, []);
 
   return (
-    <Flipper flipKey={list} className="listWrap" spring="veryGentle">
-      {list.map((item: IImageDom, key: number) => (
-        <Flipped key={key} flipId={`${key}`} translate>
-          <figure style={item.style} className="listItem">
-            <img className="listImg" src={item.preview} />
-            <div className="listTool">
-              <p className="listInfo">{item.width} / {item.height}</p>
-              <a href={item.url} download className="listDown" target="_blank">
-                <FaDownload />
-              </a>
-            </div>
-          </figure>
-        </Flipped>
-      ))}
-    </Flipper>
+    <div ref={refDom}>
+      <Flipper flipKey={list} className="listWrap" spring="veryGentle">
+        {list.map((item: IImageDom, key: number) => (
+          <Flipped key={key} flipId={`${key}`} translate>
+            <figure style={item.style} className="listItem">
+              <img className="listImg" src={item.preview} />
+              <div className="listTool">
+                <p className="listInfo">{item.width} / {item.height}</p>
+                <a href={item.url} download className="listDown" target="_blank">
+                  <FaDownload />
+                </a>
+              </div>
+            </figure>
+          </Flipped>
+        ))}
+      </Flipper>
+    </div>
   );
 });

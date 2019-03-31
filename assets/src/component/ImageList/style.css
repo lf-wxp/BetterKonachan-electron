@@ -15,9 +15,9 @@
   inset-inline-start: 0;
   inset-block-start: 0;
   &:hover {
-      @nest & :matches(.listImg, .listTool) {
-          transform: translateY(calc(var(--themeListToolHeight) * -1));
-      }
+    @nest & :matches(.listImg, .listTool) {
+      transform: translateY(calc(var(--themeListToolHeight) * -1));
+    }
   }
 }
 .listItem-full {

@@ -1,3 +1,10 @@
+:root {
+  --closeBarColor: #e17055;
+  --expandBarColor: #0984e3;
+  --miniBarColor: #b2bec3;
+  --barItemSize: 16px;
+  --barItemH: 4px;
+}
 .bar {
   inset-block-start: 0;
   inset-inline-start: 0;
@@ -6,19 +13,117 @@
   inline-size: 100%;
   flex-flow: row nowrap;
   justify-content: flex-end;
+  &>span {
+    position: relative;
+    inline-size: var(--barItemSize);
+    block-size: var(--barItemSize);
+    cursor: pointer;
+    box-sizing: border-box;
+    margin: 5px 2px;
+  }
 }
-.barDrag {
-  block-size: 100%;
-  flex: 1 1 auto;
-  line-height: var(--themeBarHeight);
-  color: gray;
-  padding: 0 0 0 5px;
-  -webkit-app-region: drag;
+.barClose {
+  color: var(--closeBarColor);
+  &:before, &:after {
+    position: absolute;
+    inset-inline: 0;
+    inset-block: 0;
+    margin: auto;
+    background-color: currentColor;
+    content: "";
+    inline-size: 100%;
+    block-size: var(--barItemH);
+    border-radius: 4px;
+    animation: breath 2s ease-in-out 0s infinite alternate both;
+    transition: transform .2s ease;
+  }
+  &:hover {
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
 }
-.barIcon {
-  flex: 0 0 auto;
-  color: gray;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 5px;
+.barExpand {
+  color: var(--expandBarColor);
+  & > span {
+    &:before, &:after {
+      position: absolute;
+      inset-inline: 0;
+      inset-block: 0;
+      margin: auto;
+      background-color: currentColor;
+      content: "";
+      inline-size: calc(var(--barItemSize) - 2 * var(--barItemH));
+      block-size: var(--barItemH);
+      animation: breath 2s ease-in-out 0s infinite alternate both;
+      transition: transform .2s ease;
+    }
+  }
+  &:before, &:after {
+    position: absolute;
+    inset-inline: 0;
+    inset-block: 0;
+    margin: auto;
+    background-color: currentColor;
+    content: "";
+    inline-size: 100%;
+    block-size: var(--barItemH);
+    border-radius: 4px;
+    animation: breath 2s ease-in-out 0s infinite alternate both;
+    transition: transform .2s ease;
+  }
+  &:hover {
+    &:before {
+      transform: translateX(calc(var(--barItemSize) / 2 - var(--barItemH) / 2)) rotate(90deg);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &:after {
+      transform: translateX(calc(var(--barItemH) / 2 - var(--barItemSize) / 2)) rotate(-90deg);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &>span {
+      &:before {
+        transform: translateY(calc(var(--barItemSize) / 2 - var(--barItemH) / 2));
+      }
+      &:after {
+        transform: translateY(calc(var(--barItemH) / 2 - var(--barItemSize) / 2));
+      }
+    }
+  }
+}
+
+.barMini {
+  color: var(--miniBarColor);
+  &:before {
+    position: absolute;
+    inset-inline: 0;
+    inset-block: 0;
+    margin: auto;
+    background-color: currentColor;
+    content: "";
+    inline-size: 100%;
+    block-size: var(--barItemH);
+    border-radius: 4px;
+    animation: breath 2s ease-in-out 0s infinite alternate both;
+    transition: transform .2s ease;
+  }
+  &:hover {
+    &:before {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+@keyframes breath {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: .5;
+  }
 }

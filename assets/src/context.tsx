@@ -2,10 +2,10 @@ import * as React from 'react';
 import { ICtx } from '~cModel/ctx';
 import { IAction } from '~cModel/action';
 
-
 const initState: ICtx = {
   bgUri: '',
   pages: 0,
+  page: 0,
   items: [{
     id: 0,
     sampleWidth: 0,
@@ -22,7 +22,7 @@ const initState: ICtx = {
   }],
 };
 
-const reducer = (state: Partial<ICtx>, { type, payload }: IAction<ICtx>) => {
+const reducer = (state: ICtx, { type, payload }: IAction<ICtx>) => {
   switch(type) {
     case 'updateState':
       return { ...state, ...payload };

@@ -1,8 +1,19 @@
+:root {
+  --minLeftWidth: 140px;
+}
 #root {
   block-size: 100vh;
   overflow: hidden;
+  display: flex;
+  justify-content: flex-start;
 }
-.wrap {
+.wrapLeft {
+  flex: 0 0 auto;
+  background: #27293d;
+  min-inline-size: var(--minLeftWidth);
+}
+.wrapRight {
+  flex: 1 1 auto;
   block-size: calc(100vh - var(--themeBarHeight));
   overflow-y: auto;
 }
