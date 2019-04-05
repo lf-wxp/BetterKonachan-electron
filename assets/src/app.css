@@ -1,19 +1,30 @@
-:root {
-  --minLeftWidth: 140px;
-}
 #root {
   block-size: 100vh;
   overflow: hidden;
+  background: none;
   display: flex;
   justify-content: flex-start;
 }
 .wrapLeft {
+  display: flex;
   flex: 0 0 auto;
+  flex-flow: column nowrap;
+  max-inline-size: var(--themeMaxLeftWidth);
+  min-inline-size: var(--themeMinLeftWidth);
   background: #27293d;
-  min-inline-size: var(--minLeftWidth);
+  & > section {
+    margin: 10px;
+    margin-block-start: 0;
+    box-sizing: border-box;
+  }
 }
 .wrapRight {
   flex: 1 1 auto;
-  block-size: calc(100vh - var(--themeBarHeight));
+  block-size: 100vh;
   overflow-y: auto;
+  background: none;
+}
+
+.test {
+  border-radius: 30px;
 }

@@ -1,7 +1,8 @@
 .pager {
+  flex: 0 0 auto;
   inline-size: calc(3 * var(--themePageItemSize));
   block-size: calc(3 * var(--themePageItemSize));
-  position: absolute;
+  position: relative;
   z-index: 2;
   &.active {
     animation: none;

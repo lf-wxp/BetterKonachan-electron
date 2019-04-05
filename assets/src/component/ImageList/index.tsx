@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { Flipper, Flipped } from 'react-flip-toolkit';
 import Context from '~src/context';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FaDownload } from 'react-icons/fa';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
 
 import { IImageDom } from '~cModel/imageDom';
 import { IImage } from '~model/image';
+import { IDownload } from '~cModel/download';
 
 const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
   return dom !== null && dom.parentElement !== null;
@@ -99,7 +102,7 @@ const updateLayout = (items: IImage[], dom: HTMLElement | null) => {
 };
 
 export default React.memo(() => {
-  const { state: { items } } = useContext(Context);
+  const { state: { items, download }, dispatch } = useContext(Context);
   const refDom = useRef(null);
   const [list, setList] = useState(updateLayout(items as IImage[], refDom.current));
   let handler: number;
@@ -111,11 +114,29 @@ export default React.memo(() => {
     handler = window.setTimeout(() => {
       setList(updateLayout(items as IImage[], refDom.current));
     }, 100);
-  }
+  };
+
+  const handleDownload = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const target: HTMLElement = e.currentTarget as HTMLElement;
+    const { index } = target.dataset;
+    const url = items[Number.parseInt(index as string, 10) as number].preview;
+    const data: IDownload = {
+      url,
+      percent: '40%',
+    };
+    if (!download.find(({ url }) => url === data.url)) {
+      dispatch({
+        type: 'updateState',
+        payload: {
+          download: [...download, data ],
+        },
+      });
+    }
+  };
 
   useEffect((): () => void => {
     window.addEventListener('resize', debounceHandler);
-    console.log('dom', refDom.current);
     setList(updateLayout(items as IImage[], refDom.current));
     return () => {
       window.removeEventListener('resize', debounceHandler);
@@ -124,21 +145,23 @@ export default React.memo(() => {
 
   return (
     <div ref={refDom}>
-      <Flipper flipKey={list} className="listWrap" spring="veryGentle">
-        {list.map((item: IImageDom, key: number) => (
-          <Flipped key={key} flipId={`${key}`} translate>
-            <figure style={item.style} className="listItem">
-              <img className="listImg" src={item.preview} />
-              <div className="listTool">
-                <p className="listInfo">{item.width} / {item.height}</p>
-                <a href={item.url} download className="listDown" target="_blank">
-                  <FaDownload />
-                </a>
-              </div>
-            </figure>
-          </Flipped>
-        ))}
-      </Flipper>
+      <PerfectScrollbar>
+        <Flipper flipKey={list} className="listWrap" spring="veryGentle">
+          {list.map((item: IImageDom, key: number) => (
+            <Flipped key={key} flipId={`${key}`} translate>
+              <figure style={item.style} className="listItem">
+                <img className="listImg" src={item.preview} />
+                <div className="listTool">
+                  <p className="listInfo">{item.width} / {item.height}</p>
+                  <a href={item.url} className="listDown" target="_blank" data-index={key} onClick={handleDownload}>
+                    <FaDownload />
+                  </a>
+                </div>
+              </figure>
+            </Flipped>
+          ))}
+        </Flipper>
+      </PerfectScrollbar>
     </div>
   );
 });

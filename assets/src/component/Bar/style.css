@@ -1,29 +1,23 @@
-:root {
-  --closeBarColor: #e17055;
-  --expandBarColor: #0984e3;
-  --miniBarColor: #b2bec3;
-  --barItemSize: 16px;
-  --barItemH: 4px;
-}
 .bar {
   inset-block-start: 0;
   inset-inline-start: 0;
   display: flex;
+  flex: 0 0 auto;
   block-size: var(--themeBarHeight);
-  inline-size: 100%;
   flex-flow: row nowrap;
-  justify-content: flex-end;
+  -webkit-app-region: drag;
   &>span {
     position: relative;
-    inline-size: var(--barItemSize);
-    block-size: var(--barItemSize);
+    inline-size: var(--themeBarItemSize);
+    block-size: var(--themeBarItemSize);
     cursor: pointer;
     box-sizing: border-box;
     margin: 5px 2px;
+    -webkit-app-region: no-drag;
   }
 }
 .barClose {
-  color: var(--closeBarColor);
+  color: var(--themeBarCloseColor);
   &:before, &:after {
     position: absolute;
     inset-inline: 0;
@@ -32,7 +26,7 @@
     background-color: currentColor;
     content: "";
     inline-size: 100%;
-    block-size: var(--barItemH);
+    block-size: var(--themeBarItemH);
     border-radius: 4px;
     animation: breath 2s ease-in-out 0s infinite alternate both;
     transition: transform .2s ease;
@@ -47,7 +41,7 @@
   }
 }
 .barExpand {
-  color: var(--expandBarColor);
+  color: var(--themeBarExpandColor);
   & > span {
     &:before, &:after {
       position: absolute;
@@ -56,8 +50,8 @@
       margin: auto;
       background-color: currentColor;
       content: "";
-      inline-size: calc(var(--barItemSize) - 2 * var(--barItemH));
-      block-size: var(--barItemH);
+      inline-size: calc(var(--themeBarItemSize) - 2 * var(--themeBarItemH));
+      block-size: var(--themeBarItemH);
       animation: breath 2s ease-in-out 0s infinite alternate both;
       transition: transform .2s ease;
     }
@@ -70,35 +64,35 @@
     background-color: currentColor;
     content: "";
     inline-size: 100%;
-    block-size: var(--barItemH);
+    block-size: var(--themeBarItemH);
     border-radius: 4px;
     animation: breath 2s ease-in-out 0s infinite alternate both;
     transition: transform .2s ease;
   }
   &:hover {
     &:before {
-      transform: translateX(calc(var(--barItemSize) / 2 - var(--barItemH) / 2)) rotate(90deg);
+      transform: translateX(calc(var(--themeBarItemSize) / 2 - var(--themeBarItemH) / 2)) rotate(90deg);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
     &:after {
-      transform: translateX(calc(var(--barItemH) / 2 - var(--barItemSize) / 2)) rotate(-90deg);
+      transform: translateX(calc(var(--themeBarItemH) / 2 - var(--themeBarItemSize) / 2)) rotate(-90deg);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
     }
     &>span {
       &:before {
-        transform: translateY(calc(var(--barItemSize) / 2 - var(--barItemH) / 2));
+        transform: translateY(calc(var(--themeBarItemSize) / 2 - var(--themeBarItemH) / 2));
       }
       &:after {
-        transform: translateY(calc(var(--barItemH) / 2 - var(--barItemSize) / 2));
+        transform: translateY(calc(var(--themeBarItemH) / 2 - var(--themeBarItemSize) / 2));
       }
     }
   }
 }
 
 .barMini {
-  color: var(--miniBarColor);
+  color: var(--themeBarMiniColor);
   &:before {
     position: absolute;
     inset-inline: 0;
@@ -107,7 +101,7 @@
     background-color: currentColor;
     content: "";
     inline-size: 100%;
-    block-size: var(--barItemH);
+    block-size: var(--themeBarItemH);
     border-radius: 4px;
     animation: breath 2s ease-in-out 0s infinite alternate both;
     transition: transform .2s ease;

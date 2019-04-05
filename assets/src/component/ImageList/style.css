@@ -1,7 +1,7 @@
 .listWrap {
   position: relative;
   background: none;
-  min-block-size: calc(100vh - var(--themeBarHeight));
+  min-block-size: 100vh;
 }
 .listItem {
   margin: 0;

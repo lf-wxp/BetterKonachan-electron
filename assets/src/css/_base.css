@@ -41,6 +41,7 @@ body {
   transition: color .2s ease-in-out;
   overflow: hidden;
   background-color: #252323;
+  border-radius: var(--themeWindowRadius);
   margin: 0;
 }
 p {

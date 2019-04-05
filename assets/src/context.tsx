@@ -6,6 +6,9 @@ const initState: ICtx = {
   bgUri: '',
   pages: 0,
   page: 0,
+  security: true,
+  expand: false,
+  download: [],
   items: [{
     id: 0,
     sampleWidth: 0,
