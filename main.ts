@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { isValidType }  from '~util';
+import { download } from 'electron-dl';
 import { Image } from '~module/image';
 import { IImage } from '~model/image';
 import * as path from 'path';
@@ -70,4 +71,12 @@ ipcMain.on('window-max', (): void => {
       mainWindow.maximize();
     }
   }
+});
+
+ipcMain.on('download', (event: Electron.Event, { url, index }: { url: string; index: number }) => {
+  download(mainWindow as BrowserWindow, url, {
+    onProgress: (progress: number) => {
+      event.sender.send('progress', { progress, index });
+    },
+  });
 });

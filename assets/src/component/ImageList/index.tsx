@@ -9,6 +9,7 @@ import './style.css';
 import { IImageDom } from '~cModel/imageDom';
 import { IImage } from '~model/image';
 import { IDownload } from '~cModel/download';
+import { ipcRenderer } from 'electron';
 
 const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
   return dom !== null && dom.parentElement !== null;
@@ -122,10 +123,11 @@ export default React.memo(() => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget as HTMLElement;
     const { index } = target.dataset;
-    const url = items[Number.parseInt(index as string, 10) as number].preview;
+    const item = items[Number.parseInt(index as string, 10) as number];
+    const url = item.preview;
     const data: IDownload = {
       url,
-      percent: '40%',
+      percent: '0%',
     };
     if (!download.find(({ url }) => url === data.url)) {
       dispatch({
@@ -134,6 +136,7 @@ export default React.memo(() => {
           download: [...download, data ],
         },
       });
+      ipcRenderer.send('download', { url: item.url, index:download.length })
     }
   };
 
@@ -148,7 +151,7 @@ export default React.memo(() => {
       <PerfectScrollbar>
         <div ref={refDom} className="listWrap">
           {list.map((item: IImageDom, key: number) => (
-            <figure style={item.style} className="listItem">
+            <figure key={key} style={item.style} className="listItem">
               <img className="listImg" src={item.preview} />
               <div className="listTool">
                 <p className="listInfo">{item.width} / {item.height}</p>

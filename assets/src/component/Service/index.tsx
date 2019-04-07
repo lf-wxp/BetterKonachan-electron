@@ -8,17 +8,16 @@ const { useContext, useEffect } = React;
 export default React.memo(() => {
   const { dispatch } = useContext(Context);
 
-  ipcRenderer.on('image-data', (event: Electron.Event, { images, pages, page }: IImageList) => {
-    dispatch({
-      type: 'updateState',
-      payload: {
-        items: images,
-        pages,
-      },
+  useEffect((): () => void => {
+    ipcRenderer.on('image-data', (event: Electron.Event, { images, pages, page }: IImageList) => {
+      dispatch({
+        type: 'updateState',
+        payload: {
+          items: images,
+          pages,
+        },
+      });
     });
-  });
-
-  useEffect((): void => {
     ipcRenderer.send('image-post', { page: 1, tags: '' });
     dispatch({
       type: 'updateState',
@@ -26,6 +25,9 @@ export default React.memo(() => {
         page: 1,
       },
     });
+    return () => {
+      ipcRenderer.removeAllListeners('image-data');
+    }
   }, []);
 
   return null;

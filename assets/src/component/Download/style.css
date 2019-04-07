@@ -17,10 +17,17 @@
   flex: 0 0 auto;
   inline-size: var(--themeDownloadItemWidth);
   margin-block-end: 10px;
+  position: relative;
   & img {
     block-size: var(--themeDownloadItemHeight);
     border-radius: 2px;
     inline-size: 100%;
     object-fit: cover;
   }
+}
+.downloadIcon {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  color: var(--themeBaseColor);
 }

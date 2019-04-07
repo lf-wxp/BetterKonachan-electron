@@ -29,6 +29,13 @@ const reducer = (state: ICtx, { type, payload }: IAction<ICtx>) => {
   switch(type) {
     case 'updateState':
       return { ...state, ...payload };
+    case 'updateProgress':
+      const { download } = state;
+      //@ts-ignore
+      const { index, percent } = payload;
+      const tmp = [...download];
+      tmp[index].percent = percent;
+      return { ...state, download: tmp };
     default:
       return { ...state };
   }

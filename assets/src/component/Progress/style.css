@@ -8,6 +8,7 @@
   overflow: hidden;
   & span {
     position: absolute;
+    transition: width .2s ease;
     background-color: var(--themeProgressInner);
     block-size: 100%;
     inline-size: 100%;

@@ -43,10 +43,9 @@ export default React.memo(() => {
   const { state: { page, pages }, dispatch } = useContext(Context);
   const pageArray = getPageArray(page, pages);
   const [statePage, setStatePage] = useState();
-  const invoke = (event: React.MouseEvent) => {
-    const { id } = (event.currentTarget as HTMLElement).dataset;
-    const page = Number.parseInt(id as string, 10);
-    ipcRenderer.send('image-post', { page, tags: ''})
+
+  const getData = (page: number, tags: string = ''): void => {
+    ipcRenderer.send('image-post', { page, tags })
     dispatch({
       type: 'updateState',
       payload: {
@@ -54,22 +53,50 @@ export default React.memo(() => {
       },
     });
   }
+  const invoke = (event: React.MouseEvent) => {
+    const { id } = (event.currentTarget as HTMLElement).dataset;
+    const page = Number.parseInt(id as string, 10);
+    getData(page);
+  }
 
-  const filterInput = () => {
 
+  const onChange = (event: React.ChangeEvent): void => {
+    const target: HTMLInputElement = event.currentTarget as HTMLInputElement;
+    const val: string = target.value;
+    const value = val.replace(/[^0-9]/g, '');
+    let num: number | string = Number.parseInt(value, 10) || '';
+    if (num > pages) {
+        num = pages;
+    }
+    if (num < 0) {
+        num = 1;
+    }
+    setStatePage(num);
   }
 
   const goTo = (event: React.MouseEvent) => {
     event.preventDefault();
-    console.log('page', page);
+    getData(statePage);
+  }
+
+  const prev = (): void => {
+    if (page - 1 > 0) {
+      getData(page - 1);
+    }
+  }
+
+  const next = (): void => {
+    if (page + 1 < pages) {
+      getData(page + 1);
+    }
   }
 
   return (
     <section className={`pager ${pageArray.length ? 'active': ''}`}>
-      <span className={`pNav ${page - 1 ? '' : 'disabled'}`}>
+      <span className={`pNav ${page - 1 ? '' : 'disabled'}`} onClick={prev}>
         <i />
       </span>
-      <span className={`pNav ${pages - page > 0 ? '':'disabled'}`}>
+      <span className={`pNav ${pages - page > 0 ? '':'disabled'}`} onClick={next}>
         <i />
       </span>
       <div className="pCon">
@@ -87,7 +114,7 @@ export default React.memo(() => {
           <span className="pGotoSpan">{pages}</span>
         </div>
         <div className="pGotoDiv">
-         <input className="pGotoInput" type="text" placeholder="page" name="pager" value={statePage} onChange={filterInput} />
+         <input className="pGotoInput" type="text" placeholder="page" name="pager" value={statePage} onChange={onChange} />
         </div>
         <button className="pBtn" onClick={goTo}>
           <span />
