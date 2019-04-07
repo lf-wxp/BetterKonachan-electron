@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flipper, Flipped } from 'react-flip-toolkit';
+// import { Flipper, Flipped } from 'react-flip-toolkit';
 import Context from '~src/context';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FaDownload } from 'react-icons/fa';
@@ -14,7 +14,7 @@ const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
   return dom !== null && dom.parentElement !== null;
 }
 
-const { useEffect, useState, useContext, useRef } = React;
+const { useEffect, useContext, useRef, useState } = React;
 let columnArray: number[] = [0];
 const maxWidth: number = 300;
 const minWidth: number = 200;
@@ -41,7 +41,7 @@ const calcColumnWidth = (dom: HTMLElement | null): { column: number; width: numb
     return {
       column,
       width,
-    }
+    };
   } else {
     return {
       column: 0,
@@ -101,21 +101,23 @@ const updateLayout = (items: IImage[], dom: HTMLElement | null) => {
   return list;
 };
 
+
 export default React.memo(() => {
   const { state: { items, download }, dispatch } = useContext(Context);
   const refDom = useRef(null);
-  const [list, setList] = useState(updateLayout(items as IImage[], refDom.current));
+  const winWidthState = useState(window.innerWidth);
   let handler: number;
-
+  let list: IImageDom[];
+  list = updateLayout(items as IImage[], refDom.current);
   const debounceHandler = () => {
     if (handler) {
       clearTimeout(handler);
     }
     handler = window.setTimeout(() => {
-      setList(updateLayout(items as IImage[], refDom.current));
-    }, 100);
+      list = updateLayout(items as IImage[], refDom.current);
+      winWidthState[1](window.innerWidth);
+    }, 500);
   };
-
   const handleDownload = (e: React.MouseEvent) => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget as HTMLElement;
@@ -137,31 +139,26 @@ export default React.memo(() => {
 
   useEffect((): () => void => {
     window.addEventListener('resize', debounceHandler);
-    setList(updateLayout(items as IImage[], refDom.current));
     return () => {
       window.removeEventListener('resize', debounceHandler);
     }
   }, []);
 
   return (
-    <div ref={refDom}>
       <PerfectScrollbar>
-        <Flipper flipKey={list} className="listWrap" spring="veryGentle">
+        <div ref={refDom} className="listWrap">
           {list.map((item: IImageDom, key: number) => (
-            <Flipped key={key} flipId={`${key}`} translate>
-              <figure style={item.style} className="listItem">
-                <img className="listImg" src={item.preview} />
-                <div className="listTool">
-                  <p className="listInfo">{item.width} / {item.height}</p>
-                  <a href={item.url} className="listDown" target="_blank" data-index={key} onClick={handleDownload}>
-                    <FaDownload />
-                  </a>
-                </div>
-              </figure>
-            </Flipped>
+            <figure style={item.style} className="listItem">
+              <img className="listImg" src={item.preview} />
+              <div className="listTool">
+                <p className="listInfo">{item.width} / {item.height}</p>
+                <a href={item.url} className="listDown" target="_blank" data-index={key} onClick={handleDownload}>
+                  <FaDownload />
+                </a>
+              </div>
+            </figure>
           ))}
-        </Flipper>
+        </div>
       </PerfectScrollbar>
-    </div>
   );
 });

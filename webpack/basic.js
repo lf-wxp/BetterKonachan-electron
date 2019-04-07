@@ -1,24 +1,23 @@
 const { resolve } = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './index.tsx',
   resolve: {
     alias: {
       '~component': resolve(__dirname, '../assets/src/component'),
-      '~service': resolve(__dirname, '../assets/src/service.ts'),
+      '~util': resolve(__dirname, '../util/index.ts'),
       '~cModule': resolve(__dirname, '../assets/src/module'),
       '~css': resolve(__dirname, '../assets/src/css'),
       '~src': resolve(__dirname, '../assets/src/'),
       '~font': resolve(__dirname, '../assets/src/font'),
       '~image': resolve(__dirname, '../assets/src/image'),
       '~model': resolve(__dirname, '../model'),
+      '~module': resolve(__dirname, '../module'),
+      '~config': resolve(__dirname, '../config'),
       '~cModel': resolve(__dirname, '../assets/src/model'),
     },
     modules: [resolve(__dirname, '../modules'), 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
-  context: resolve(__dirname, '../assets/src/'),
   module: {
     rules: [
       {
@@ -55,9 +54,6 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({ template: resolve(__dirname, '../assets/src/index.html') }),
-  ],
   performance: {
     hints: false,
   },

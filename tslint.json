@@ -10,10 +10,8 @@
         "no-implicit-dependencies": [
             true,
             [
-                "~db",
                 "~model",
                 "~module",
-                "~type",
                 "~config",
                 "~controller",
                 "~route",

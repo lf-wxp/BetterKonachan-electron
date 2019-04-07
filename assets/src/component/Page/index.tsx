@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { ipcRenderer } from 'electron';
 import Context from '~src/context';
 import './style.css';
 
-const { useContext } = React;
+const { useContext, useState } = React;
 const size = 4;
 const getPageArray = (page: number, pages: number): number[] => {
+  if (pages === 0) return [];
   const half: number = Math.floor(size / 2);
   const navpage: number[] = [];
   if (page > half && page < pages - half) {
@@ -40,22 +42,30 @@ const getPageArray = (page: number, pages: number): number[] => {
 export default React.memo(() => {
   const { state: { page, pages }, dispatch } = useContext(Context);
   const pageArray = getPageArray(page, pages);
+  const [statePage, setStatePage] = useState();
   const invoke = (event: React.MouseEvent) => {
     const { id } = (event.currentTarget as HTMLElement).dataset;
-    dispatch({ type: 'updateState', payload: { page: Number.parseInt(id as string, 10) }});
+    const page = Number.parseInt(id as string, 10);
+    ipcRenderer.send('image-post', { page, tags: ''})
+    dispatch({
+      type: 'updateState',
+      payload: {
+        page,
+      },
+    });
   }
 
   const filterInput = () => {
 
   }
 
-  const goTo = () => {
-
+  const goTo = (event: React.MouseEvent) => {
+    event.preventDefault();
+    console.log('page', page);
   }
 
-  console.log('pageArray', pageArray, page, pages);
   return (
-    <section className="pager active">
+    <section className={`pager ${pageArray.length ? 'active': ''}`}>
       <span className={`pNav ${page - 1 ? '' : 'disabled'}`}>
         <i />
       </span>
@@ -77,7 +87,7 @@ export default React.memo(() => {
           <span className="pGotoSpan">{pages}</span>
         </div>
         <div className="pGotoDiv">
-         <input className="pGotoInput" type="text" placeholder="page" name="pager" onChange={filterInput} />
+         <input className="pGotoInput" type="text" placeholder="page" name="pager" value={statePage} onChange={filterInput} />
         </div>
         <button className="pBtn" onClick={goTo}>
           <span />

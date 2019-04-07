@@ -30,4 +30,5 @@ export interface IResImage {
 export interface IImageList {
   images: IImage[];
   pages: number;
+  page?: number;
 }

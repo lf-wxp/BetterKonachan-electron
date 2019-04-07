@@ -1,14 +1,18 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
+import { isValidType }  from '~util';
+import { Image } from '~module/image';
+import { IImage } from '~model/image';
 import * as path from 'path';
 
 let mainWindow: Electron.BrowserWindow | null;
 
-function createWindow(): void {
+const createWindow = (): void => {
   mainWindow = new BrowserWindow({
     transparent: true,
     height: 600,
     width: 800,
     frame: false,
+    webPreferences: {webSecurity: false},
   });
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:9999/index.html');
@@ -39,6 +43,31 @@ app.on('activate', (): void => {
   }
 });
 
-ipcMain.on('custom-get-images', (): void => {
+ipcMain.on('image-post', async (event: Electron.Event, { page, tags }: { page: number; tags:string; }): Promise<void> => {
+  const pages: number = await Image.getPage();
+  const images: IImage[] = await Image.getData({ page, tags });
+  event.sender.send('image-data', { images, pages, page });
+});
 
+
+ipcMain.on('window-close', (): void => {
+  if (isValidType<Electron.BrowserWindow>(mainWindow)) {
+    mainWindow.close();
+  }
+});
+
+ipcMain.on('window-min', (): void => {
+  if (isValidType<Electron.BrowserWindow>(mainWindow)) {
+    mainWindow.minimize();
+  }
+});
+
+ipcMain.on('window-max', (): void => {
+  if (isValidType<Electron.BrowserWindow>(mainWindow)) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.restore();
+    } else {
+      mainWindow.maximize();
+    }
+  }
 });
