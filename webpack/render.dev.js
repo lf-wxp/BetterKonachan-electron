@@ -6,7 +6,7 @@ const path = require('path');
 
 module.exports = merge(basicConfig, {
   mode: 'development',
-  entry: './index.tsx',
+  entry: { index: './index.tsx' },
   context: path.resolve(__dirname, '../assets/src/'),
   output: {
     filename: '[name].js',
