@@ -1,15 +1,16 @@
 import * as React from 'react';
-// import { Flipper, Flipped } from 'react-flip-toolkit';
 import Context from '~src/context';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { FaDownload } from 'react-icons/fa';
-import 'react-perfect-scrollbar/dist/css/styles.css';
-import './style.css';
+import { ipcRenderer } from 'electron';
 
 import { IImageDom } from '~cModel/imageDom';
+import { EAction } from '~cModel/action';
 import { IImage } from '~model/image';
 import { IDownload } from '~cModel/download';
-import { ipcRenderer } from 'electron';
+
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import './style.css';
 
 const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
   return dom !== null && dom.parentElement !== null;
@@ -131,10 +132,8 @@ export default React.memo(() => {
     };
     if (!download.find(({ url }) => url === data.url)) {
       dispatch({
-        type: 'updateState',
-        payload: {
-          download: [...download, data ],
-        },
+        type: EAction.setDownload,
+        payload: [...download, data ],
       });
       ipcRenderer.send('download', { url: item.url, index:download.length })
     }

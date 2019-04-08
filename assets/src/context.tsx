@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { ICtx } from '~cModel/ctx';
-import { IAction } from '~cModel/action';
+import { IAction, EAction, IUpdateProgressPayload } from '~cModel/action';
+import { IImage } from '~model/image';
+import { IDownload } from '~cModel/download';
 
 const initState: ICtx = {
   bgUri: '',
@@ -25,14 +27,25 @@ const initState: ICtx = {
   }],
 };
 
-const reducer = (state: ICtx, { type, payload }: IAction<ICtx>) => {
+const reducer = (state: ICtx, { type, payload }: IAction) => {
   switch(type) {
-    case 'updateState':
-      return { ...state, ...payload };
-    case 'updateProgress':
+    case EAction.setBgUri:
+      return { ...state, bgUri: payload as string };
+    case EAction.setExpand:
+      return { ...state, expand: payload as boolean };
+    case EAction.setPage:
+      return { ...state, page: payload as number };
+    case EAction.setPages:
+      return { ...state, pages: payload as number };
+    case EAction.setSecurity:
+      return { ...state, security: payload as boolean };
+    case EAction.setItems:
+      return { ...state, items: payload as IImage[] };
+    case EAction.setDownload:
+      return { ...state, download: payload as IDownload[] };
+    case EAction.setProgress:
       const { download } = state;
-      //@ts-ignore
-      const { index, percent } = payload;
+      const { index, percent } = payload as IUpdateProgressPayload;
       const tmp = [...download];
       tmp[index].percent = percent;
       return { ...state, download: tmp };
@@ -41,7 +54,7 @@ const reducer = (state: ICtx, { type, payload }: IAction<ICtx>) => {
   }
 };
 
-const Context = React.createContext<{state: ICtx; dispatch?: any}>({ state: initState });
+const Context = React.createContext<{state: ICtx; dispatch: React.Dispatch<IAction>}>({ state: initState, dispatch: () => {} });
 
 const Provider = (props: { children: React.ReactNode; value: ICtx }) => {
   const [state, dispatch] = React.useReducer(reducer, props.value);

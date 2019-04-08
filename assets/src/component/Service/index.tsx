@@ -1,6 +1,8 @@
 import * as React from 'react';
-import Context from '~src/context';
 import { ipcRenderer } from 'electron';
+import Context from '~src/context';
+
+import { EAction } from '~cModel/action';
 import { IImageList } from '~model/image';
 
 const { useContext, useEffect } = React;
@@ -11,19 +13,18 @@ export default React.memo(() => {
   useEffect((): () => void => {
     ipcRenderer.on('image-data', (event: Electron.Event, { images, pages, page }: IImageList) => {
       dispatch({
-        type: 'updateState',
-        payload: {
-          items: images,
-          pages,
-        },
+        type: EAction.setItems,
+        payload: images,
+      });
+      dispatch({
+        type: EAction.setPages,
+        payload: pages,
       });
     });
     ipcRenderer.send('image-post', { page: 1, tags: '' });
     dispatch({
-      type: 'updateState',
-      payload: {
-        page: 1,
-      },
+      type: EAction.setPage,
+      payload: 1,
     });
     return () => {
       ipcRenderer.removeAllListeners('image-data');

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
+
 import Context from '~src/context';
+import { EAction } from '~cModel/action';
+
 import './style.css';
 
 const { useContext, useState } = React;
@@ -47,10 +50,8 @@ export default React.memo(() => {
   const getData = (page: number, tags: string = ''): void => {
     ipcRenderer.send('image-post', { page, tags })
     dispatch({
-      type: 'updateState',
-      payload: {
-        page,
-      },
+      type: EAction.setPage,
+      payload: page,
     });
   }
   const invoke = (event: React.MouseEvent) => {

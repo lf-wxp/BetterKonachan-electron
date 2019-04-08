@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
-import Context from '~src/context';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import Progress from '~component/Progress';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import Context from '~src/context';
+
+import { EAction } from '~cModel/action';
+
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
 
@@ -15,7 +18,7 @@ export default React.memo(() => {
     ipcRenderer.on('progress', (event: Electron.Event, { progress, index }: { progress: number; index: number } ) => {
       const percent = `${progress * 100}%`;
       dispatch({
-        type: 'updateProgress',
+        type: EAction.setProgress,
         payload: {
           index,
           percent,

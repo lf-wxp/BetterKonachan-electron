@@ -1,13 +1,21 @@
+import { ICtx } from './ctx';
 
+export enum EAction {
+  setBgUri = 'setBgUri',
+  setItems = 'setItems',
+  setPage = 'setPage',
+  setPages = 'setPages',
+  setSecurity = 'setSecurity',
+  setExpand = 'setExpand',
+  setDownload = 'setDownload',
+  setProgress = 'setProgress',
+}
 
-// interface IPayload<T> extends IUpdateProgressPayload { 
-// }
 export interface IUpdateProgressPayload {
   index: number;
   percent: string;
 }
-export interface IAction<T> {
-  type: string;
-  // payload: TPayload<T,IUpdateProgressPayload>;
-  payload: Partial<T>;
+export interface IAction {
+  type: EAction;
+  payload: ICtx[keyof ICtx] | IUpdateProgressPayload;
 }

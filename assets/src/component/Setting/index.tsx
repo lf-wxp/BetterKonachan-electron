@@ -1,12 +1,15 @@
 import * as React from 'react';
-import './style.css';
 import Context from '~src/context';
+
+import { EAction } from '~cModel/action';
+
+import './style.css';
 
 const { useContext } = React;
 export default React.memo(() => {
   const { state: { security }, dispatch } = useContext(Context);
   const handleChange = () => {
-    dispatch({ type: 'updateState', payload: { security: !security }});
+    dispatch({ type: EAction.setSecurity, payload: !security });
   }
 
   return (

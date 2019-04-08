@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Context from '~src/context';
+
 import './style.css';
 
 const { useContext }  = React;

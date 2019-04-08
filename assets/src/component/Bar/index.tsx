@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ipcRenderer } from 'electron';
+
 import './style.css';
 
 export default React.memo(() => {

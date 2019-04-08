@@ -2,7 +2,7 @@ import { IImage } from '~model/image';
 import { IDownload } from '~cModel/download';
 
 export interface ICtx {
-  bgUri?: string;
+  bgUri: string;
   items: IImage[];
   pages: number;
   page: number;
