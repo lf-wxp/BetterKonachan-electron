@@ -35,11 +35,13 @@
   "license": "MIT",
   "dependencies": {
     "@types/cheerio": "^0.22.11",
+    "@types/electron-window-state": "^2.0.33",
     "@types/react-icons": "^3.0.0",
     "@types/react-spinkit": "^3.0.5",
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.3",
     "electron-dl": "^1.14.0",
+    "electron-window-state": "^5.0.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-flip-toolkit": "^6.5.7",

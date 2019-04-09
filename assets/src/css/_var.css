@@ -25,7 +25,7 @@
 
   --themeBackgroundColor: color(#252323 alpha(90%));
 
-  --themeLeftSideBgColor: #27293d;
+  --themeLeftSideBgColor: color(#27293d alpha(90%));
 
   --themePageNavBgColor: rgba(0, 0, 0, .3);
   --themePageItemSize: 36px;

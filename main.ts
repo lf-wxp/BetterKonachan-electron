@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import electron, { app, BrowserWindow, ipcMain } from 'electron';
+import windowStateKeeper from 'electron-window-state';
 import { isValidType }  from '~util';
 import { download } from 'electron-dl';
 import { Image } from '~module/image';
@@ -6,14 +7,28 @@ import { IImage } from '~model/image';
 import * as path from 'path';
 
 let mainWindow: Electron.BrowserWindow | null;
+let mainWindowState: windowStateKeeper.State;
+let screen: { width: number; height: number };
 
 const createWindow = (): void => {
+  screen = electron.screen.getPrimaryDisplay().workAreaSize;
+  mainWindowState = windowStateKeeper({
+    defaultHeight: 600,
+    defaultWidth: 800,
+  });
   mainWindow = new BrowserWindow({
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    height: mainWindowState.height,
+    width: mainWindowState.width,
+    minHeight: 600,
+    minWidth: 800,
     frame: false,
     transparent: true,
-    height: 600,
-    width: 800,
   });
+
+  mainWindowState.manage(mainWindow);
+
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:9999/index.html');
     mainWindow.webContents.openDevTools();
@@ -48,7 +63,6 @@ ipcMain.on('image-post', async (event: Electron.Event, { page, tags }: { page: n
   event.sender.send('image-data', { images, pages, page });
 });
 
-
 ipcMain.on('window-close', (): void => {
   if (isValidType<Electron.BrowserWindow>(mainWindow)) {
     mainWindow.close();
@@ -63,8 +77,9 @@ ipcMain.on('window-min', (): void => {
 
 ipcMain.on('window-max', (): void => {
   if (isValidType<Electron.BrowserWindow>(mainWindow)) {
-    if (mainWindow.isMaximized()) {
-      mainWindow.restore();
+    const [width, height] = mainWindow.getSize();
+    if (screen.width === width && screen.height === height) {
+      mainWindow.unmaximize();
     } else {
       mainWindow.maximize();
     }
