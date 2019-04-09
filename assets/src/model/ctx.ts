@@ -9,4 +9,5 @@ export interface ICtx {
   security: boolean;
   expand: boolean;
   download: IDownload[],
+  loading: boolean;
 }

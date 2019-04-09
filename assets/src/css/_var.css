@@ -20,8 +20,12 @@
 
   --themeBorderColor: #dcdcdc;
   --themeNoticeColor: #99ccff;
-  --themeRadius: 5px;
+  --themeRadius: 6px;
   --themeDisabledColor: color(gray alpha(30%));
+
+  --themeBackgroundColor: color(#252323 alpha(90%));
+
+  --themeLeftSideBgColor: #27293d;
 
   --themePageNavBgColor: rgba(0, 0, 0, .3);
   --themePageItemSize: 36px;
@@ -46,4 +50,6 @@
   --themeBarMiniColor: #b2bec3;
   --themeBarItemSize: 16px;
   --themeBarItemH: 4px;
+
+  --themePageLoadingSize: 36px;
 }

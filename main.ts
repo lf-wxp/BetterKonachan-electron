@@ -9,18 +9,18 @@ let mainWindow: Electron.BrowserWindow | null;
 
 const createWindow = (): void => {
   mainWindow = new BrowserWindow({
+    frame: false,
+    transparent: true,
     height: 600,
     width: 800,
-    frame: false,
   });
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:9999/index.html');
+    mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(path.resolve(app.getAppPath(), './dist/index.html'));
   }
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-
+  
   mainWindow.on('closed', (): void => {
     mainWindow = null;
   });

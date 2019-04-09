@@ -53,6 +53,10 @@ export default React.memo(() => {
       type: EAction.setPage,
       payload: page,
     });
+    dispatch({
+      type: EAction.setLoading,
+      payload: true,
+    });
   }
   const invoke = (event: React.MouseEvent) => {
     const { id } = (event.currentTarget as HTMLElement).dataset;

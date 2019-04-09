@@ -14,10 +14,20 @@
   transform-origin: center;
   inset-inline-start: 0;
   inset-block-start: 0;
+  background-color: gainsboro;
   &:hover {
     @nest & :matches(.listImg, .listTool) {
       transform: translateY(calc(var(--themeListToolHeight) * -1));
     }
+  }
+  & .sk-spinner {
+    color: var(--themeBaseColor);
+    position: absolute;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    margin: auto;
   }
 }
 .listItem-full {

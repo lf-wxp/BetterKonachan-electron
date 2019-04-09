@@ -25,6 +25,7 @@ const initState: ICtx = {
     security: false,
     name: '',
   }],
+  loading: true,
 };
 
 const reducer = (state: ICtx, { type, payload }: IAction) => {
@@ -43,6 +44,8 @@ const reducer = (state: ICtx, { type, payload }: IAction) => {
       return { ...state, items: payload as IImage[] };
     case EAction.setDownload:
       return { ...state, download: payload as IDownload[] };
+    case EAction.setLoading:
+      return { ...state, loading: payload as boolean };
     case EAction.setProgress:
       const { download } = state;
       const { index, percent } = payload as IUpdateProgressPayload;

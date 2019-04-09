@@ -20,6 +20,10 @@ export default React.memo(() => {
         type: EAction.setPages,
         payload: pages,
       });
+      dispatch({
+        type: EAction.setLoading,
+        payload: false,
+      });
     });
     ipcRenderer.send('image-post', { page: 1, tags: '' });
     dispatch({

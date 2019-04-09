@@ -9,6 +9,7 @@ export enum EAction {
   setExpand = 'setExpand',
   setDownload = 'setDownload',
   setProgress = 'setProgress',
+  setLoading = 'setLoading',
 }
 
 export interface IUpdateProgressPayload {
