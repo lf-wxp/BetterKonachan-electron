@@ -43,8 +43,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-flip-toolkit": "^6.5.7",
+    "react-graceful-image": "^1.2.9",
     "react-icons": "^3.5.0",
-    "react-image": "^2.1.1",
     "react-perfect-scrollbar": "^1.4.4",
     "react-spinkit": "^3.0.0",
     "typescript": "^3.4.2"

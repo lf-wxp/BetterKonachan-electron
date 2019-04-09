@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Context from '~src/context';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Img from 'react-image';
-import Spinner from 'react-spinkit';
+import Image from 'react-graceful-image';
 import { FaDownload } from 'react-icons/fa';
 import { ipcRenderer } from 'electron';
 
@@ -153,9 +152,8 @@ export default React.memo(() => {
         <div ref={refDom} className="listWrap">
           {list.filter(item => security ? item.security : true).map((item: IImageDom, key: number) => (
             <figure key={key} style={item.style} className="listItem">
-              <Img
+              <Image
                 className="listImg"
-                loader={<Spinner name="wave" color="rgba(0,0,0,.5)" />}
                 src={item.preview} />
               <div className="listTool">
                 <p className="listInfo">{item.width} / {item.height}</p>

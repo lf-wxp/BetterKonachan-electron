@@ -25,7 +25,7 @@ declare module 'react-perfect-scrollbar' {
     export default PerfectScrollbar;
 }
 
-declare module 'react-image' {
-    const Img: any;
-    export default Img;
+declare module 'react-graceful-image' {
+    const Image: any;
+    export default Image;
 }
