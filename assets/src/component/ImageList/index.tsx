@@ -107,7 +107,7 @@ const updateLayout = (items: IImage[], dom: HTMLElement | null) => {
 
 
 export default React.memo(() => {
-  const { state: { items, download }, dispatch } = useContext(Context);
+  const { state: { items, download, security }, dispatch } = useContext(Context);
   const refDom = useRef(null);
   const winWidthState = useState(window.innerWidth);
   let handler: number;
@@ -151,7 +151,7 @@ export default React.memo(() => {
   return (
       <PerfectScrollbar>
         <div ref={refDom} className="listWrap">
-          {list.map((item: IImageDom, key: number) => (
+          {list.filter(item => security ? item.security : true).map((item: IImageDom, key: number) => (
             <figure key={key} style={item.style} className="listItem">
               <Img
                 className="listImg"
