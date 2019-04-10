@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useState } from 'react';
 import { ipcRenderer } from 'electron';
 
 import Context from '~src/context';
@@ -6,7 +6,6 @@ import { EAction } from '~cModel/action';
 
 import './style.css';
 
-const { useContext, useState } = React;
 const size = 4;
 const getPageArray = (page: number, pages: number): number[] => {
   if (pages === 0) return [];
@@ -58,8 +57,8 @@ export default React.memo(() => {
       payload: true,
     });
   }
-  const invoke = (event: React.MouseEvent) => {
-    const { id } = (event.currentTarget as HTMLElement).dataset;
+  const invoke = (event: React.FormEvent<HTMLLIElement>) => {
+    const { id } = event.currentTarget.dataset;
     const page = Number.parseInt(id as string, 10);
     getData(page);
   }
@@ -79,7 +78,7 @@ export default React.memo(() => {
     setStatePage(num);
   }
 
-  const goTo = (event: React.MouseEvent) => {
+  const goTo = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     getData(statePage);
   }

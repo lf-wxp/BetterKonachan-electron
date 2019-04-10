@@ -36,6 +36,7 @@
   --themeListToolHeight: 25px;
   --themeListToolBgColor: color(#39cccc alpha(50%));
   --themeListGap: 10px;
+  --themeListImageBgColor: rgba(0, 0, 0, .3);
 
   --themeProgressHeight: 4px;
   --themeProgressBg: #dcdcdc;

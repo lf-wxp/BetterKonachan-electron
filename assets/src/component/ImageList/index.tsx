@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React, { useEffect,  useContext, useRef, useState} from 'react';
 import Context from '~src/context';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Image from 'react-graceful-image';
+import Image from '~component/Image';
+import fallbackImage from '~image/loaderror.png';
 import { FaDownload } from 'react-icons/fa';
 import { ipcRenderer } from 'electron';
 
@@ -13,11 +14,11 @@ import { IDownload } from '~cModel/download';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
 
+
 const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
   return dom !== null && dom.parentElement !== null;
 }
 
-const { useEffect, useContext, useRef, useState } = React;
 let columnArray: number[] = [0];
 const maxWidth: number = 300;
 const minWidth: number = 200;
@@ -97,10 +98,11 @@ const shortestColumn = (): { height: number; index: number} => {
   }
 };
 
-const updateLayout = (items: IImage[], dom: HTMLElement | null) => {
+const updateLayout = (items: IImage[], dom: HTMLElement | null, security: boolean) => {
   const { column, width } = calcColumnWidth(dom);
   columnArray = new Array(column).fill(0);
-  const list = calcList(items, width);
+  const filterItem = items.filter(item => security ? item.security : true);
+  const list = calcList(filterItem, width);
   return list;
 };
 
@@ -111,19 +113,19 @@ export default React.memo(() => {
   const winWidthState = useState(window.innerWidth);
   let handler: number;
   let list: IImageDom[];
-  list = updateLayout(items as IImage[], refDom.current);
+  list = updateLayout(items as IImage[], refDom.current, security);
   const debounceHandler = () => {
     if (handler) {
       clearTimeout(handler);
     }
     handler = window.setTimeout(() => {
-      list = updateLayout(items as IImage[], refDom.current);
+      list = updateLayout(items as IImage[], refDom.current, security);
       winWidthState[1](window.innerWidth);
     }, 500);
   };
-  const handleDownload = (e: React.MouseEvent) => {
+  const handleDownload = (e: React.FormEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const target: HTMLElement = e.currentTarget as HTMLElement;
+    const target: HTMLElement = e.currentTarget;
     const { index } = target.dataset;
     const item = items[Number.parseInt(index as string, 10) as number];
     const url = item.preview;
@@ -150,10 +152,14 @@ export default React.memo(() => {
   return (
       <PerfectScrollbar>
         <div ref={refDom} className="listWrap">
-          {list.filter(item => security ? item.security : true).map((item: IImageDom, key: number) => (
-            <figure key={key} style={item.style} className="listItem">
+          {list.map((item: IImageDom, key: number) => (
+            <figure key={item.name} style={item.style} className="listItem" >
               <Image
+                fallback={fallbackImage}
                 className="listImg"
+                width={item.styleW}
+                height={item.styleH}
+                style={{animationDelay: `${key * .1}s`}}
                 src={item.preview} />
               <div className="listTool">
                 <p className="listInfo">{item.width} / {item.height}</p>

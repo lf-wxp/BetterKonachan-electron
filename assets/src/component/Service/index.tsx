@@ -1,11 +1,9 @@
-import * as React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import Context from '~src/context';
 
 import { EAction } from '~cModel/action';
 import { IImageList } from '~model/image';
-
-const { useContext, useEffect } = React;
 
 export default React.memo(() => {
   const { dispatch } = useContext(Context);

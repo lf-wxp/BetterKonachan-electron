@@ -1,10 +1,8 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import Context from '~src/context';
 import Spinner from 'react-spinkit';
 
 import './style.css';
-
-const { useContext } = React;
 
 export default React.memo(() => {
   const { state: { loading } } = useContext(Context);

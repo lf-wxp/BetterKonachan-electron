@@ -14,7 +14,7 @@
   transform-origin: center;
   inset-inline-start: 0;
   inset-block-start: 0;
-  background-color: gainsboro;
+  background-clip: content-box;
   &:hover {
     @nest & :matches(.listImg, .listTool) {
       transform: translateY(calc(var(--themeListToolHeight) * -1));
@@ -75,4 +75,7 @@
   object-fit: cover;
   cursor: pointer;
   transition: transform 0.2s ease;
+  &.error {
+    object-fit: contain;
+  }
 }

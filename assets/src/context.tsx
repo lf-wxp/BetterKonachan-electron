@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { ICtx } from '~cModel/ctx';
 import { IAction, EAction, IUpdateProgressPayload } from '~cModel/action';
 import { IImage } from '~model/image';

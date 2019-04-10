@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
 import Progress from '~component/Progress';
@@ -10,7 +10,6 @@ import { EAction } from '~cModel/action';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
 
-const { useContext, useEffect } = React;
 export default React.memo(() => {
   const { state: { download }, dispatch } = useContext(Context);
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import ImageList from '~component/ImageList';
 import Background from '~component/Background';
 import Bar from '~component/Bar';
