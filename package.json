@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "dist": "npm run main:build && npm run render:build && npm run copy && electron-builder --win --x64",
-    "copy": "copyfiles -f ./assets/src/image/splash.svg dist",
+    "copy": "copyfiles -f ./assets/src/image/splash.svg ./assets/src/image/icon.ico dist",
     "render:dev": "webpack-dev-server --inline --config ./webpack/render.dev.js",
     "render:build": "webpack --config ./webpack/render.prod.js",
     "web:dev": "webpack-dev-server --inline --config ./webpack/web.dev.js",
@@ -30,7 +30,8 @@
       "target": [
         "nsis",
         "zip"
-      ]
+      ],
+      "icon": "dist/icon.ico"
     }
   },
   "license": "MIT",
