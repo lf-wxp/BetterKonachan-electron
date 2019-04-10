@@ -127,7 +127,8 @@ export default React.memo(() => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget;
     const { index } = target.dataset;
-    const item = items[Number.parseInt(index as string, 10) as number];
+    const filterItem = items.filter(item => security ? item.security : true);
+    const item = filterItem[Number.parseInt(index as string, 10) as number];
     const url = item.preview;
     const data: IDownload = {
       url,

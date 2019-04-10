@@ -1,14 +1,16 @@
 import electron, { app, BrowserWindow, ipcMain } from 'electron';
 import windowStateKeeper from 'electron-window-state';
+import * as Splashscreen from '@trodi/electron-splashscreen';
 import { isValidType }  from '~util';
 import { download } from 'electron-dl';
 import { Image } from '~module/image';
 import { IImage } from '~model/image';
-import * as path from 'path';
+import path from 'path';
 
 let mainWindow: Electron.BrowserWindow | null;
 let mainWindowState: windowStateKeeper.State;
 let screen: { width: number; height: number };
+
 
 const createWindow = (): void => {
   screen = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -16,7 +18,7 @@ const createWindow = (): void => {
     defaultHeight: 600,
     defaultWidth: 800,
   });
-  mainWindow = new BrowserWindow({
+  const windowOpts = {
     x: mainWindowState.x,
     y: mainWindowState.y,
     height: mainWindowState.height,
@@ -25,6 +27,17 @@ const createWindow = (): void => {
     minWidth: 800,
     frame: false,
     transparent: true,
+  };
+  mainWindow = Splashscreen.initSplashScreen({
+    windowOpts,
+    templateUrl: path.resolve(app.getAppPath(), './dist/splash.svg'),
+    delay: 0,
+    minVisible: 1500,
+    splashScreenOpts: {
+      height: 200,
+      width: 200,
+      transparent: true,
+    },
   });
 
   mainWindowState.manage(mainWindow);

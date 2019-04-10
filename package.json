@@ -4,7 +4,8 @@
   "description": "betterkonachan electron version",
   "main": "dist/main.js",
   "scripts": {
-    "dist": "electron-builder --win --x64",
+    "dist": "npm run main:build && npm run render:build && npm run copy && electron-builder --win --x64",
+    "copy": "copyfiles -f ./assets/src/image/splash.svg dist",
     "render:dev": "webpack-dev-server --inline --config ./webpack/render.dev.js",
     "render:build": "webpack --config ./webpack/render.prod.js",
     "web:dev": "webpack-dev-server --inline --config ./webpack/web.dev.js",
@@ -34,6 +35,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@trodi/electron-splashscreen": "^0.3.4",
     "@types/cheerio": "^0.22.11",
     "@types/electron-window-state": "^2.0.33",
     "@types/react-icons": "^3.0.0",
@@ -59,6 +61,7 @@
     "@types/webpack-env": "^1.13.9",
     "awesome-typescript-loader": "^5.2.1",
     "concurrently": "^4.1.0",
+    "copyfiles": "^2.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
     "electron": "^4.1.4",
