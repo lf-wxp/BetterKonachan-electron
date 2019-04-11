@@ -4,6 +4,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import Image from '~component/Image';
 import fallbackImage from '~image/loaderror.png';
 import { FaDownload } from 'react-icons/fa';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { ipcRenderer } from 'electron';
 
 import { IImageDom } from '~cModel/imageDom';
@@ -150,26 +151,37 @@ export default React.memo(() => {
     }
   }, []);
 
+  const combineStyle = (style: IImageDom['style'], key: number) => {
+    return {
+      ...style,
+      transitionDelay: `${key * .02}s`,
+    };
+  }
+
   return (
       <PerfectScrollbar>
         <div ref={refDom} className="listWrap">
-          {list.map((item: IImageDom, key: number) => (
-            <figure key={item.name} style={item.style} className="listItem" >
-              <Image
-                fallback={fallbackImage}
-                className="listImg"
-                width={item.styleW}
-                height={item.styleH}
-                style={{animationDelay: `${key * .1}s`}}
-                src={item.preview} />
-              <div className="listTool">
-                <p className="listInfo">{item.width} / {item.height}</p>
-                <a href={item.url} className="listDown" target="_blank" data-index={key} onClick={handleDownload}>
-                  <FaDownload />
-                </a>
-              </div>
-            </figure>
-          ))}
+          <TransitionGroup>
+            {list.map((item: IImageDom, key: number) => (
+              <CSSTransition key={item.name} timeout={5000} classNames="flip">
+                <figure key={item.name} style={combineStyle(item.style, key)} className="listItem">
+                  <Image
+                    fallback={fallbackImage}
+                    className="listImg"
+                    width={item.styleW}
+                    height={item.styleH}
+                    style={{animationDelay: `${key * .1}s`}}
+                    src={item.preview} />
+                  <div className="listTool">
+                    <p className="listInfo">{item.width} / {item.height}</p>
+                    <a href={item.url} className="listDown" target="_blank" data-index={key} onClick={handleDownload}>
+                      <FaDownload />
+                    </a>
+                  </div>
+                </figure>
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
         </div>
       </PerfectScrollbar>
   );

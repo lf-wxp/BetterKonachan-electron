@@ -79,3 +79,19 @@
     object-fit: contain;
   }
 }
+
+.flip-enter {
+  opacity: 0;
+}
+.flip-exit {
+  opacity: 1;
+}
+
+.flip-enter-active {
+  transition: all 0.5s ease-in-out;
+  opacity: 1;
+}
+.flip-exit-active {
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
