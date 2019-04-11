@@ -11,7 +11,7 @@
   flex-flow: column nowrap;
   max-inline-size: var(--themeMaxLeftWidth);
   min-inline-size: var(--themeMinLeftWidth);
-  background-color: var(--themeLeftSideBgColor);
+  background: linear-gradient(rgba(20, 30, 48, 0.6), rgba(36, 59, 85, 0.6));
   border-top-left-radius: var(--themeRadius);
   border-bottom-left-radius: var(--themeRadius);
   & > section {
