@@ -5,17 +5,19 @@ import { EAction } from '~cModel/action';
 
 import './style.css';
 
+import { TFuncVoid } from '~util';
+
 export default React.memo(() => {
   const { state: { security }, dispatch } = useContext(Context);
-  const handleChange = () => {
+  const handleChange: TFuncVoid = (): void => {
     dispatch({ type: EAction.setSecurity, payload: !security });
-  }
+  };
 
   return (
-    <section className={`setting ${security ? 'active': ''}`}>
-      <label className="sToggle">
-        <input type="checkbox" className="sSecurity" onChange={handleChange}/>
-        <span className="sFake"/>
+    <section className={`setting ${security ? 'active' : ''}`}>
+      <label className='sToggle'>
+        <span className='sSecurity' onChange={handleChange} />
+        <span className='sFake'/>
       </label>
     </section>
   );

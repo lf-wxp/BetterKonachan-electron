@@ -12,25 +12,26 @@ export default React.memo(() => {
     ipcRenderer.on('image-data', (event: Electron.Event, { images, pages, page }: IImageList) => {
       dispatch({
         type: EAction.setItems,
-        payload: images,
+        payload: images
       });
       dispatch({
         type: EAction.setPages,
-        payload: pages,
+        payload: pages
       });
       dispatch({
         type: EAction.setLoading,
-        payload: false,
+        payload: false
       });
     });
     ipcRenderer.send('image-post', { page: 1, tags: '' });
     dispatch({
       type: EAction.setPage,
-      payload: 1,
+      payload: 1
     });
-    return () => {
+
+    return (): void => {
       ipcRenderer.removeAllListeners('image-data');
-    }
+    };
   }, []);
 
   return null;

@@ -8,6 +8,6 @@ export interface ICtx {
   page: number;
   security: boolean;
   expand: boolean;
-  download: IDownload[],
+  download: IDownload[];
   loading: boolean;
 }

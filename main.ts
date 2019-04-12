@@ -1,24 +1,25 @@
 import electron, { app, BrowserWindow, ipcMain } from 'electron';
 import windowStateKeeper from 'electron-window-state';
 import * as Splashscreen from '@trodi/electron-splashscreen';
-import { isValidType }  from '~util';
+import { isValidType, TFuncVoid } from '~util';
 import { download } from 'electron-dl';
 import { Image } from '~module/image';
 import { IImage } from '~model/image';
 import path from 'path';
+
 
 let mainWindow: Electron.BrowserWindow | null;
 let mainWindowState: windowStateKeeper.State;
 let screen: { width: number; height: number };
 
 
-const createWindow = (): void => {
+const createWindow: TFuncVoid = (): void => {
   screen = electron.screen.getPrimaryDisplay().workAreaSize;
   mainWindowState = windowStateKeeper({
     defaultHeight: 600,
-    defaultWidth: 800,
+    defaultWidth: 800
   });
-  const windowOpts = {
+  const windowOpts: Electron.BrowserWindowConstructorOptions = {
     x: mainWindowState.x,
     y: mainWindowState.y,
     height: mainWindowState.height,
@@ -26,7 +27,7 @@ const createWindow = (): void => {
     minHeight: 600,
     minWidth: 800,
     frame: false,
-    transparent: true,
+    transparent: true
   };
   mainWindow = Splashscreen.initSplashScreen({
     windowOpts,
@@ -36,8 +37,8 @@ const createWindow = (): void => {
     splashScreenOpts: {
       height: 200,
       width: 200,
-      transparent: true,
-    },
+      transparent: true
+    }
   });
 
   mainWindowState.manage(mainWindow);
@@ -48,11 +49,11 @@ const createWindow = (): void => {
   } else {
     mainWindow.loadFile(path.resolve(app.getAppPath(), './dist/index.html'));
   }
-  
+
   mainWindow.on('closed', (): void => {
     mainWindow = null;
   });
-}
+};
 
 app.on('ready', createWindow);
 
@@ -70,7 +71,7 @@ app.on('activate', (): void => {
   }
 });
 
-ipcMain.on('image-post', async (event: Electron.Event, { page, tags }: { page: number; tags:string; }): Promise<void> => {
+ipcMain.on('image-post', async (event: Electron.Event, { page, tags }: { page: number; tags: string }): Promise<void> => {
   const pages: number = await Image.getPage();
   const images: IImage[] = await Image.getData({ page, tags });
   event.sender.send('image-data', { images, pages, page });
@@ -100,9 +101,12 @@ ipcMain.on('window-max', (): void => {
 });
 
 ipcMain.on('download', (event: Electron.Event, { url, index }: { url: string; index: number }) => {
-  download(mainWindow as BrowserWindow, url, {
-    onProgress: (progress: number) => {
+  download(<BrowserWindow>mainWindow, url, {
+    onProgress: (progress: number): void => {
       event.sender.send('progress', { progress, index });
-    },
+    }
+  })
+  .catch((err: Error) => {
+    console.error(err);
   });
 });

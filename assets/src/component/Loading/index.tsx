@@ -7,11 +7,13 @@ import './style.css';
 export default React.memo(() => {
   const { state: { loading } } = useContext(Context);
 
-  if (!loading) return null;
+  if (!loading) {
+    return null;
+  }
 
   return (
-    <section className="loading">
-      <Spinner name="cube-grid" />
+    <section className='loading'>
+      <Spinner name='cube-grid' />
     </section>
   );
 });

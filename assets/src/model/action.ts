@@ -9,7 +9,7 @@ export enum EAction {
   setExpand = 'setExpand',
   setDownload = 'setDownload',
   setProgress = 'setProgress',
-  setLoading = 'setLoading',
+  setLoading = 'setLoading'
 }
 
 export interface IUpdateProgressPayload {
@@ -17,6 +17,11 @@ export interface IUpdateProgressPayload {
   percent: string;
 }
 export interface IAction {
+// tslint:disable-next-line: no-reserved-keywords
   type: EAction;
   payload: ICtx[keyof ICtx] | IUpdateProgressPayload;
 }
+
+export type TReducer = (state: ICtx, action: IAction) => ICtx;
+
+export type TContext = {state: ICtx; dispatch: React.Dispatch<IAction>};

@@ -1,4 +1,4 @@
-import React, { useEffect,  useContext, useRef, useState} from 'react';
+import React, { useEffect,  useContext, useRef, useState, CSSProperties} from 'react';
 import Context from '~src/context';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Image from '~component/Image';
@@ -11,12 +11,14 @@ import { IImageDom } from '~cModel/imageDom';
 import { EAction } from '~cModel/action';
 import { IImage } from '~model/image';
 import { IDownload } from '~cModel/download';
+import { TFuncVoid, TFunc1Void, TFunc1, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
 
 
-const isValidDom = (dom: HTMLElement | null): dom is HTMLElement => {
+function isValidDom(dom: HTMLElement | null): dom is HTMLElement {
+
   return dom !== null && dom.parentElement !== null;
 }
 
@@ -24,9 +26,19 @@ let columnArray: number[] = [0];
 const maxWidth: number = 300;
 const minWidth: number = 200;
 
-const calcColumnWidth = (dom: HTMLElement | null): { column: number; width: number } => {
+const shortestColumn: TFuncVoidReturn<{ height: number; index: number }> = (): { height: number; index: number} => {
+  const min: number = Math.min(...columnArray);
+  const index: number = columnArray.indexOf(min);
+
+  return {
+    height: min,
+    index
+  };
+};
+
+const calcColumnWidth: TFunc1<HTMLElement | null, { column: number; width: number }> =
+ (dom: HTMLElement | null): { column: number; width: number } => {
   if (isValidDom(dom)) {
-    dom.parentElement
     const w: number = (dom.parentElement as HTMLElement).clientWidth;
     const l: number = w % maxWidth;
     let column: number;
@@ -45,21 +57,23 @@ const calcColumnWidth = (dom: HTMLElement | null): { column: number; width: numb
 
     return {
       column,
-      width,
+      width
     };
   } else {
+
     return {
       column: 0,
       width: 0
-    }
+    };
   }
-}
-const calcColumnArray = (h: number): void => {
+};
+
+const calcColumnArray: TFunc1Void<number> = (h: number): void => {
   const { index, height } = shortestColumn();
   columnArray.splice(index, 1, height + h);
 };
 
-const calcPosition = (w: number): { x: number; y: number } => {
+const calcPosition: TFunc1<number, { x: number; y: number }> = (w: number): { x: number; y: number } => {
   const { height, index } = shortestColumn();
   const offsetX: number = index * w;
   const offsetY: number = height;
@@ -68,10 +82,11 @@ const calcPosition = (w: number): { x: number; y: number } => {
       x: offsetX,
       y: offsetY
   };
-}
+};
 
-const calcList = (items: IImage[], width: number): IImageDom[] => {
-  const list = items.map((item: IImage, i: number) => {
+const calcList: TFunc2<IImage[], number, IImageDom[]> = (items: IImage[], width: number): IImageDom[] => {
+
+  return items.map((item: IImage, i: number) => {
     const newItem: IImageDom = { ...item };
     const h: number = item.height / item.width * width;
     newItem.styleW = width;
@@ -86,95 +101,89 @@ const calcList = (items: IImage[], width: number): IImageDom[] => {
 
     return newItem;
   });
-
-  return list;
-}
-const shortestColumn = (): { height: number; index: number} => {
-  const min = Math.min(...columnArray);
-  const index = columnArray.indexOf(min);
-
-  return {
-    height: min,
-    index,
-  }
 };
 
-const updateLayout = (items: IImage[], dom: HTMLElement | null, security: boolean) => {
+
+const updateLayout: TFunc3<IImage[], HTMLElement | null, boolean, IImageDom[]> =
+   (items: IImage[], dom: HTMLElement | null, security: boolean): IImageDom[] => {
   const { column, width } = calcColumnWidth(dom);
+  // tslint:disable-next-line: prefer-array-literal
   columnArray = new Array(column).fill(0);
-  const filterItem = items.filter(item => security ? item.security : true);
-  const list = calcList(filterItem, width);
-  return list;
+  const filterItem: IImage[]  = items.filter((item: IImage) => security ? item.security : true);
+
+  return calcList(filterItem, width);
 };
 
 
 export default React.memo(() => {
   const { state: { items, download, security }, dispatch } = useContext(Context);
-  const refDom = useRef(null);
-  const winWidthState = useState(window.innerWidth);
+  const refDom: React.MutableRefObject<null> = useRef(null);
+  const winWidthState: [number, React.Dispatch<React.SetStateAction<number>>] = useState(window.innerWidth);
   let handler: number;
   let list: IImageDom[];
-  list = updateLayout(items as IImage[], refDom.current, security);
-  const debounceHandler = () => {
+  list = updateLayout(items, refDom.current, security);
+  const debounceHandler: TFuncVoid = (): void => {
     if (handler) {
       clearTimeout(handler);
     }
     handler = window.setTimeout(() => {
-      list = updateLayout(items as IImage[], refDom.current, security);
+      list = updateLayout(items, refDom.current, security);
       winWidthState[1](window.innerWidth);
     }, 500);
   };
-  const handleDownload = (e: React.FormEvent<HTMLAnchorElement>) => {
+  const handleDownload: TFunc1Void<React.FormEvent<HTMLAnchorElement>> = (e: React.FormEvent<HTMLAnchorElement>) : void => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget;
     const { index } = target.dataset;
-    const filterItem = items.filter(item => security ? item.security : true);
-    const item = filterItem[Number.parseInt(index as string, 10) as number];
-    const url = item.preview;
+    const filterItem: IImage[] = items.filter((it: IImage) => security ? it.security : true);
+    const item: IImage = filterItem[Number.parseInt(index as string, 10)];
+    const previewUrl: string = item.preview;
     const data: IDownload = {
-      url,
-      percent: '0%',
+      url: previewUrl,
+      percent: '0%'
     };
-    if (!download.find(({ url }) => url === data.url)) {
+    if (!download.find(({ url }: { url: string}) => url === data.url)) {
       dispatch({
         type: EAction.setDownload,
-        payload: [...download, data ],
+        payload: [...download, data ]
       });
-      ipcRenderer.send('download', { url: item.url, index:download.length })
+      ipcRenderer.send('download', { url: item.url, index: download.length });
     }
   };
 
-  useEffect((): () => void => {
+  useEffect((): TFuncVoid => {
     window.addEventListener('resize', debounceHandler);
-    return () => {
+
+    return (): void => {
       window.removeEventListener('resize', debounceHandler);
-    }
+    };
   }, []);
 
-  const combineStyle = (style: IImageDom['style'], key: number) => {
+  const combineStyle: TFunc2<CSSProperties, number, CSSProperties> = (style: CSSProperties, key: number): CSSProperties => {
+
     return {
       ...style,
-      transitionDelay: `${key * .02}s`,
+      transitionDelay: `${key * 0.02}s`
     };
-  }
+  };
 
   return (
       <PerfectScrollbar>
-        <div ref={refDom} className="listWrap">
+        <div ref={refDom} className='listWrap'>
           <TransitionGroup>
             {list.map((item: IImageDom, key: number) => (
-              <CSSTransition key={item.name} timeout={5000} classNames="flip">
-                <figure key={item.name} style={combineStyle(item.style, key)} className="listItem">
+              <CSSTransition key={item.name} timeout={5000} classNames='flip'>
+                <figure key={item.name} style={combineStyle(item.style as CSSProperties, key)} className='listItem'>
                   <Image
                     fallback={fallbackImage}
-                    className="listImg"
+                    className='listImg'
                     width={item.styleW}
                     height={item.styleH}
-                    style={{animationDelay: `${key * .1}s`}}
+                    style={{animationDelay: `${key * 0.1}s`}}
                     src={item.preview} />
-                  <div className="listTool">
-                    <p className="listInfo">{item.width} / {item.height}</p>
-                    <a href={item.url} className="listDown" target="_blank" data-index={key} onClick={handleDownload}>
+                  <div className='listTool'>
+                    <p className='listInfo'>{item.width} / {item.height}</p>
+                    <a href={item.url} className='listDown' target='_blank' data-index={key} rel='noreferrer' onClick={handleDownload}>
                       <FaDownload />
                     </a>
                   </div>

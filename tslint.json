@@ -7,42 +7,24 @@
         "quotemark": {
             "options": ["single", "avoid-escape"]
         },
-        "no-implicit-dependencies": [
-            true,
-            [
-                "~model",
-                "~module",
-                "~config",
-                "~controller",
-                "~route",
-                "~component",
-                "~service",
-                "~cModule",
-                "~util",
-                "~css",
-                "~src",
-                "~image",
-                "~cModel"
-            ]
-        ],
-        "no-submodule-imports": [
-            true,
-            "~css",
-            "~src",
-            "~image",
-            "~cModel"
-        ],
+        "no-implicit-dependencies": false,
+        "no-submodule-imports": false, 
+        "no-relative-imports": false,
         "ordered-imports": false,
         "non-literal-fs-path": false,
         "align": false,
+        "no-empty": false,
         "no-null-keyword": false,
         "no-default-export": false,
         "missing-jsdoc": false,
         "import-name": false,
         "object-literal-sort-keys": false,
         "insecure-random": false,
+        "match-default-export-name": false,
         "new-parens": true,
+        "export-name": false,
         "no-http-string": false,
+        "strict-boolean-expressions": false,
         "no-import-side-effect": [true, {"ignore-module": "(\\.html|\\.css)$"}],
         "variable-name": [
             true,

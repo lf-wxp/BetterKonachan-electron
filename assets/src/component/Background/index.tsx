@@ -7,8 +7,8 @@ export default React.memo(() => {
   const { state: { bgUri } } = useContext(Context);
 
   return (
-    <figure className="bg">
-        <img src={bgUri} className="bgImage" />
+    <figure className='bg'>
+        <img src={bgUri} className='bgImage' alt='bg'/>
     </figure>
   );
 });
