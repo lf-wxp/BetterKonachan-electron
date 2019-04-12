@@ -51,7 +51,7 @@ export default React.memo(() => {
   const [statePage, setStatePage] = useState();
 
   const getData: (p: number, tags?: string) => void = (p: number, tags: string = ''): void => {
-    ipcRenderer.send('image-post', { p, tags });
+    ipcRenderer.send('image-post', { page: p, tags });
     dispatch({
       type: EAction.setPage,
       payload: p

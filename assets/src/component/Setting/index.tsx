@@ -9,14 +9,14 @@ import { TFuncVoid } from '~util';
 
 export default React.memo(() => {
   const { state: { security }, dispatch } = useContext(Context);
-  const handleChange: TFuncVoid = (): void => {
+  const handleClick: TFuncVoid = (): void => {
+    console.log('click');
     dispatch({ type: EAction.setSecurity, payload: !security });
   };
 
   return (
     <section className={`setting ${security ? 'active' : ''}`}>
-      <label className='sToggle'>
-        <span className='sSecurity' onChange={handleChange} />
+      <label className='sToggle' onClick={handleClick}>
         <span className='sFake'/>
       </label>
     </section>

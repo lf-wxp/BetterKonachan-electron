@@ -23,10 +23,6 @@
   transition: transform 0.2s ease;
   animation: breathItem 2s ease-in-out infinite alternate-reverse both;
 }
-.sSecurity {
-  position: absolute;
-  opacity: 0;
-}
 @keyframes breathSet {
   0% {
     border-color: transparent;
