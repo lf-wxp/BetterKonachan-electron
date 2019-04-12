@@ -1,12 +1,14 @@
-const merge = require('webpack-merge');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const basicConfig = require('./basic');
-const path = require('path');
+import merge from 'webpack-merge';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+//@ts-ignore
+import webpackDevServer from 'webpack-dev-server';
+import basicConfig from './basic';
+import webpack from 'webpack';
+import path from 'path';
 
-module.exports = merge(basicConfig, {
+export default merge(basicConfig, {
   mode: 'development',
-  entry: './index.tsx',
+  entry: { index: './index.tsx' },
   context: path.resolve(__dirname, '../assets/src/'),
   output: {
     filename: '[name].js',
@@ -23,9 +25,13 @@ module.exports = merge(basicConfig, {
     publicPath: '/'
   },
   devtool: 'cheap-module-eval-source-map',
+  target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin({ template: path.resolve(__dirname, '../assets/src/index.html') }),
     new webpack.HotModuleReplacementPlugin(), // enable HMR globally
-    new webpack.NamedModulesPlugin(), // prints more readable module names in the browser console on HMR updates
+    new webpack.NamedModulesPlugin() // prints more readable module names in the browser console on HMR updates
   ],
+  performance: {
+    hints: false
+  }
 });

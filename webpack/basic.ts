@@ -1,6 +1,6 @@
-const { resolve } = require('path');
+import { resolve } from 'path';
 
-module.exports = {
+export default {
   resolve: {
     alias: {
       '~component': resolve(__dirname, '../assets/src/component'),
@@ -13,10 +13,10 @@ module.exports = {
       '~model': resolve(__dirname, '../model'),
       '~module': resolve(__dirname, '../module'),
       '~config': resolve(__dirname, '../config'),
-      '~cModel': resolve(__dirname, '../assets/src/model'),
+      '~cModel': resolve(__dirname, '../assets/src/model')
     },
     modules: [resolve(__dirname, '../modules'), 'node_modules'],
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
   },
   module: {
     rules: [
@@ -39,9 +39,9 @@ module.exports = {
         use: [{
           loader: 'file-loader',
           options: {
-            limit: 1000,
-          },
-        },],
+            limit: 1000
+          }
+        }]
       },
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -49,12 +49,9 @@ module.exports = {
           loader: 'file-loader',
           options: {
             name: 'fonts/[name].[ext]',
-          },
-        },],
-      },
-    ],
-  },
-  performance: {
-    hints: false,
-  },
+          }
+        }]
+      }
+    ]
+  }
 };

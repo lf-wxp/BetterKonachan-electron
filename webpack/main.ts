@@ -1,8 +1,8 @@
-const merge = require('webpack-merge');
-const basicConfig = require('./basic');
-const path = require('path');
+import merge from 'webpack-merge';
+import basicConfig from './basic';
+import path from 'path';
 
-module.exports = merge(basicConfig, {
+export default merge(basicConfig, {
   entry: './main.ts',
   context: path.resolve(__dirname, '../'),
   output: {
@@ -12,5 +12,5 @@ module.exports = merge(basicConfig, {
     path: path.resolve(__dirname, '../dist')
   },
   devtool: 'cheap-module-eval-source-map',
-  target: 'electron-main',
+  target: 'electron-main'
 });
