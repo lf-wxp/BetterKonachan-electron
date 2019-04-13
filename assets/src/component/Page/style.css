@@ -234,6 +234,7 @@
 }
 .pGotoSpan {
   font-size: 14px;
+  line-height: var(--themePageItemSize);
 }
 .pGotoInput {
   color: white;

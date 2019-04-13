@@ -111,7 +111,7 @@ export default React.memo(() => {
       <div className='pCon'>
         <ul className='pBox'>
           {pageArray.map((item: number) => (
-            <li className={`pItem ${page === item ? 'current' : ''}`} onClick={invoke} key={item} data-id={item} role='button'>
+            <li className={`pItem ${page === item ? 'current' : ''} ${page >= 102 ? 'middle' : '' }`} onClick={invoke} key={item} data-id={item} role='button'>
               <span className='pItemText'>{item}</span>
             </li>
           ))}
