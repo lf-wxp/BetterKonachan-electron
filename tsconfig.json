@@ -2,7 +2,6 @@
     "compilerOptions": {
         "baseUrl": "./",
         "target": "es2015",
-        // "module": "commonjs",
         "sourceMap": true,
         "esModuleInterop": true,
         "noEmitHelpers": true,
@@ -21,58 +20,26 @@
         "removeComments": true,
         "noUnusedLocals": true,
         "jsx": "react",
-        "lib": [
-            "dom",
-            "es7",
-            "es6",
-            "es2015"
-        ],
-        "typeRoots": [
-            "node_modules/@types",
-        ],
+        "lib": [ "dom", "es7", "es6", "es2015" ],
+        "typeRoots": [ "node_modules/@types" ],
         "outDir": "./dist",
-        "types": [
-            "node",
-            "electron"
-        ],
+        "types": [ "node", "electron" ],
         "paths": {
-            "~util": [
-                "util/index"
-            ],
-            "~module/*": [
-                "module/*"
-            ],
-            "~model/*": [
-                "model/*"
-            ],
-            "~config": [
-                "config/index"
-            ],
-            "~component/*": [
-                "assets/src/component/*"
-            ],
-            "~service": [
-                "assets/src/service"
-            ],
-            "~cModule/*": [
-                "assets/src/module/*"
-            ],
-            "~cModel/*": [
-                "assets/src/model/*"
-            ],
-            "~css/*": [
-                "assets/src/css"
-            ],
-            "~src/*": [
-                "assets/src/*"
-            ],
-            "~image/*": [
-                "assets/src/image/*"
-            ]
+            "~util": [ "util/index" ],
+            "~module/*": [ "module/*" ],
+            "~model/*": [ "model/*" ],
+            "~config": [ "config/index" ],
+            "~component/*": [ "assets/src/component/*" ],
+            "~service": [ "assets/src/service" ],
+            "~cModule/*": [ "assets/src/module/*" ],
+            "~cModel/*": [ "assets/src/model/*" ],
+            "~css/*": [ "assets/src/css" ],
+            "~src/*": [ "assets/src/*" ],
+            "~image/*": [ "assets/src/image/*" ]
         }
     },
     "exclude": [
         "node_modules",
-        "**/*.test.ts",
+        "**/*.test.ts"
     ]
 }
