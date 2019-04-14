@@ -15,4 +15,7 @@
     inset-block-end: 0;
     margin: auto;
   }
+  & .sk-fade-in {
+    animation: sk-fade-in 0.5s;
+  }
 }
