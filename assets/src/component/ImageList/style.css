@@ -3,6 +3,7 @@
   background: none;
   min-block-size: 100vh;
 }
+
 .listItem {
   margin: 0;
   border: calc(var(--themeListGap) / 2) solid transparent;
@@ -15,11 +16,14 @@
   inset-inline-start: 0;
   inset-block-start: 0;
   background-clip: content-box;
+
   &:hover {
+
     @nest & :matches(.listImg, .listTool) {
       transform: translateY(calc(var(--themeListToolHeight) * -1));
     }
   }
+
   & .sk-spinner {
     color: var(--themeBaseColor);
     position: absolute;
@@ -30,12 +34,14 @@
     margin: auto;
   }
 }
+
 .listItem-full {
   width: 100vw!important;
   height: 100vh!important;
   transform: translate(0,0)!important;
   z-index: 30;
 }
+
 .listTool {
   position: absolute;
   display: flex;
@@ -47,6 +53,7 @@
   transition: transform 0.2s ease;
   background: var(--themeListToolBgColor);
 }
+
 .listInfo {
   flex: 1 1 auto;
   font-size: 12px;
@@ -54,6 +61,7 @@
   line-height: var(--themeListToolHeight);
   text-align: center;
 }
+
 .listDown {
   flex: 0 0 auto;
   display: flex;
@@ -62,10 +70,12 @@
   inline-size: var(--themeListToolHeight);
   color: white;
   font-size: 14px;
+
   & i {
       flex: 0 0 auto;
   }
 }
+
 .listImg {
   display: block;
   inline-size: 100%;
@@ -75,6 +85,7 @@
   object-fit: cover;
   cursor: pointer;
   transition: transform 0.2s ease;
+
   &.error {
     object-fit: contain;
   }

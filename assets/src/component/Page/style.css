@@ -4,48 +4,62 @@
   block-size: calc(3 * var(--themePageItemSize));
   position: relative;
   z-index: 2;
+
   &.active {
     animation: none;
+
       & .pNav {
+
         &:first-of-type {
           transform: translate(-100%, 100%);
         }
+
         &:last-of-type {
           transform: translate(100%, -100%);
         }
       }
+
       & .pGoto {
+
         & .pGotoDiv {
+
           &:first-of-type {
             inset-inline-start: var(--themePageItemSize);
             inset-block-start: 0px;
           }
+
           &:last-of-type {
             inset-block-start: var(--themePageItemSize);
             inset-inline-start: 0px;
             transition-delay: 0.1s;
           }
         }
+
         & .pBtn {
           inset-block-start: var(--themePageItemSize);
           inset-inline-start: var(--themePageItemSize);
           transition-delay: 0.2s;
         }
       }
+
       & .pHolder {
         visibility: hidden;
         opacity: 0;
       }
+
       & .pItem {
+
         &:nth-child(1) {
           inset-inline-start: 0px;
           inset-block-start: 0px;
         }
+
         &:nth-child(2) {
           inset-inline-start: var(--themePageItemSize);
           inset-block-start: 0px;
           transition-delay: 0.1s;
         }
+
         &:nth-child(3) {
           inset-inline-start: 0px;
           inset-block-start: var(--themePageItemSize);
@@ -69,22 +83,28 @@
   transition: all 0.3s ease;
   inset-block-end: var(--themePageItemSize);
   inset-inline-start: var(--themePageItemSize);
+
   &:hover {
+
     &:after,
     &:before {
       background: var(--themePageItemHoverColor) !important;
     }
   }
+
   & svg {
     inline-size: 100%;
     block-size: 100%;
     display: block;
   }
+
   &:after,
   &:before {
     transition: all 0.2s ease;
   }
+
   &:nth-of-type(1) {
+
     &:after {
       content: '';
       position: absolute;
@@ -94,6 +114,7 @@
       inline-size: calc(100% - 5px);
       background: var(--themePageItemHoverColor);
     }
+
     &:before {
       content: '';
       position: absolute;
@@ -104,7 +125,9 @@
       background: var(--themePageItemHoverColor);
     }
   }
+
   &:nth-of-type(2) {
+
     &:after {
       content: '';
       position: absolute;
@@ -114,6 +137,7 @@
       inline-size: calc(100% - 5px);
       background: var(--themePageItemHoverColor);
     }
+
     &:before {
       content: '';
       position: absolute;
@@ -124,11 +148,13 @@
       background: var(--themePageItemHoverColor);
     }
   }
+
   &.disabled {
     pointer-events: none;
     cursor: not-allowed;
   }
 }
+
 .pHolder {
   inline-size: var(--themePageItemSize);
   block-size: var(--themePageItemSize);
@@ -140,6 +166,7 @@
   cursor: pointer;
   transition: all 0.2s 0.5s ease-in-out;
   animation: breathPage 2s 4s ease-in-out alternate infinite;
+
   &:after,
   &:before {
     content: '';
@@ -147,12 +174,14 @@
     margin: auto;
     position: absolute;
   }
+
   &:after {
     inline-size: 40%;
     block-size: 40%;
     background-color: var(--themePageItemBreathColor2);
     animation: breathPage2 2s ease-in-out alternate infinite;
   }
+
   &:before {
     inline-size: 70%;
     block-size: 70%;
@@ -160,6 +189,7 @@
     animation: breathPage1 2s 2s ease-in-out alternate infinite;
   }
 }
+
 .pCon {
   inline-size: calc(2 * var(--themePageItemSize));
   block-size: calc(2 * var(--themePageItemSize));
@@ -168,12 +198,14 @@
   inset-block-start: 0px;
   z-index: 2;
 }
+
 .pBox {
   inline-size: 100%;
   block-size: 100%;
   font-size: 0px;
   position: relative;
 }
+
 .pItemText {
   display: block;
   inline-size: 100%;
@@ -182,6 +214,7 @@
   line-height: var(--themePageItemSize);
   letter-spacing: 2px;
 }
+
 .pItem {
   position: absolute;
   color: white;
@@ -195,18 +228,22 @@
   background-color: var(--themePageNavBgColor);
   cursor: pointer;
   transition: all 0.2s ease;
+
   &:hover,
   &.current {
     background-color: var(--themePageItemHoverColor);
   }
+
   &.current {
     cursor: not-allowed;
     pointer-events: none;
   }
+
   &.middle {
     font-size: 14px;
   }
 }
+
 .pGoto {
   inline-size: 2 * var(--themePageItemSize);
   block-size: 2 * var(--themePageItemSize);
@@ -232,10 +269,12 @@
   border: none;
   background: none;
 }
+
 .pGotoSpan {
   font-size: 14px;
   line-height: var(--themePageItemSize);
 }
+
 .pGotoInput {
   color: white;
   font-size: 14px;
@@ -244,6 +283,7 @@
   border-block-end: 4px solid var(--themeBaseColor);
   animation: blink 1s ease-in-out infinite alternate-reverse both;
 }
+
 .pGotoEm,
 .pGotoDiv,
 .pBtn {
@@ -260,16 +300,20 @@
   background-color: var(--themePageNavBgColor);
   transition: all 0.2s ease;
 }
+
 .pGotoEm {
   background: none;
 }
+
 .pBtn {
   margin: 0;
   padding: 0;
   cursor: pointer;
+
   &:hover {
     background-color: var(--themePageItemHoverColor);
   }
+
   & span {
     inline-size: 40%;
     block-size: 40%;
@@ -280,6 +324,7 @@
     inset-block-end: 0;
   }
 }
+
 @keyframes breathPage {
   0% {
     background-color: var(--themeBaseColor);
@@ -288,6 +333,7 @@
     background-color: var(--themePageItemBreathColor2);
   }
 }
+
 @keyframes breathPage1 {
   0% {
     background-color: var(--themePageItemBreathColor1);
@@ -299,6 +345,7 @@
     background-color: var(--themeBaseColor);
   }
 }
+
 @keyframes breathPage2 {
   0% {
     background-color: var(--themePageItemBreathColor2);
@@ -307,6 +354,7 @@
     background-color: var(--themeBaseColor);
   }
 }
+
 @keyframes blink {
   0% {
     border-color: transparent;
