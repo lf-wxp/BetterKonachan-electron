@@ -13,6 +13,8 @@ import bg1 from '~image/bg1.jpg';
 import bg2 from '~image/bg2.jpg';
 import bg3 from '~image/bg3.jpg';
 import bg4 from '~image/bg4.jpg';
+import bg5 from '~image/bg5.jpg';
+import bg6 from '~image/bg6.jpg';
 
 import { ICtx } from '~cModel/ctx';
 
@@ -20,9 +22,9 @@ import './css/_var.css';
 import './css/_base.css';
 import './app.css';
 
-const bgs: string[] = [bg0, bg1, bg2, bg3, bg4];
+const bgs: string[] = [bg0, bg1, bg2, bg3, bg4, bg5, bg6];
 
-const defaultBg: string = bgs[Math.floor(Math.random() * 4)];
+const defaultBg: string = bgs[Math.floor(Math.random() * 6)];
 
 const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(() => {
   const defaultState: ICtx = {

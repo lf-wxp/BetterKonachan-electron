@@ -13,7 +13,8 @@ export default {
       '~model': resolve(__dirname, '../model'),
       '~module': resolve(__dirname, '../module'),
       '~config': resolve(__dirname, '../config'),
-      '~cModel': resolve(__dirname, '../assets/src/model')
+      '~cModel': resolve(__dirname, '../assets/src/model'),
+      '~hook': resolve(__dirname, '../assets/src/hook')
     },
     modules: [resolve(__dirname, '../modules'), 'node_modules'],
     extensions: ['.ts', '.tsx', '.js', '.jsx']

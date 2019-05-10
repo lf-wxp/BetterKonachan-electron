@@ -35,11 +35,11 @@ export default React.memo(() => {
   return (
     <section className='download'>
       <PerfectScrollbar>
-        <div className='downloadBox'>
+        <div className='download_box'>
           {download.map((item: IDownload, key: number) => (
-            <div className='downloadItem' key={key}>
+            <div className='download_item' key={key}>
               {(item.percent === '100%') && (
-                <span className='downloadIcon'>
+                <span className='download_icon'>
                   <IoIosCheckmarkCircle />
                 </span>
               )}

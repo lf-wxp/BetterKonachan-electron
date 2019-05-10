@@ -6,6 +6,7 @@
   display: block;
   background-color: var(--themeProgressBg);
   overflow: hidden;
+
   & span {
     position: absolute;
     transition: width .2s ease;

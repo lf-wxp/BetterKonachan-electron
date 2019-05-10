@@ -27,7 +27,10 @@ const createWindow: TFuncVoid = (): void => {
     minHeight: 600,
     minWidth: 800,
     frame: false,
-    transparent: true
+    transparent: true,
+    webPreferences: {
+      nodeIntegration: true
+    }
   };
   mainWindow = Splashscreen.initSplashScreen({
     windowOpts,

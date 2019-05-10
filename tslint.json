@@ -25,6 +25,7 @@
         "export-name": false,
         "no-http-string": false,
         "strict-boolean-expressions": false,
+        "react-a11y-event-has-role": false,
         "no-import-side-effect": [true, {"ignore-module": "(\\.html|\\.css)$"}],
         "variable-name": [
             true,

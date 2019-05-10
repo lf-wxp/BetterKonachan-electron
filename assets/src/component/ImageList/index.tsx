@@ -6,21 +6,16 @@ import fallbackImage from '~image/loaderror.png';
 import { FaDownload } from 'react-icons/fa';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { ipcRenderer } from 'electron';
+import useSize from '~hook/useSize';
 
 import { IImageDom } from '~cModel/imageDom';
 import { EAction } from '~cModel/action';
 import { IImage } from '~model/image';
 import { IDownload } from '~cModel/download';
-import { TFuncVoid, TFunc1Void, TFunc1, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
+import { TFunc1Void, TFunc1, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
-
-
-function isValidDom(dom: HTMLElement | null): dom is HTMLElement {
-
-  return dom !== null && dom.parentElement !== null;
-}
 
 let columnArray: number[] = [0];
 const maxWidth: number = 300;
@@ -36,34 +31,34 @@ const shortestColumn: TFuncVoidReturn<{ height: number; index: number }> = (): {
   };
 };
 
-const calcColumnWidth: TFunc1<HTMLElement | null, { column: number; width: number }> =
- (dom: HTMLElement | null): { column: number; width: number } => {
-  if (isValidDom(dom)) {
-    const w: number = (dom.parentElement as HTMLElement).clientWidth;
+const calcColumnWidth: TFunc1<number, { column: number; colWidth: number }> =
+ (width: number): { column: number; colWidth: number } => {
+  if (width) {
+    const w: number = width;
     const l: number = w % maxWidth;
     let column: number;
-    let width: number;
+    let colWidth: number;
     if (l) {
       column = Math.ceil(w / maxWidth);
-      width = w / column;
+      colWidth = w / column;
     } else {
       column = w / maxWidth;
-      width = maxWidth;
+      colWidth = maxWidth;
     }
-    if (width < minWidth) {
+    if (colWidth < minWidth) {
       column = 1;
-      width = w;
+      colWidth = w;
     }
 
     return {
       column,
-      width
+      colWidth
     };
   } else {
 
     return {
       column: 0,
-      width: 0
+      colWidth: 0
     };
   }
 };
@@ -104,33 +99,23 @@ const calcList: TFunc2<IImage[], number, IImageDom[]> = (items: IImage[], width:
 };
 
 
-const updateLayout: TFunc3<IImage[], HTMLElement | null, boolean, IImageDom[]> =
-   (items: IImage[], dom: HTMLElement | null, security: boolean): IImageDom[] => {
-  const { column, width } = calcColumnWidth(dom);
+const updateLayout: TFunc3<IImage[], number, boolean, IImageDom[]> =
+   (items: IImage[], width: number, security: boolean): IImageDom[] => {
+  const { column, colWidth } = calcColumnWidth(width);
   // tslint:disable-next-line: prefer-array-literal
   columnArray = new Array(column).fill(0);
   const filterItem: IImage[]  = items.filter((item: IImage) => security ? item.security : true);
 
-  return calcList(filterItem, width);
+  return calcList(filterItem, colWidth);
 };
 
 
 export default React.memo(() => {
   const { state: { items, download, security }, dispatch } = useContext(Context);
   const refDom: React.MutableRefObject<null> = useRef(null);
-  const winWidthState: [number, React.Dispatch<React.SetStateAction<number>>] = useState(window.innerWidth);
-  let handler: number;
-  let list: IImageDom[];
-  list = updateLayout(items, refDom.current, security);
-  const debounceHandler: TFuncVoid = (): void => {
-    if (handler) {
-      clearTimeout(handler);
-    }
-    handler = window.setTimeout(() => {
-      list = updateLayout(items, refDom.current, security);
-      winWidthState[1](window.innerWidth);
-    }, 500);
-  };
+  const [list, setList] = useState([] as IImageDom[]);
+  const { width } = useSize(refDom.current);
+
   const handleDownload: TFunc1Void<React.FormEvent<HTMLAnchorElement>> = (e: React.FormEvent<HTMLAnchorElement>) : void => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget;
@@ -151,13 +136,9 @@ export default React.memo(() => {
     }
   };
 
-  useEffect((): TFuncVoid => {
-    window.addEventListener('resize', debounceHandler);
-
-    return (): void => {
-      window.removeEventListener('resize', debounceHandler);
-    };
-  }, []);
+  useEffect((): void => {
+    setList(updateLayout(items, width, security));
+  }, [width, items]);
 
   const combineStyle: TFunc2<CSSProperties, number, CSSProperties> = (style: CSSProperties, key: number): CSSProperties => {
 
