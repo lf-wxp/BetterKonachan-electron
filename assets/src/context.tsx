@@ -1,6 +1,12 @@
 import React from 'react';
 import { ICtx } from '~cModel/ctx';
-import { IAction, EAction, IUpdateProgressPayload, TReducer, TContext } from '~cModel/action';
+import {
+  IAction,
+  EAction,
+  IUpdateProgressPayload,
+  TReducer,
+  IContext
+} from '~cModel/action';
 import { IImage } from '~model/image';
 import { IDownload } from '~cModel/download';
 
@@ -15,20 +21,22 @@ const initState: ICtx = {
   security: true,
   expand: false,
   download: [],
-  items: [{
-    id: 0,
-    sampleWidth: 0,
-    sampleHeight: 0,
-    sample: '',
-    previewWidth: 0,
-    previewHeight: 0,
-    preview: '',
-    url: '',
-    width: 0,
-    height: 0,
-    security: false,
-    name: ''
-  }],
+  items: [
+    {
+      id: 0,
+      sampleWidth: 0,
+      sampleHeight: 0,
+      sample: '',
+      previewWidth: 0,
+      previewHeight: 0,
+      preview: '',
+      url: '',
+      width: 0,
+      height: 0,
+      security: false,
+      name: ''
+    }
+  ],
   loading: true
 };
 
@@ -62,10 +70,14 @@ const reducer: TReducer = (state: ICtx, { type, payload }: IAction): ICtx => {
   }
 };
 
-const Context: React.Context<TContext> =
-  React.createContext<TContext>({ state: initState, dispatch: (): void => {} });
+const Context: React.Context<IContext> = React.createContext<IContext>({
+  state: initState,
+  dispatch: (): void => {}
+});
 
-const Provider: React.StatelessComponent<IProp> = (props: React.PropsWithChildren<IProp>): React.ReactElement => {
+const Provider: React.StatelessComponent<IProp> = (
+  props: React.PropsWithChildren<IProp>
+): React.ReactElement => {
   const [state, dispatch] = React.useReducer(reducer, props.value);
 
   return (
@@ -78,4 +90,3 @@ const Provider: React.StatelessComponent<IProp> = (props: React.PropsWithChildre
 export { Provider };
 
 export default Context;
-

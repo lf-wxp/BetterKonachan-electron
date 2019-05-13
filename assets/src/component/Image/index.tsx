@@ -19,17 +19,28 @@ enum EImageState {
   error = 'error'
 }
 
-export default ({ src, fallback, className, style, width, height }: IProps): React.ReactElement => {
+export default ({
+  src,
+  fallback,
+  className,
+  style,
+  width,
+  height
+}: IProps): React.ReactElement => {
   const [state, setState] = useState(EImageState.pendding);
   const [animationEnd, setAnimationEnd] = useState(false);
   const [isError, setIsError] = useState(false);
-  const onLoad: TFunc1Void<React.FormEvent<HTMLImageElement>> = (e: React.FormEvent<HTMLImageElement>): void => {
+  const onLoad: TFunc1Void<React.FormEvent<HTMLImageElement>> = (
+    e: React.FormEvent<HTMLImageElement>
+  ): void => {
     if (!isError) {
       setState(EImageState.loaded);
     }
   };
 
-  const onError: TFunc1Void<React.FormEvent<HTMLImageElement>> = (e: React.FormEvent<HTMLImageElement>): void => {
+  const onError: TFunc1Void<React.FormEvent<HTMLImageElement>> = (
+    e: React.FormEvent<HTMLImageElement>
+  ): void => {
     const target: HTMLImageElement = e.currentTarget;
     setState(EImageState.error);
     setIsError(true);
@@ -43,7 +54,10 @@ export default ({ src, fallback, className, style, width, height }: IProps): Rea
   };
 
   return (
-    <div className={`imageBox ${animationEnd ? 'anmationend' : ''}`} style={{ width: width as number - 10, height: height as number - 10 }}>
+    <div
+      className={`imageBox ${animationEnd ? 'anmationend' : ''}`}
+      style={{ width: (width as number) - 10, height: (height as number) - 10 }}
+    >
       <img
         alt='image'
         src={src}
@@ -51,7 +65,8 @@ export default ({ src, fallback, className, style, width, height }: IProps): Rea
         className={`${className} image  ${state}`}
         onAnimationEnd={onAnimationEnd}
         onError={onError}
-        onLoad={onLoad} />
+        onLoad={onLoad}
+      />
     </div>
   );
 };

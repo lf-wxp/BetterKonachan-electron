@@ -9,7 +9,10 @@ import './style.css';
 import { TFuncVoid } from '~util';
 
 export default React.memo(() => {
-  const { state: { security, loading, page }, dispatch } = useContext(Context);
+  const {
+    state: { security, loading, page },
+    dispatch
+  } = useContext(Context);
   const handleSecurityClick: TFuncVoid = (): void => {
     dispatch({
       type: EAction.setSecurity,
@@ -29,10 +32,13 @@ export default React.memo(() => {
     <section className='setting'>
       <article className={`sSecurity ${security ? 'active' : ''}`}>
         <label className='sToggle' onClick={handleSecurityClick}>
-          <span className='sFake'/>
+          <span className='sFake' />
         </label>
       </article>
-      <article className={`sRefresh ${loading ? 'active' : ''}`} onClick={handleRefreshClick}>
+      <article
+        className={`sRefresh ${loading ? 'active' : ''}`}
+        onClick={handleRefreshClick}
+      >
         <div />
         <div />
         <div />

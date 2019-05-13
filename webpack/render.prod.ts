@@ -17,6 +17,8 @@ export default merge(basicConfig, {
   },
   target: 'electron-renderer',
   plugins: [
-    new HtmlWebpackPlugin({ template: path.resolve(__dirname, '../assets/src/index.html') })
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../assets/src/index.html')
+    })
   ]
 });

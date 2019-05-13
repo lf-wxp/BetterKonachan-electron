@@ -7,8 +7,11 @@ import { TFuncVoid, TFunc2, TFunc1Void } from '~util';
 
 import './style.css';
 
-const size: number = 4;
-const getPageArray: TFunc2<number, number, number[]> = (page: number, pages: number): number[] => {
+const size = 4;
+const getPageArray: TFunc2<number, number, number[]> = (
+  page: number,
+  pages: number
+): number[] => {
   if (pages === 0) {
     return [];
   }
@@ -16,7 +19,7 @@ const getPageArray: TFunc2<number, number, number[]> = (page: number, pages: num
   const navpage: number[] = [];
   if (page > half && page < pages - half) {
     let i: number = page - half;
-    let j: number = 0;
+    let j = 0;
     while (j < size) {
       navpage.push(i);
       i += 1;
@@ -24,8 +27,8 @@ const getPageArray: TFunc2<number, number, number[]> = (page: number, pages: num
     }
   }
   if (page <= half) {
-    let i: number = 1;
-    let j: number = 0;
+    let i = 1;
+    let j = 0;
     while (j < size) {
       navpage.push(i);
       j += 1;
@@ -34,7 +37,7 @@ const getPageArray: TFunc2<number, number, number[]> = (page: number, pages: num
   }
   if (page >= pages - half) {
     let i: number = pages - size + 1;
-    let j: number = 0;
+    let j = 0;
     while (j < size) {
       navpage.push(i);
       j += 1;
@@ -46,11 +49,17 @@ const getPageArray: TFunc2<number, number, number[]> = (page: number, pages: num
 };
 
 export default React.memo(() => {
-  const { state: { page, pages }, dispatch } = useContext(Context);
+  const {
+    state: { page, pages },
+    dispatch
+  } = useContext(Context);
   const pageArray: number[] = getPageArray(page, pages);
   const [statePage, setStatePage] = useState();
 
-  const getData: (p: number, tags?: string) => void = (p: number, tags: string = ''): void => {
+  const getData: (p: number, tags?: string) => void = (
+    p: number,
+    tags: string = ''
+  ): void => {
     ipcRenderer.send('image-post', { page: p, tags });
     dispatch({
       type: EAction.setPage,
@@ -62,28 +71,33 @@ export default React.memo(() => {
     });
   };
 
-  const invoke: TFunc1Void<React.FormEvent<HTMLLIElement>> = (event: React.FormEvent<HTMLLIElement>): void => {
+  const invoke: TFunc1Void<React.FormEvent<HTMLLIElement>> = (
+    event: React.FormEvent<HTMLLIElement>
+  ): void => {
     const { id } = event.currentTarget.dataset;
     const p: number = Number.parseInt(id as string, 10);
     getData(p);
   };
 
-
-  const onChange: TFunc1Void<React.ChangeEvent> = (event: React.ChangeEvent): void => {
+  const onChange: TFunc1Void<React.ChangeEvent> = (
+    event: React.ChangeEvent
+  ): void => {
     const target: HTMLInputElement = event.currentTarget as HTMLInputElement;
     const val: string = target.value;
     const value: string = val.replace(/[^0-9]/g, '');
     let num: number | string = Number.parseInt(value, 10) || '';
     if (num > pages) {
-        num = pages;
+      num = pages;
     }
     if (num < 0) {
-        num = 1;
+      num = 1;
     }
     setStatePage(num);
   };
 
-  const goTo: TFunc1Void<React.FormEvent<HTMLButtonElement>> = (event: React.FormEvent<HTMLButtonElement>): void => {
+  const goTo: TFunc1Void<React.FormEvent<HTMLButtonElement>> = (
+    event: React.FormEvent<HTMLButtonElement>
+  ): void => {
     event.preventDefault();
     getData(statePage);
   };
@@ -102,16 +116,32 @@ export default React.memo(() => {
 
   return (
     <section className={`pager ${pageArray.length ? 'active' : ''}`}>
-      <span className={`pNav ${page - 1 ? '' : 'disabled'}`} onClick={prev} role='button'>
+      <span
+        className={`pNav ${page - 1 ? '' : 'disabled'}`}
+        onClick={prev}
+        role='button'
+      >
         <i />
       </span>
-      <span className={`pNav ${pages - page > 0 ? '' : 'disabled'}`} onClick={next} role='button'>
+      <span
+        className={`pNav ${pages - page > 0 ? '' : 'disabled'}`}
+        onClick={next}
+        role='button'
+      >
         <i />
       </span>
       <div className='pCon'>
         <ul className='pBox'>
           {pageArray.map((item: number) => (
-            <li className={`pItem ${page === item ? 'current' : ''} ${page >= 102 ? 'middle' : '' }`} onClick={invoke} key={item} data-id={item} role='button'>
+            <li
+              className={`pItem ${page === item ? 'current' : ''} ${
+                page >= 102 ? 'middle' : ''
+              }`}
+              onClick={invoke}
+              key={item}
+              data-id={item}
+              role='button'
+            >
               <span className='pItemText'>{item}</span>
             </li>
           ))}
@@ -123,7 +153,14 @@ export default React.memo(() => {
           <span className='pGotoSpan'>{pages}</span>
         </div>
         <div className='pGotoDiv'>
-         <input className='pGotoInput' type='text' placeholder='page' name='pager' value={statePage} onChange={onChange} />
+          <input
+            className='pGotoInput'
+            type='text'
+            placeholder='page'
+            name='pager'
+            value={statePage}
+            onChange={onChange}
+          />
         </div>
         <button className='pBtn' onClick={goTo}>
           <span />

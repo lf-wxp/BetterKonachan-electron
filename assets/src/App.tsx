@@ -26,36 +26,38 @@ const bgs: string[] = [bg0, bg1, bg2, bg3, bg4, bg5, bg6];
 
 const defaultBg: string = bgs[Math.floor(Math.random() * 6)];
 
-const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(() => {
-  const defaultState: ICtx = {
-    bgUri: defaultBg,
-    pages: 0,
-    page: 0,
-    items: [],
-    download: [],
-    security: true,
-    expand: true,
-    loading: true
-  };
+const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(
+  () => {
+    const defaultState: ICtx = {
+      bgUri: defaultBg,
+      pages: 0,
+      page: 0,
+      items: [],
+      download: [],
+      security: true,
+      expand: true,
+      loading: true
+    };
 
-  return (
-    <React.Fragment>
-      <Provider value={defaultState}>
-        <Service />
-        <div className={`wrapLeft ${defaultState.expand ? 'expand' : ''}`}>
-          <Bar />
-          <Page />
-          <Setting />
-          <Download />
-        </div>
-        <div className='wrapRight'>
-          <Background />
-          <ImageList />
-          <Loading />
-        </div>
-      </Provider>
-    </React.Fragment>
-  );
-});
+    return (
+      <React.Fragment>
+        <Provider value={defaultState}>
+          <Service />
+          <div className={`wrapLeft ${defaultState.expand ? 'expand' : ''}`}>
+            <Bar />
+            <Page />
+            <Setting />
+            <Download />
+          </div>
+          <div className='wrapRight'>
+            <Background />
+            <ImageList />
+            <Loading />
+          </div>
+        </Provider>
+      </React.Fragment>
+    );
+  }
+);
 
 export default App;

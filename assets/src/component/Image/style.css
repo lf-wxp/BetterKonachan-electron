@@ -11,7 +11,7 @@
   background-color: var(--themeListImageBgColor);
   border-radius: 2px;
 
-  &.animationend { 
+  &.animationend {
     background-color: transparent;
   }
 }
@@ -19,7 +19,8 @@
 .image {
   opacity: 0;
 
-  &.loaded, &.error {
-    animation: fadeIn 0.2s ease 0s 1 normal both; 
+  &.loaded,
+  &.error {
+    animation: fadeIn 0.2s ease 0s 1 normal both;
   }
 }

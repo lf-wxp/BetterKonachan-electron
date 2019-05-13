@@ -18,7 +18,6 @@
   background-clip: content-box;
 
   &:hover {
-
     @nest & :matches(.listImg, .listTool) {
       transform: translateY(calc(var(--themeListToolHeight) * -1));
     }
@@ -36,9 +35,9 @@
 }
 
 .listItem-full {
-  width: 100vw!important;
-  height: 100vh!important;
-  transform: translate(0,0)!important;
+  width: 100vw !important;
+  height: 100vh !important;
+  transform: translate(0, 0) !important;
   z-index: 30;
 }
 
@@ -72,7 +71,7 @@
   font-size: 14px;
 
   & i {
-      flex: 0 0 auto;
+    flex: 0 0 auto;
   }
 }
 

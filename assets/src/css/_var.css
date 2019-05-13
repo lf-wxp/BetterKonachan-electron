@@ -8,11 +8,11 @@
   --themeBaseColorTint20: color(#39cccc tint(20%));
   --themeBaseColorTint10: color(#39cccc tint(10%));
 
-  --themeUploadProcessBarBgColor:color(#dcdcdc tint(10%));
-  --themeUploadProcessBarColor:#3399ff;
-  --themeUploadProcessBarColorTint5:color(#3399ff tint(5%));
-  --themeUploadProcessBarColorTint10:color(#3399ff tint(10%));
-  --themeUploadProcessBarColorTint20:color(#3399ff tint(20%));
+  --themeUploadProcessBarBgColor: color(#dcdcdc tint(10%));
+  --themeUploadProcessBarColor: #3399ff;
+  --themeUploadProcessBarColorTint5: color(#3399ff tint(5%));
+  --themeUploadProcessBarColorTint10: color(#3399ff tint(10%));
+  --themeUploadProcessBarColorTint20: color(#3399ff tint(20%));
   --themeUploadProcessBarSuccessColor: #5bbd72;
 
   --themeMaxLeftWidth: 130px;
@@ -27,7 +27,7 @@
 
   --themeLeftSideBgColor: color(#27293d alpha(90%));
 
-  --themePageNavBgColor: rgba(0, 0, 0, .3);
+  --themePageNavBgColor: rgba(0, 0, 0, 0.3);
   --themePageItemSize: 36px;
   --themePageItemHoverColor: color(#39cccc alpha(20%));
   --themePageItemBreathColor1: color(#39cccc shade(5%));
@@ -36,7 +36,7 @@
   --themeListToolHeight: 25px;
   --themeListToolBgColor: color(#39cccc alpha(50%));
   --themeListGap: 10px;
-  --themeListImageBgColor: rgba(0, 0, 0, .3);
+  --themeListImageBgColor: rgba(0, 0, 0, 0.3);
 
   --themeProgressHeight: 4px;
   --themeProgressBg: #dcdcdc;

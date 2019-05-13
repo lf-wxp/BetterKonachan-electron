@@ -40,7 +40,7 @@
   inline-size: 32px;
   block-size: 32px;
   position: relative;
-  transition: all .1s linear;
+  transition: all 0.1s linear;
   cursor: pointer;
   border: 4px solid var(--themeBaseColor);
   box-sizing: border-box;
@@ -52,11 +52,10 @@
     display: inline-block;
   }
 
-
   &.active {
     border-width: 0;
     cursor: default;
-    
+
     & > div {
       background-color: var(--themeBaseColor);
       animation: sk-stretchdelay 1.2s infinite ease-in-out;
@@ -66,7 +65,7 @@
       }
 
       &:nth-child(3) {
-        animation-delay: -1.0s;
+        animation-delay: -1s;
       }
 
       &:nth-child(4) {
@@ -81,10 +80,13 @@
 }
 
 @keyframes sk-stretchdelay {
-  0%, 40%, 100% { 
+  0%,
+  40%,
+  100% {
     transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
+  }
+  20% {
+    transform: scaleY(1);
   }
 }
 

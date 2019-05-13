@@ -13,19 +13,28 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.css';
 
 export default React.memo(() => {
-  const { state: { download }, dispatch } = useContext(Context);
+  const {
+    state: { download },
+    dispatch
+  } = useContext(Context);
 
   useEffect((): TFuncVoid => {
-    ipcRenderer.on('progress', (event: Electron.Event, { progress, index }: { progress: number; index: number }) => {
-      const percent: string = `${progress * 100}%`;
-      dispatch({
-        type: EAction.setProgress,
-        payload: {
-          index,
-          percent
-        }
-      });
-    });
+    ipcRenderer.on(
+      'progress',
+      (
+        event: Electron.Event,
+        { progress, index }: { progress: number; index: number }
+      ) => {
+        const percent = `${progress * 100}%`;
+        dispatch({
+          type: EAction.setProgress,
+          payload: {
+            index,
+            percent
+          }
+        });
+      }
+    );
 
     return (): void => {
       ipcRenderer.removeAllListeners('progress');
@@ -38,12 +47,12 @@ export default React.memo(() => {
         <div className='downloadBox'>
           {download.map((item: IDownload, key: number) => (
             <div className='downloadItem' key={key}>
-              {(item.percent === '100%') && (
+              {item.percent === '100%' && (
                 <span className='downloadIcon'>
                   <IoIosCheckmarkCircle />
                 </span>
               )}
-              <img src={item.url} alt='preview'/>
+              <img src={item.url} alt='preview' />
               <Progress percent={item.percent} />
             </div>
           ))}

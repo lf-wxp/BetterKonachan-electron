@@ -5,7 +5,9 @@ import Spinner from 'react-spinkit';
 import './style.css';
 
 export default React.memo(() => {
-  const { state: { loading } } = useContext(Context);
+  const {
+    state: { loading }
+  } = useContext(Context);
 
   if (!loading) {
     return null;

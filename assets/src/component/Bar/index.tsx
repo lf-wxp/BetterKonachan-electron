@@ -18,11 +18,11 @@ export default React.memo(() => {
 
   return (
     <section className='bar'>
-      <span className='barClose' onClick={close} role='button'/>
+      <span className='barClose' onClick={close} role='button' />
       <span className='barExpand' onClick={max} role='button'>
         <span />
       </span>
-      <span className='barMini' onClick={min} role='button'/>
+      <span className='barMini' onClick={min} role='button' />
     </section>
   );
 });

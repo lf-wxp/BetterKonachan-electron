@@ -27,7 +27,9 @@ export default merge(basicConfig, {
   devtool: 'cheap-module-eval-source-map',
   target: 'electron-renderer',
   plugins: [
-    new HtmlWebpackPlugin({ template: path.resolve(__dirname, '../assets/src/index.html') }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../assets/src/index.html')
+    }),
     new webpack.HotModuleReplacementPlugin(), // enable HMR globally
     new webpack.NamedModulesPlugin() // prints more readable module names in the browser console on HMR updates
   ],
