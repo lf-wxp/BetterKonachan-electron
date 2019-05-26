@@ -3,8 +3,9 @@ import windowStateKeeper from 'electron-window-state';
 import * as Splashscreen from '@trodi/electron-splashscreen';
 import { isValidType, TFuncVoid } from '~util';
 import { download } from 'electron-dl';
-import { getImageData, getImagePage } from '~module/image';
-import { IImage } from '~model/image';
+// import { getImageData, getImagePage } from '~module/image';
+import { getImageJsonData } from '~module/image';
+// import { IImage } from '~model/image';
 import path from 'path';
 
 let mainWindow: Electron.BrowserWindow | null;
@@ -87,8 +88,11 @@ ipcMain.on(
     event: Electron.Event,
     { page, tags }: { page: number; tags: string }
   ): Promise<void> => {
-    const pages: number = await getImagePage();
-    const images: IImage[] = await getImageData({ page, tags });
+    // const pages: number = await getImagePage();
+    // const images: IImage[] = await getImageData({ page, tags });
+    const { images, pages } = await getImageJsonData({ page, tags });
+
+    console.log('jsonnnnnnnnnnnnnnnnnnnnnnnnnnnnn', images, pages);
     event.sender.send('image-data', { images, pages, page });
   }
 );

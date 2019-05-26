@@ -26,5 +26,5 @@ export type TReducer = (state: ICtx, action: IAction) => ICtx;
 
 export interface IContext {
   state: ICtx;
-  dispatch: React.Dispatch<IAction>
+  dispatch: React.Dispatch<IAction>;
 }

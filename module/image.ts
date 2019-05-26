@@ -5,6 +5,7 @@ import * as path from 'path';
 import { IMAGEPAGESIZE, IMAGEURLJSON, IMAGEURLXML } from '~config';
 
 import { IImage, IResImage } from '~model/image';
+import { IResponse } from '~model/response';
 
 export const getImagePage = async (): Promise<number> => {
   const res: AxiosResponse<string> = await axios.get(IMAGEURLXML);
@@ -13,12 +14,12 @@ export const getImagePage = async (): Promise<number> => {
   return Math.ceil(
     Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE
   );
-}
+};
 
 export const formatUrl = (url: string): string => {
   // return `${url.replace(/(?<=konachan\.)net/, 'com')}`;
   return url;
-}
+};
 
 export const getImageData = async ({
   page = 1,
@@ -55,4 +56,23 @@ export const getImageData = async ({
   );
 
   return imgs;
-}
+};
+
+export const getImageJsonData = async ({
+  page = 1,
+  tags = ''
+}: {
+  page: number;
+  tags: string;
+}): Promise<{ pages: number; images: IImage[] }> => {
+  const res: AxiosResponse<
+    IResponse<{ pages: number; images: IImage[] }>
+  > = await axios.get('https://acglife.club/api/image/list', {
+    params: {
+      page,
+      tags
+    }
+  });
+
+  return res.data.data;
+};
