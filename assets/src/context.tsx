@@ -33,6 +33,7 @@ const initState: ICtx = {
       url: '',
       width: 0,
       height: 0,
+      tags: '',
       security: false,
       name: ''
     }

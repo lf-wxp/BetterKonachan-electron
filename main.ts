@@ -1,12 +1,15 @@
-import electron, { app, BrowserWindow, ipcMain } from 'electron';
-import windowStateKeeper from 'electron-window-state';
 import * as Splashscreen from '@trodi/electron-splashscreen';
-import { isValidType, TFuncVoid } from '~util';
+
+import { TFuncVoid, isValidType } from '~util';
+import electron, { BrowserWindow, app, ipcMain } from 'electron';
+import { fromEvent, of, zip } from 'rxjs';
+import { map, mergeAll } from 'rxjs/operators';
+
+import { IRxEventPayLoad } from '~model/event';
 import { download } from 'electron-dl';
-// import { getImageData, getImagePage } from '~module/image';
-import { getImageJsonData } from '~module/image';
-// import { IImage } from '~model/image';
+import { imageXmlObservable } from '~module/image';
 import path from 'path';
+import windowStateKeeper from 'electron-window-state';
 
 let mainWindow: Electron.BrowserWindow | null;
 let mainWindowState: windowStateKeeper.State;
@@ -14,10 +17,12 @@ let screen: { width: number; height: number };
 
 const createWindow: TFuncVoid = (): void => {
   screen = electron.screen.getPrimaryDisplay().workAreaSize;
+
   mainWindowState = windowStateKeeper({
     defaultHeight: 600,
     defaultWidth: 800
   });
+
   const windowOpts: Electron.BrowserWindowConstructorOptions = {
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -31,6 +36,7 @@ const createWindow: TFuncVoid = (): void => {
       nodeIntegration: true
     }
   };
+
   mainWindow = Splashscreen.initSplashScreen({
     windowOpts,
     templateUrl: path.resolve(app.getAppPath(), './dist/splash.svg'),
@@ -52,92 +58,56 @@ const createWindow: TFuncVoid = (): void => {
     mainWindow.loadFile(path.resolve(app.getAppPath(), './dist/index.html'));
   }
 
-  mainWindow.on(
-    'closed',
-    (): void => {
-      mainWindow = null;
-    }
-  );
+  fromEvent(mainWindow, 'closed')
+  .subscribe(() => {
+    mainWindow = null;
+  });
 };
 
-app.on('ready', createWindow);
 
-app.on(
-  'window-all-closed',
-  (): void => {
-    if (process.platform !== 'darwin') {
-      app.quit();
+fromEvent(app, 'ready')
+.subscribe(createWindow);
+
+fromEvent(app, 'window-all-closed')
+.subscribe(() => process.platform !== 'darwin' && app.quit());
+
+fromEvent(app, 'activate')
+.subscribe(() => mainWindow === null && createWindow());
+
+fromEvent(ipcMain, 'image-post').pipe(
+  map(([e, params]) => zip(imageXmlObservable(params), of(e))),
+  mergeAll(),
+)
+.subscribe(([{ images, pages }, event]) => {
+  event.sender.send('image-data', { images, pages });
+});
+
+
+fromEvent(ipcMain, 'window-close')
+.subscribe(() => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.close());
+
+fromEvent(ipcMain, 'window-min')
+.subscribe(() => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.minimize())
+
+fromEvent(ipcMain, 'window-max')
+.subscribe(() => {
+  if (isValidType<Electron.BrowserWindow>(mainWindow)) {
+    const [width, height] = mainWindow.getSize();
+    if (screen.width === width && screen.height === height) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
     }
   }
-);
+});
 
-app.on(
-  'activate',
-  (): void => {
-    // On OS X it"s common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-      createWindow();
+fromEvent(ipcMain, 'download')
+.subscribe(([event, { url, index }]: IRxEventPayLoad<{ url: string; index: number }>) => {
+  download(mainWindow as BrowserWindow, url, {
+    onProgress: (progress: number): void => {
+      event.sender.send('progress', { progress, index });
     }
-  }
-);
-
-ipcMain.on(
-  'image-post',
-  async (
-    event: Electron.Event,
-    { page, tags }: { page: number; tags: string }
-  ): Promise<void> => {
-    // const pages: number = await getImagePage();
-    // const images: IImage[] = await getImageData({ page, tags });
-    const { images, pages } = await getImageJsonData({ page, tags });
-
-    console.log('jsonnnnnnnnnnnnnnnnnnnnnnnnnnnnn', images, pages);
-    event.sender.send('image-data', { images, pages, page });
-  }
-);
-
-ipcMain.on(
-  'window-close',
-  (): void => {
-    if (isValidType<Electron.BrowserWindow>(mainWindow)) {
-      mainWindow.close();
-    }
-  }
-);
-
-ipcMain.on(
-  'window-min',
-  (): void => {
-    if (isValidType<Electron.BrowserWindow>(mainWindow)) {
-      mainWindow.minimize();
-    }
-  }
-);
-
-ipcMain.on(
-  'window-max',
-  (): void => {
-    if (isValidType<Electron.BrowserWindow>(mainWindow)) {
-      const [width, height] = mainWindow.getSize();
-      if (screen.width === width && screen.height === height) {
-        mainWindow.unmaximize();
-      } else {
-        mainWindow.maximize();
-      }
-    }
-  }
-);
-
-ipcMain.on(
-  'download',
-  (event: Electron.Event, { url, index }: { url: string; index: number }) => {
-    download(mainWindow as BrowserWindow, url, {
-      onProgress: (progress: number): void => {
-        event.sender.send('progress', { progress, index });
-      }
-    }).catch((err: Error) => {
-      console.error(err);
-    });
-  }
-);
+  }).catch((err: Error) => {
+    console.error(err);
+  });
+});

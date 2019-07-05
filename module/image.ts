@@ -1,78 +1,80 @@
-import axios, { AxiosResponse } from 'axios';
-import * as cheerio from 'cheerio';
-import * as path from 'path';
+import { IMAGEAPIJSON, IMAGEPAGESIZE, IMAGEURLXML } from '~config';
+import { catchError, map, pluck, switchMap } from 'rxjs/operators';
+import { of, zip } from 'rxjs';
 
-import { IMAGEPAGESIZE, IMAGEURLJSON, IMAGEURLXML } from '~config';
+import { IImage } from '~model/image';
+import axios from 'axios';
+import cheerio from 'cheerio';
+import path from 'path';
+import querystring from 'querystring';
+import { retryWithDelay } from 'rxjs-retry-delay';
 
-import { IImage, IResImage } from '~model/image';
-import { IResponse } from '~model/response';
-
-export const getImagePage = async (): Promise<number> => {
-  const res: AxiosResponse<string> = await axios.get(IMAGEURLXML);
-  const $: CheerioStatic = cheerio.load(res.data);
-
-  return Math.ceil(
-    Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE
-  );
-};
-
-export const formatUrl = (url: string): string => {
-  // return `${url.replace(/(?<=konachan\.)net/, 'com')}`;
-  return url;
-};
-
-export const getImageData = async ({
-  page = 1,
-  tags = ''
-}: {
-  page: number;
-  tags: string;
-}): Promise<IImage[]> => {
-  const res: AxiosResponse<IResImage[]> = await axios.get(IMAGEURLJSON, {
-    params: {
-      page,
-      tags
-    }
+export const parseXmlData = (xmlData: string) => {
+  const $: CheerioStatic = cheerio.load(xmlData);
+  const pages = Math.floor(Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE);
+  const images: IImage[] = [];
+  $('post').map((index, post) => {
+    const attrs = post.attribs;
+    images.push({
+      id: index,
+      url: attrs.file_url,
+      sampleWidth: Number.parseInt(attrs.sample_width, 10),
+      sampleHeight: Number.parseInt(attrs.sample_height, 10),
+      sample: attrs.sample_url,
+      preview: attrs.preview_url,
+      previewWidth: Number.parseInt(attrs.actual_preview_width, 10),
+      previewHeight: Number.parseInt(attrs.actual_preview_height, 10),
+      width: Number.parseInt(attrs.width, 10),
+      height: Number.parseInt(attrs.height, 10),
+      tags: attrs.tags,
+      security: attrs.rating === 's' ? true : false,
+      name: `${attrs.md5}${path.extname(attrs.file_url)}`
+    });
   });
 
-  const imgs: IImage[] = [];
-  res.data.forEach(
-    (value: IResImage, index: number): void => {
-      imgs.push({
-        id: index,
-        url: formatUrl(value.file_url),
-        sampleWidth: value.sample_width,
-        width: value.width,
-        sampleHeight: value.sample_height,
-        sample: formatUrl(value.sample_url),
-        previewWidth: value.actual_preview_width,
-        previewHeight: value.actual_preview_height,
-        height: value.height,
-        preview: formatUrl(value.preview_url),
-        security: value.rating === 's' ? true : false,
-        name: value.md5 + path.extname(value.file_url)
-      });
-    }
+  return {
+    pages,
+    images,
+  }
+}
+
+export const imageXmlObservable = ({ page = 1, tags = '' } : { page: number; tags: string }) => {
+  const params$ = of<{ page: number; tags: string; }>({ page, tags })
+  const url$ = of<string>(IMAGEURLXML);
+  return zip(params$, url$).pipe(
+    switchMap(([{ page, tags }, url]) => axios.get(`${url}?${querystring.stringify({ page, tags })}`)),
+    pluck('data'),
+    map((xmlData: any) => parseXmlData(xmlData)),
+    retryWithDelay({
+      delay: 1000,
+      scalingFactor: 2,
+      maxRetryAttempts: 4,
+    }),
+    catchError((err) => {
+      return of({
+        images: [],
+        pages: -1,
+      })
+    })
+  )
+};
+
+export const imageJsonObservable = ({ page = 1, tags = '' } : { page: number; tags: string }) => {
+  const params$ = of<{ page: number; tags: string; }>({ page, tags })
+  const url$ = of<string>(IMAGEAPIJSON);
+  return zip(params$, url$).pipe(
+    switchMap(([{ page, tags }, url]) => axios.get(`${url}?${querystring.stringify({ page, tags })}`)),
+    pluck('data', 'data'),
+    retryWithDelay({
+      delay: 1000,
+      scalingFactor: 2,
+      maxRetryAttempts: 4,
+    }),
+    catchError((err) => {
+      return of({
+        images: [],
+        pages: -1,
+      })
+    })
   );
-
-  return imgs;
-};
-
-export const getImageJsonData = async ({
-  page = 1,
-  tags = ''
-}: {
-  page: number;
-  tags: string;
-}): Promise<{ pages: number; images: IImage[] }> => {
-  const res: AxiosResponse<
-    IResponse<{ pages: number; images: IImage[] }>
-  > = await axios.get('https://acglife.club/api/image/list', {
-    params: {
-      page,
-      tags
-    }
-  });
-
-  return res.data.data;
-};
+}
