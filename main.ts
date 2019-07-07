@@ -3,7 +3,7 @@ import * as Splashscreen from '@trodi/electron-splashscreen';
 import { TFuncVoid, isValidType } from '~util';
 import electron, { BrowserWindow, app, ipcMain } from 'electron';
 import { fromEvent, of, zip } from 'rxjs';
-import { map, mergeAll } from 'rxjs/operators';
+import { map, mergeAll, debounceTime } from 'rxjs/operators';
 
 import { IRxEventPayLoad } from '~model/event';
 import { download } from 'electron-dl';
@@ -75,6 +75,7 @@ fromEvent(app, 'activate')
 .subscribe(() => mainWindow === null && createWindow());
 
 fromEvent(ipcMain, 'image-post').pipe(
+  debounceTime(1000),
   map(([e, params]) => zip(imageXmlObservable(params), of(e))),
   mergeAll(),
 )

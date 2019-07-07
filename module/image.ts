@@ -1,5 +1,5 @@
 import { IMAGEAPIJSON, IMAGEPAGESIZE, IMAGEURLXML } from '~config';
-import { catchError, map, pluck, switchMap } from 'rxjs/operators';
+import { catchError, map, pluck, switchMap, tap } from 'rxjs/operators';
 import { of, zip } from 'rxjs';
 
 import { IImage } from '~model/image';
@@ -42,6 +42,7 @@ export const imageXmlObservable = ({ page = 1, tags = '' } : { page: number; tag
   const params$ = of<{ page: number; tags: string; }>({ page, tags })
   const url$ = of<string>(IMAGEURLXML);
   return zip(params$, url$).pipe(
+    tap(() => console.log('image post')),
     switchMap(([{ page, tags }, url]) => axios.get(`${url}?${querystring.stringify({ page, tags })}`)),
     pluck('data'),
     map((xmlData: any) => parseXmlData(xmlData)),
