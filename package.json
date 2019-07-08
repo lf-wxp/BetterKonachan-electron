@@ -5,6 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "dist": "npx rimraf dist/* && npm run main:build && npm run render:build && npm run copy && electron-builder --win --x64",
+    "convert": "convert -density 512x512 -background transparent ./assets/src/image/icon.svg -define icon:auto-resize -colors 512 ./assets/src/image/icon.ico",
     "copy": "copyfiles -f ./assets/src/image/splash.svg ./assets/src/image/icon.ico dist",
     "render:dev": "webpack-dev-server --inline --config ./webpack/render.dev.ts",
     "render:build": "webpack --config ./webpack/render.prod.ts",
