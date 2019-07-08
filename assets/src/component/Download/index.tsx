@@ -1,11 +1,15 @@
 import React, { useContext, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
-import { IoIosCheckmarkCircle } from 'react-icons/io';
+import {
+  IoIosCheckmarkCircle,
+  IoMdInformationCircleOutline,
+  IoIosRefresh
+} from 'react-icons/io';
 import Progress from '~component/Progress';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Context from '~src/context';
 
-import { EAction } from '~cModel/action';
+import { EAction, IUpdateProgressPayload } from '~cModel/action';
 import { TFuncVoid } from '~util';
 import { IDownload } from '~cModel/download';
 
@@ -20,26 +24,35 @@ export default React.memo(() => {
 
   useEffect((): TFuncVoid => {
     ipcRenderer.on(
-      'progress',
+      'download-status',
       (
         event: Electron.Event,
-        { progress, index }: { progress: number; index: number }
+        {
+          progress,
+          index,
+          status
+        }: { progress: number; index: number; status: 'error' | 'progress' }
       ) => {
         const percent = `${progress * 100}%`;
         dispatch({
-          type: EAction.setProgress,
+          type: EAction.setDownloadStatus,
           payload: {
             index,
-            percent
-          }
+            percent,
+            status
+          } as IUpdateProgressPayload
         });
       }
     );
 
     return (): void => {
-      ipcRenderer.removeAllListeners('progress');
+      ipcRenderer.removeAllListeners('download-status');
     };
   }, []);
+
+  const downloadRetry = (url: string, index: number) => {
+    ipcRenderer.send('download', { url: url, index });
+  };
 
   return (
     <section className='download'>
@@ -52,7 +65,20 @@ export default React.memo(() => {
                   <IoIosCheckmarkCircle />
                 </span>
               )}
-              <img src={item.url} alt='preview' />
+              {item.error && (
+                <div className='downloadCatch'>
+                  <span className='downloadError'>
+                    <IoMdInformationCircleOutline />
+                  </span>
+                  <span
+                    className='downloadRetry'
+                    onClick={() => downloadRetry(item.url, key)}
+                  >
+                    <IoIosRefresh />
+                  </span>
+                </div>
+              )}
+              <img src={item.sample} alt='preview' />
               <Progress percent={item.percent} />
             </div>
           ))}

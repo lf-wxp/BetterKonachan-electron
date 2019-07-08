@@ -8,13 +8,14 @@ export enum EAction {
   setSecurity = 'setSecurity',
   setExpand = 'setExpand',
   setDownload = 'setDownload',
-  setProgress = 'setProgress',
-  setLoading = 'setLoading'
+  setLoading = 'setLoading',
+  setDownloadStatus = 'setDownloadStatus'
 }
 
 export interface IUpdateProgressPayload {
   index: number;
   percent: string;
+  status: 'error' | 'progress';
 }
 export interface IAction {
   // tslint:disable-next-line: no-reserved-keywords

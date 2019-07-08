@@ -36,3 +36,39 @@
   inset-inline-end: 0;
   color: var(--themeBaseColor);
 }
+
+.downloadCatch {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+
+  &:hover {
+    & .downloadError {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    & .downloadRetry {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.downloadError {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  color: var(--themeErrorColor);
+  transition: opacity 0.2s ease;
+}
+
+.downloadRetry {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  color: var(--themeBaseColor);
+  transition: opacity 0.2s ease;
+}

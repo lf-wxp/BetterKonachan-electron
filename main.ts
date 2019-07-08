@@ -58,40 +58,40 @@ const createWindow: TFuncVoid = (): void => {
     mainWindow.loadFile(path.resolve(app.getAppPath(), './dist/index.html'));
   }
 
-  fromEvent(mainWindow, 'closed')
-  .subscribe(() => {
+  fromEvent(mainWindow, 'closed').subscribe(() => {
     mainWindow = null;
   });
 };
 
+fromEvent(app, 'ready').subscribe(createWindow);
 
-fromEvent(app, 'ready')
-.subscribe(createWindow);
+fromEvent(app, 'window-all-closed').subscribe(
+  () => process.platform !== 'darwin' && app.quit()
+);
 
-fromEvent(app, 'window-all-closed')
-.subscribe(() => process.platform !== 'darwin' && app.quit());
+fromEvent(app, 'activate').subscribe(
+  () => mainWindow === null && createWindow()
+);
 
-fromEvent(app, 'activate')
-.subscribe(() => mainWindow === null && createWindow());
+fromEvent(ipcMain, 'image-post')
+  .pipe(
+    debounceTime(1000),
+    map(([e, params]) => zip(imageXmlObservable(params), of(e))),
+    mergeAll()
+  )
+  .subscribe(([{ images, pages }, event]) => {
+    event.sender.send('image-data', { images, pages });
+  });
 
-fromEvent(ipcMain, 'image-post').pipe(
-  debounceTime(1000),
-  map(([e, params]) => zip(imageXmlObservable(params), of(e))),
-  mergeAll(),
-)
-.subscribe(([{ images, pages }, event]) => {
-  event.sender.send('image-data', { images, pages });
-});
+fromEvent(ipcMain, 'window-close').subscribe(
+  () => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.close()
+);
 
+fromEvent(ipcMain, 'window-min').subscribe(
+  () => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.minimize()
+);
 
-fromEvent(ipcMain, 'window-close')
-.subscribe(() => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.close());
-
-fromEvent(ipcMain, 'window-min')
-.subscribe(() => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.minimize())
-
-fromEvent(ipcMain, 'window-max')
-.subscribe(() => {
+fromEvent(ipcMain, 'window-max').subscribe(() => {
   if (isValidType<Electron.BrowserWindow>(mainWindow)) {
     const [width, height] = mainWindow.getSize();
     if (screen.width === width && screen.height === height) {
@@ -102,13 +102,22 @@ fromEvent(ipcMain, 'window-max')
   }
 });
 
-fromEvent(ipcMain, 'download')
-.subscribe(([event, { url, index }]: IRxEventPayLoad<{ url: string; index: number }>) => {
-  download(mainWindow as BrowserWindow, url, {
-    onProgress: (progress: number): void => {
-      event.sender.send('progress', { progress, index });
-    }
-  }).catch((err: Error) => {
-    console.error(err);
-  });
-});
+fromEvent(ipcMain, 'download').subscribe(
+  ([event, { url, index }]: IRxEventPayLoad<{
+    url: string;
+    index: number;
+  }>) => {
+    download(mainWindow as BrowserWindow, url, {
+      onProgress: (progress: number): void => {
+        event.sender.send('download-status', {
+          status: 'progress',
+          progress,
+          index
+        });
+      }
+    }).catch((err: Error) => {
+      console.log(err);
+      event.sender.send('download-status', { status: 'error', index });
+    });
+  }
+);

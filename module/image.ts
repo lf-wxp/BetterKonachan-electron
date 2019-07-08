@@ -11,7 +11,9 @@ import { retryWithDelay } from 'rxjs-retry-delay';
 
 export const parseXmlData = (xmlData: string) => {
   const $: CheerioStatic = cheerio.load(xmlData);
-  const pages = Math.floor(Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE);
+  const pages = Math.floor(
+    Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE
+  );
   const images: IImage[] = [];
   $('post').map((index, post) => {
     const attrs = post.attribs;
@@ -34,48 +36,64 @@ export const parseXmlData = (xmlData: string) => {
 
   return {
     pages,
-    images,
-  }
-}
+    images
+  };
+};
 
-export const imageXmlObservable = ({ page = 1, tags = '' } : { page: number; tags: string }) => {
-  const params$ = of<{ page: number; tags: string; }>({ page, tags })
+export const imageXmlObservable = ({
+  page = 1,
+  tags = ''
+}: {
+  page: number;
+  tags: string;
+}) => {
+  const params$ = of<{ page: number; tags: string }>({ page, tags });
   const url$ = of<string>(IMAGEURLXML);
   return zip(params$, url$).pipe(
     tap(() => console.log('image post')),
-    switchMap(([{ page, tags }, url]) => axios.get(`${url}?${querystring.stringify({ page, tags })}`)),
+    switchMap(([{ page, tags }, url]) =>
+      axios.get(`${url}?${querystring.stringify({ page, tags })}`)
+    ),
     pluck('data'),
     map((xmlData: any) => parseXmlData(xmlData)),
     retryWithDelay({
       delay: 1000,
       scalingFactor: 2,
-      maxRetryAttempts: 4,
+      maxRetryAttempts: 4
     }),
-    catchError((err) => {
+    catchError(err => {
       return of({
         images: [],
-        pages: -1,
-      })
+        pages: -1
+      });
     })
-  )
+  );
 };
 
-export const imageJsonObservable = ({ page = 1, tags = '' } : { page: number; tags: string }) => {
-  const params$ = of<{ page: number; tags: string; }>({ page, tags })
+export const imageJsonObservable = ({
+  page = 1,
+  tags = ''
+}: {
+  page: number;
+  tags: string;
+}) => {
+  const params$ = of<{ page: number; tags: string }>({ page, tags });
   const url$ = of<string>(IMAGEAPIJSON);
   return zip(params$, url$).pipe(
-    switchMap(([{ page, tags }, url]) => axios.get(`${url}?${querystring.stringify({ page, tags })}`)),
+    switchMap(([{ page, tags }, url]) =>
+      axios.get(`${url}?${querystring.stringify({ page, tags })}`)
+    ),
     pluck('data', 'data'),
     retryWithDelay({
       delay: 1000,
       scalingFactor: 2,
-      maxRetryAttempts: 4,
+      maxRetryAttempts: 4
     }),
-    catchError((err) => {
+    catchError(err => {
       return of({
         images: [],
-        pages: -1,
-      })
+        pages: -1
+      });
     })
   );
-}
+};

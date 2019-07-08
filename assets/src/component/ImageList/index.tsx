@@ -145,9 +145,9 @@ export default React.memo(() => {
       security ? it.security : true
     );
     const item: IImage = filterItem[Number.parseInt(index as string, 10)];
-    const previewUrl: string = item.preview;
     const data: IDownload = {
-      url: previewUrl,
+      url: item.url,
+      sample: item.preview,
       percent: '0%'
     };
     if (!download.find(({ url }: { url: string }) => url === data.url)) {

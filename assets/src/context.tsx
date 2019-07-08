@@ -59,11 +59,16 @@ const reducer: TReducer = (state: ICtx, { type, payload }: IAction): ICtx => {
       return { ...state, download: payload as IDownload[] };
     case EAction.setLoading:
       return { ...state, loading: payload as boolean };
-    case EAction.setProgress:
+    case EAction.setDownloadStatus:
       const { download } = state;
-      const { index, percent } = payload as IUpdateProgressPayload;
+      const { index, percent, status } = payload as IUpdateProgressPayload;
       const tmp: IDownload[] = [...download];
-      tmp[index].percent = percent;
+      if (status === 'progress') {
+        tmp[index].percent = percent;
+      }
+      if (status === 'error') {
+        tmp[index].error = true;
+      }
 
       return { ...state, download: tmp };
     default:

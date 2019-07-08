@@ -2,6 +2,7 @@
   --themeWindowRadius: 4px;
 
   --themeBaseColor: #39cccc;
+  --themeErrorColor: #ff4136;
   --themeBaseColorAlpha30: color(#39cccc alpha(30%));
   --themeBaseColorAlpha50: color(#39cccc alpha(50%));
   --themeBaseColorAlpha80: color(#39cccc alpha(80%));
