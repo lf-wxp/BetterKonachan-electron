@@ -1,5 +1,5 @@
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import './style.css';
+import './style.pcss';
 
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, {

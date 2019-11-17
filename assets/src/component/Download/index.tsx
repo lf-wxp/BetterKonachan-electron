@@ -14,7 +14,7 @@ import { TFuncVoid } from '~util';
 import { IDownload } from '~cModel/download';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
-import './style.css';
+import './style.pcss';
 
 export default React.memo(() => {
   const {

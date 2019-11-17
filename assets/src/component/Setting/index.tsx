@@ -4,7 +4,7 @@ import Context from '~src/context';
 
 import { EAction } from '~cModel/action';
 
-import './style.css';
+import './style.pcss';
 
 import { TFuncVoid } from '~util';
 

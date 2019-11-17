@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Context from '~src/context';
 import Spinner from 'react-spinkit';
 
-import './style.css';
+import './style.pcss';
 
 export default React.memo(() => {
   const {

@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 
 import { TFuncVoid } from '~util';
 
-import './style.css';
+import './style.pcss';
 
 export default React.memo(() => {
   const close: TFuncVoid = (): void => {

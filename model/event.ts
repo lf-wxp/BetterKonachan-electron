@@ -1,1 +1,1 @@
-export type IRxEventPayLoad<T> = [Electron.Event, T];
+export type IRxEventPayLoad<T> = [Electron.IpcMainEvent, T];

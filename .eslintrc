@@ -4,9 +4,9 @@
     "prettier",
     "prettier/@typescript-eslint"
   ],
+  "plugins": ["@typescript-eslint", "react-hooks"],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": false,
-    "@typescript-eslint/no-unused-vars": false,
-    "@typescript-eslint/interface-name-prefix": "always"
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   }
 }

@@ -5,7 +5,7 @@ import Context from '~src/context';
 import { EAction } from '~cModel/action';
 import { TFuncVoid, TFunc2, TFunc1Void } from '~util';
 
-import './style.css';
+import './style.pcss';
 
 const size = 4;
 const getPageArray: TFunc2<number, number, number[]> = (

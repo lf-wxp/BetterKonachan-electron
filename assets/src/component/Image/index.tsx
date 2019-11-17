@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { TFunc1Void, TFuncVoid } from '~util';
 
-import './style.css';
+import './style.pcss';
 
 interface IProps {
   src: string;

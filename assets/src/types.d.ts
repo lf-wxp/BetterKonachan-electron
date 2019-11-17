@@ -2,7 +2,7 @@ declare module '*.json' {
   const value: string;
   export default value;
 }
-declare module '*.css' {
+declare module '*.pcss' {
   interface IClassNames {
     [className: string]: string;
   }

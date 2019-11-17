@@ -27,7 +27,7 @@ export default {
         exclude: /node_modules/
       },
       {
-        test: /\.css$/,
+        test: /\.p?css$/,
         use: [
           'style-loader',
           {
