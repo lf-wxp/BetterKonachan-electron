@@ -1,13 +1,13 @@
-import { IImage } from '~model/image';
-import { IDownload } from '~cModel/download';
+import { ImageDetail } from '~model/image';
+import { Download } from '~cModel/download';
 
-export interface ICtx {
+export interface Ctx {
   bgUri: string;
-  items: IImage[];
+  items: ImageDetail[];
   pages: number;
   page: number;
   security: boolean;
   expand: boolean;
-  download: IDownload[];
+  download: Download[];
   loading: boolean;
 }

@@ -4,7 +4,7 @@ import { TFunc1Void, TFuncVoid } from '~util';
 
 import './style.pcss';
 
-interface IProps {
+interface ImageProps {
   src: string;
   fallback?: string;
   className?: string;
@@ -26,13 +26,11 @@ export default ({
   style,
   width,
   height
-}: IProps): React.ReactElement => {
+}: ImageProps): React.ReactElement => {
   const [state, setState] = useState(EImageState.pendding);
   const [animationEnd, setAnimationEnd] = useState(false);
   const [isError, setIsError] = useState(false);
-  const onLoad: TFunc1Void<React.FormEvent<HTMLImageElement>> = (
-    e: React.FormEvent<HTMLImageElement>
-  ): void => {
+  const onLoad: TFunc1Void<React.FormEvent<HTMLImageElement>> = (): void => {
     if (!isError) {
       setState(EImageState.loaded);
     }

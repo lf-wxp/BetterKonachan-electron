@@ -1,4 +1,4 @@
-import { ICtx } from './ctx';
+import { Ctx } from './ctx';
 
 export enum EAction {
   setBgUri = 'setBgUri',
@@ -12,20 +12,20 @@ export enum EAction {
   setDownloadStatus = 'setDownloadStatus'
 }
 
-export interface IUpdateProgressPayload {
+export interface UpdateProgressPayload {
   index: number;
   percent: string;
   status: 'error' | 'progress';
 }
-export interface IAction {
+export interface Action {
   // tslint:disable-next-line: no-reserved-keywords
   type: EAction;
-  payload: ICtx[keyof ICtx] | IUpdateProgressPayload;
+  payload: Ctx[keyof Ctx] | UpdateProgressPayload;
 }
 
-export type TReducer = (state: ICtx, action: IAction) => ICtx;
+export type TReducer = (state: Ctx, action: Action) => Ctx;
 
-export interface IContext {
-  state: ICtx;
-  dispatch: React.Dispatch<IAction>;
+export interface Context {
+  state: Ctx;
+  dispatch: React.Dispatch<Action>;
 }

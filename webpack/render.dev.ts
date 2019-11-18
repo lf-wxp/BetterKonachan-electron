@@ -1,7 +1,6 @@
+import 'webpack-dev-server';
 import merge from 'webpack-merge';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-//@ts-ignore
-import webpackDevServer from 'webpack-dev-server';
 import basicConfig from './basic';
 import webpack from 'webpack';
 import path from 'path';

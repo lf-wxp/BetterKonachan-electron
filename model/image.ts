@@ -1,4 +1,4 @@
-export interface IImage {
+export interface ImageDetail {
   id: number;
   sampleWidth: number;
   sampleHeight: number;
@@ -14,8 +14,8 @@ export interface IImage {
   tags: string;
 }
 
-export interface IImageList {
-  images: IImage[];
+export interface ImageList {
+  images: ImageDetail[];
   pages: number;
   page?: number;
 }

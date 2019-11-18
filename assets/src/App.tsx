@@ -17,7 +17,7 @@ import bg4 from '~image/bg4.jpg';
 import bg5 from '~image/bg5.jpg';
 import bg6 from '~image/bg6.jpg';
 
-import { ICtx } from '~cModel/ctx';
+import { Ctx } from '~cModel/ctx';
 
 import './css/_var.pcss';
 import './css/_base.pcss';
@@ -29,7 +29,7 @@ const defaultBg: string = bgs[Math.floor(Math.random() * 6)];
 
 const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(
   () => {
-    const defaultState: ICtx = {
+    const defaultState: Ctx = {
       bgUri: defaultBg,
       pages: 0,
       page: 0,

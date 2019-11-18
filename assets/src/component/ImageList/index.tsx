@@ -14,9 +14,9 @@ import { TFunc1, TFunc1Void, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
 import Context from '~src/context';
 import { EAction } from '~cModel/action';
 import { FaDownload } from 'react-icons/fa';
-import { IDownload } from '~cModel/download';
-import { IImage } from '~model/image';
-import { IImageDom } from '~cModel/imageDom';
+import { Download } from '~cModel/download';
+import { ImageDetail } from '~model/image';
+import { ImageDom } from '~cModel/imageDom';
 import Image from '~component/Image';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import fallbackImage from '~image/loaderror.png';
@@ -90,12 +90,12 @@ const calcPosition: TFunc1<number, { x: number; y: number }> = (
   };
 };
 
-const calcList: TFunc2<IImage[], number, IImageDom[]> = (
-  items: IImage[],
+const calcList: TFunc2<ImageDetail[], number, ImageDom[]> = (
+  items: ImageDetail[],
   width: number
-): IImageDom[] => {
-  return items.map((item: IImage, i: number) => {
-    const newItem: IImageDom = { ...item };
+): ImageDom[] => {
+  return items.map((item: ImageDetail) => {
+    const newItem: ImageDom = { ...item };
     const h: number = (item.height / item.width) * width;
     newItem.styleW = width;
     newItem.styleH = h;
@@ -111,15 +111,15 @@ const calcList: TFunc2<IImage[], number, IImageDom[]> = (
   });
 };
 
-const updateLayout: TFunc3<IImage[], number, boolean, IImageDom[]> = (
-  items: IImage[],
+const updateLayout: TFunc3<ImageDetail[], number, boolean, ImageDom[]> = (
+  items: ImageDetail[],
   width: number,
   security: boolean
-): IImageDom[] => {
+): ImageDom[] => {
   const { column, colWidth } = calcColumnWidth(width);
   // tslint:disable-next-line: prefer-array-literal
   columnArray = new Array(column).fill(0);
-  const filterItem: IImage[] = items.filter((item: IImage) =>
+  const filterItem: ImageDetail[] = items.filter((item: ImageDetail) =>
     security ? item.security : true
   );
 
@@ -132,7 +132,7 @@ export default React.memo(() => {
     dispatch
   } = useContext(Context);
   const refDom: React.MutableRefObject<null> = useRef(null);
-  const [list, setList] = useState([] as IImageDom[]);
+  const [list, setList] = useState([] as ImageDom[]);
   const { width } = useSize(refDom.current);
 
   const handleDownload: TFunc1Void<React.FormEvent<HTMLAnchorElement>> = (
@@ -141,11 +141,11 @@ export default React.memo(() => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget;
     const { index } = target.dataset;
-    const filterItem: IImage[] = items.filter((it: IImage) =>
+    const filterItem: ImageDetail[] = items.filter((it: ImageDetail) =>
       security ? it.security : true
     );
-    const item: IImage = filterItem[Number.parseInt(index as string, 10)];
-    const data: IDownload = {
+    const item: ImageDetail = filterItem[Number.parseInt(index as string, 10)];
+    const data: Download = {
       url: item.url,
       sample: item.preview,
       percent: '0%'
@@ -177,7 +177,7 @@ export default React.memo(() => {
     <PerfectScrollbar>
       <div ref={refDom} className='listWrap'>
         <TransitionGroup>
-          {list.map((item: IImageDom, key: number) => (
+          {list.map((item: ImageDom, key: number) => (
             <CSSTransition key={item.name} timeout={5000} classNames='flip'>
               <figure
                 key={item.name}
@@ -200,8 +200,8 @@ export default React.memo(() => {
                     href={item.url}
                     className='listDown'
                     target='_blank'
+                    rel='noopener noreferrer'
                     data-index={key}
-                    rel='noreferrer'
                     onClick={handleDownload}
                   >
                     <FaDownload />

@@ -4,7 +4,7 @@ export enum EStateType {
   Notice = 2
 }
 
-export interface IMsg {
+export interface Msg {
   state: EStateType;
   msg: string;
 }

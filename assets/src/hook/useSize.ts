@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
-interface ISize {
+interface Size {
   width: number;
   height: number;
 }
 
-const useSize: (dom: HTMLElement | null, ms?: number) => ISize = (
+const useSize: (dom: HTMLElement | null, ms?: number) => Size = (
   dom: HTMLElement | null,
-  ms: number = 500
-): ISize => {
+  ms = 500
+): Size => {
   const [size, setSize] = useState({ width: 0, height: 0 });
   const handler: React.MutableRefObject<number> = useRef(0);
   const observer: React.MutableRefObject<ResizeObserver> = useRef(
@@ -32,7 +32,7 @@ const useSize: (dom: HTMLElement | null, ms?: number) => ISize = (
       observer.current.observe(dom);
 
       return (): void => {
-        observer.current.unobserve(dom);
+        observer?.current?.unobserve(dom);
       };
     }
   }, [dom]);

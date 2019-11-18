@@ -4,7 +4,14 @@ class WaveItem {
 
   constructor(color: string, nodeNum: number, width: number) {
     this.color = color;
-    this.nodes = new Array(nodeNum + 2).fill(1).map((__, i) => [((i - 1) * width) / nodeNum, 0, Math.random() * 200, 0.1]);
+    this.nodes = new Array(nodeNum + 2)
+      .fill(1)
+      .map((__, i) => [
+        ((i - 1) * width) / nodeNum,
+        0,
+        Math.random() * 200,
+        0.1
+      ]);
   }
 }
 
@@ -18,7 +25,12 @@ export default class Wave {
   private waveDot: number;
   private colorList?: string[];
 
-  constructor(canvas: HTMLCanvasElement, waveNum: number, waveDot: number, colorList?: string[]) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    waveNum: number,
+    waveDot: number,
+    colorList?: string[]
+  ) {
     this.waveNum = waveNum;
     this.waveDot = waveDot;
     this.colorList = colorList;
@@ -37,35 +49,40 @@ export default class Wave {
 
   private update(): void {
     console.log('update');
-		// this.ctx.fillStyle = '#215';
-		// this.ctx.fillStyle = '';
-		this.ctx.fillStyle = '#215';
+    // this.ctx.fillStyle = '#215';
+    // this.ctx.fillStyle = '';
+    this.ctx.fillStyle = '#215';
     this.ctx.globalCompositeOperation = 'source-over';
-		// ctx.fillRect(0, 0, cvs.width, cvs.height);
-		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // ctx.fillRect(0, 0, cvs.width, cvs.height);
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.globalCompositeOperation = 'screen';
-    this.wave.forEach((wave) => {
-      wave.nodes.forEach((node) => {
+    this.wave.forEach(wave => {
+      wave.nodes.forEach(node => {
         this.bounce(node);
       });
       this.draw(wave);
     });
-		this.ctx.globalCompositeOperation = 'hue';
-		this.ctx.fillStyle = '#215';
+    this.ctx.globalCompositeOperation = 'hue';
+    this.ctx.fillStyle = '#215';
   }
 
   private createWave({
     num,
     waveDot,
     width = this.canvas.width,
-    colorList, 
+    colorList
   }: {
     num: number;
     waveDot: number;
     width?: number;
     colorList?: string[];
   }): WaveItem[] {
-    return new Array(num).fill(0).map((__, idx) => new WaveItem(colorList?.[idx] ?? this.randomColor(), waveDot, width));
+    return new Array(num)
+      .fill(0)
+      .map(
+        (__, idx) =>
+          new WaveItem(colorList?.[idx] ?? this.randomColor(), waveDot, width)
+      );
   }
 
   private randomColor(): string {
@@ -75,8 +92,8 @@ export default class Wave {
 
   private draw(wave: WaveItem): void {
     this.ctx.fillStyle = wave.color;
-		this.ctx.beginPath();
-		this.ctx.moveTo(0, this.canvas.height);
+    this.ctx.beginPath();
+    this.ctx.moveTo(0, this.canvas.height);
     this.ctx.lineTo(wave.nodes[0][0], wave.nodes[0][1]);
     wave.nodes.forEach((node, idx) => {
       const nextNode = wave.nodes[idx + 1];
@@ -92,18 +109,24 @@ export default class Wave {
         this.ctx.lineTo(this.canvas.width, this.canvas.height);
       }
     });
-		this.ctx.closePath();
-		this.ctx.fill();
+    this.ctx.closePath();
+    this.ctx.fill();
   }
 
   private bounce(node: number[]): void {
-		node[1] = (this.canvas.height / 2) * Math.sin(node[2] / 20) + this.canvas.height / 2;
-		node[2] = node[2] + node[3];
+    node[1] =
+      (this.canvas.height / 2) * Math.sin(node[2] / 20) +
+      this.canvas.height / 2;
+    node[2] = node[2] + node[3];
   }
 
   public resize(width: number, height: number): void {
     this.canvas.height = height;
     this.canvas.width = width;
-    this.wave = this.createWave({ num: this.waveNum, waveDot: this.waveDot, colorList: this.colorList });
+    this.wave = this.createWave({
+      num: this.waveNum,
+      waveDot: this.waveDot,
+      colorList: this.colorList
+    });
   }
 }

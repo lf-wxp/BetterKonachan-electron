@@ -1,20 +1,25 @@
 import { IMAGEAPIJSON, IMAGEPAGESIZE, IMAGEURLXML } from '~config';
 import { catchError, map, pluck, switchMap, tap } from 'rxjs/operators';
-import { of, zip } from 'rxjs';
+import { of, zip, Observable } from 'rxjs';
 
-import { IImage } from '~model/image';
+import { ImageDetail } from '~model/image';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import path from 'path';
 import querystring from 'querystring';
 import { retryWithDelay } from 'rxjs-retry-delay';
 
-export const parseXmlData = (xmlData: string) => {
+interface ImageResData {
+  pages: number;
+  images: ImageDetail[];
+}
+
+export const parseXmlData = (xmlData: string): ImageResData => {
   const $: CheerioStatic = cheerio.load(xmlData);
   const pages = Math.floor(
     Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE
   );
-  const images: IImage[] = [];
+  const images: ImageDetail[] = [];
   $('post').map((index, post) => {
     const attrs = post.attribs;
     images.push({
@@ -61,7 +66,7 @@ export const imageXmlObservable = ({
       scalingFactor: 2,
       maxRetryAttempts: 4
     }),
-    catchError(err => {
+    catchError(() => {
       return of({
         images: [],
         pages: -1
@@ -76,7 +81,7 @@ export const imageJsonObservable = ({
 }: {
   page: number;
   tags: string;
-}) => {
+}): Observable<ImageResData> => {
   const params$ = of<{ page: number; tags: string }>({ page, tags });
   const url$ = of<string>(IMAGEAPIJSON);
   return zip(params$, url$).pipe(

@@ -9,9 +9,9 @@ import Progress from '~component/Progress';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import Context from '~src/context';
 
-import { EAction, IUpdateProgressPayload } from '~cModel/action';
+import { EAction, UpdateProgressPayload } from '~cModel/action';
 import { TFuncVoid } from '~util';
-import { IDownload } from '~cModel/download';
+import { Download } from '~cModel/download';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.pcss';
@@ -40,7 +40,7 @@ export default React.memo(() => {
             index,
             percent,
             status
-          } as IUpdateProgressPayload
+          } as UpdateProgressPayload
         });
       }
     );
@@ -50,7 +50,7 @@ export default React.memo(() => {
     };
   }, []);
 
-  const downloadRetry = (url: string, index: number) => {
+  const downloadRetry = (url: string, index: number): void => {
     ipcRenderer.send('download', { url: url, index });
   };
 
@@ -58,7 +58,7 @@ export default React.memo(() => {
     <section className='download'>
       <PerfectScrollbar>
         <div className='downloadBox'>
-          {download.map((item: IDownload, key: number) => (
+          {download.map((item: Download, key: number) => (
             <div className='downloadItem' key={key}>
               {item.percent === '100%' && (
                 <span className='downloadIcon'>
@@ -72,7 +72,7 @@ export default React.memo(() => {
                   </span>
                   <span
                     className='downloadRetry'
-                    onClick={() => downloadRetry(item.url, key)}
+                    onClick={(): void => downloadRetry(item.url, key)}
                   >
                     <IoIosRefresh />
                   </span>

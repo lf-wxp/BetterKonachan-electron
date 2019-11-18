@@ -1,4 +1,4 @@
-export interface IDownload {
+export interface Download {
   url: string;
   sample: string;
   percent: string;

@@ -1,20 +1,20 @@
 import React from 'react';
-import { ICtx } from '~cModel/ctx';
+import { Ctx } from '~cModel/ctx';
 import {
-  IAction,
+  Action,
   EAction,
-  IUpdateProgressPayload,
+  UpdateProgressPayload,
   TReducer,
-  IContext
+  Context
 } from '~cModel/action';
-import { IImage } from '~model/image';
-import { IDownload } from '~cModel/download';
+import { ImageDetail } from '~model/image';
+import { Download } from '~cModel/download';
 
-interface IProp {
-  value: ICtx;
+interface CtxProps {
+  value: Ctx;
 }
 
-const initState: ICtx = {
+const initState: Ctx = {
   bgUri: '',
   pages: 0,
   page: 0,
@@ -41,7 +41,7 @@ const initState: ICtx = {
   loading: true
 };
 
-const reducer: TReducer = (state: ICtx, { type, payload }: IAction): ICtx => {
+const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
   switch (type) {
     case EAction.setBgUri:
       return { ...state, bgUri: payload as string };
@@ -54,15 +54,15 @@ const reducer: TReducer = (state: ICtx, { type, payload }: IAction): ICtx => {
     case EAction.setSecurity:
       return { ...state, security: payload as boolean };
     case EAction.setItems:
-      return { ...state, items: payload as IImage[] };
+      return { ...state, items: payload as ImageDetail[] };
     case EAction.setDownload:
-      return { ...state, download: payload as IDownload[] };
+      return { ...state, download: payload as Download[] };
     case EAction.setLoading:
       return { ...state, loading: payload as boolean };
     case EAction.setDownloadStatus:
       const { download } = state;
-      const { index, percent, status } = payload as IUpdateProgressPayload;
-      const tmp: IDownload[] = [...download];
+      const { index, percent, status } = payload as UpdateProgressPayload;
+      const tmp: Download[] = [...download];
       if (status === 'progress') {
         tmp[index].percent = percent;
       }
@@ -76,13 +76,13 @@ const reducer: TReducer = (state: ICtx, { type, payload }: IAction): ICtx => {
   }
 };
 
-const Context: React.Context<IContext> = React.createContext<IContext>({
+const Context: React.Context<Context> = React.createContext<Context>({
   state: initState,
   dispatch: (): void => {}
 });
 
-const Provider: React.StatelessComponent<IProp> = (
-  props: React.PropsWithChildren<IProp>
+const Provider: React.StatelessComponent<CtxProps> = (
+  props: React.PropsWithChildren<CtxProps>
 ): React.ReactElement => {
   const [state, dispatch] = React.useReducer(reducer, props.value);
 

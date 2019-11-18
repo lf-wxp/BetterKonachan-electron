@@ -58,7 +58,7 @@ export default React.memo(() => {
 
   const getData: (p: number, tags?: string) => void = (
     p: number,
-    tags: string = ''
+    tags = ''
   ): void => {
     ipcRenderer.send('image-post', { page: p, tags });
     dispatch({

@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 import Context from '~src/context';
 
 import { EAction } from '~cModel/action';
-import { IImageList } from '~model/image';
+import { ImageList } from '~model/image';
 
 export default React.memo(() => {
   const { dispatch } = useContext(Context);
@@ -11,7 +11,7 @@ export default React.memo(() => {
   useEffect((): (() => void) => {
     ipcRenderer.on(
       'image-data',
-      (event: Electron.Event, { images, pages, page }: IImageList) => {
+      (event: Electron.Event, { images, pages }: ImageList) => {
         dispatch({
           type: EAction.setItems,
           payload: images
