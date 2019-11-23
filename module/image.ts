@@ -51,16 +51,17 @@ export const imageXmlObservable = ({
 }: {
   page: number;
   tags: string;
-}) => {
+}): Observable<ImageResData> => {
   const params$ = of<{ page: number; tags: string }>({ page, tags });
   const url$ = of<string>(IMAGEURLXML);
   return zip(params$, url$).pipe(
+    // eslint-disable-next-line jsx-control-statements/jsx-jcs-no-undef
     tap(() => console.log('image post')),
     switchMap(([{ page, tags }, url]) =>
       axios.get(`${url}?${querystring.stringify({ page, tags })}`)
     ),
     pluck('data'),
-    map((xmlData: any) => parseXmlData(xmlData)),
+    map((xmlData: string) => parseXmlData(xmlData)),
     retryWithDelay({
       delay: 1000,
       scalingFactor: 2,
@@ -94,7 +95,7 @@ export const imageJsonObservable = ({
       scalingFactor: 2,
       maxRetryAttempts: 4
     }),
-    catchError(err => {
+    catchError(() => {
       return of({
         images: [],
         pages: -1

@@ -48,9 +48,7 @@ export default class Wave {
   }
 
   private update(): void {
-    console.log('update');
     // this.ctx.fillStyle = '#215';
-    // this.ctx.fillStyle = '';
     this.ctx.fillStyle = '#215';
     this.ctx.globalCompositeOperation = 'source-over';
     // ctx.fillRect(0, 0, cvs.width, cvs.height);
@@ -62,8 +60,8 @@ export default class Wave {
       });
       this.draw(wave);
     });
-    this.ctx.globalCompositeOperation = 'hue';
-    this.ctx.fillStyle = '#215';
+    // this.ctx.globalCompositeOperation = 'hue';
+    // this.ctx.fillStyle = '#fff';
   }
 
   private createWave({
