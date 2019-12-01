@@ -1,4 +1,4 @@
-.pager {
+.bk-pager {
   flex: 0 0 auto;
   inline-size: calc(3 * var(--themePageItemSize));
   block-size: calc(3 * var(--themePageItemSize));
@@ -8,7 +8,7 @@
   &.active {
     animation: none;
 
-    & .pNav {
+    & .bk-pager_nav {
       &:first-of-type {
         transform: translate(-100%, 100%);
       }
@@ -18,8 +18,8 @@
       }
     }
 
-    & .pGoto {
-      & .pGotoDiv {
+    & .bk-pager_go {
+      & .bk-pager_go-div {
         &:first-of-type {
           inset-inline-start: var(--themePageItemSize);
           inset-block-start: 0px;
@@ -32,19 +32,19 @@
         }
       }
 
-      & .pBtn {
+      & .bk-pager_btn {
         inset-block-start: var(--themePageItemSize);
         inset-inline-start: var(--themePageItemSize);
         transition-delay: 0.2s;
       }
     }
 
-    & .pHolder {
+    & .bk-pager_holder {
       visibility: hidden;
       opacity: 0;
     }
 
-    & .pItem {
+    & .bk-pager_item {
       &:nth-child(1) {
         inset-inline-start: 0px;
         inset-block-start: 0px;
@@ -65,7 +65,7 @@
   }
 }
 
-.pNav {
+.bk-pager_nav {
   inline-size: var(--themePageItemSize);
   block-size: var(--themePageItemSize);
   position: absolute;
@@ -148,7 +148,7 @@
   }
 }
 
-.pHolder {
+.bk-pager_holder {
   inline-size: var(--themePageItemSize);
   block-size: var(--themePageItemSize);
   position: absolute;
@@ -183,7 +183,7 @@
   }
 }
 
-.pCon {
+.bk-pager_con {
   inline-size: calc(2 * var(--themePageItemSize));
   block-size: calc(2 * var(--themePageItemSize));
   position: absolute;
@@ -192,14 +192,14 @@
   z-index: 2;
 }
 
-.pBox {
+.bk-pager_box {
   inline-size: 100%;
   block-size: 100%;
   font-size: 0px;
   position: relative;
 }
 
-.pItemText {
+.bk-pager_item-text {
   display: block;
   inline-size: 100%;
   block-size: 100%;
@@ -208,7 +208,7 @@
   letter-spacing: 2px;
 }
 
-.pItem {
+.bk-pager_item {
   position: absolute;
   color: white;
   font-size: 20px;
@@ -237,7 +237,7 @@
   }
 }
 
-.pGoto {
+.bk-pager_go {
   inline-size: 2 * var(--themePageItemSize);
   block-size: 2 * var(--themePageItemSize);
   position: absolute;
@@ -247,8 +247,8 @@
   z-index: 1;
 }
 
-.pGotoSpan,
-.pGotoInput {
+.bk-pager_go-span,
+.bk-pager_go-input {
   line-height: 45px;
   text-align: center;
   font-size: 20px;
@@ -263,12 +263,12 @@
   background: none;
 }
 
-.pGotoSpan {
+.bk-pager_go-span {
   font-size: 14px;
   line-height: var(--themePageItemSize);
 }
 
-.pGotoInput {
+.bk-pager_go-input {
   color: white;
   font-size: 14px;
   outline: none;
@@ -277,9 +277,9 @@
   animation: blink 1s ease-in-out infinite alternate-reverse both;
 }
 
-.pGotoEm,
-.pGotoDiv,
-.pBtn {
+.bk-pager_go-em,
+.bk-pager_go-div,
+.bk-pager_btn {
   inline-size: var(--themePageItemSize);
   block-size: var(--themePageItemSize);
   box-sizing: border-box;
@@ -294,11 +294,11 @@
   transition: all 0.2s ease;
 }
 
-.pGotoEm {
+.bk-pager_go-em {
   background: none;
 }
 
-.pBtn {
+.bk-pager_btn {
   margin: 0;
   padding: 0;
   cursor: pointer;

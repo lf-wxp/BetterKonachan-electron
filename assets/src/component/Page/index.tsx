@@ -115,26 +115,26 @@ export default React.memo(() => {
   };
 
   return (
-    <section className={`pager ${pageArray.length ? 'active' : ''}`}>
+    <section className={`bk-pager ${pageArray.length ? 'active' : ''}`}>
       <span
-        className={`pNav ${page - 1 ? '' : 'disabled'}`}
+        className={`bk-pager_nav ${page - 1 ? '' : 'disabled'}`}
         onClick={prev}
         role='button'
       >
         <i />
       </span>
       <span
-        className={`pNav ${pages - page > 0 ? '' : 'disabled'}`}
+        className={`bk-pager_nav ${pages - page > 0 ? '' : 'disabled'}`}
         onClick={next}
         role='button'
       >
         <i />
       </span>
-      <div className='pCon'>
-        <ul className='pBox'>
+      <div className='bk-pager_con'>
+        <ul className='bk-pager_box'>
           {pageArray.map((item: number) => (
             <li
-              className={`pItem ${page === item ? 'current' : ''} ${
+              className={`bk-pager_item ${page === item ? 'current' : ''} ${
                 page >= 102 ? 'middle' : ''
               }`}
               onClick={invoke}
@@ -142,19 +142,19 @@ export default React.memo(() => {
               data-id={item}
               role='button'
             >
-              <span className='pItemText'>{item}</span>
+              <span className='bk-pager_item-text'>{item}</span>
             </li>
           ))}
         </ul>
       </div>
-      <form className='pGoto'>
-        <em className='pGotoEm' />
-        <div className='pGotoDiv'>
-          <span className='pGotoSpan'>{pages}</span>
+      <form className='bk-pager_go'>
+        <em className='bk-pager_go-em' />
+        <div className='bk-pager_go-div'>
+          <span className='bk-pager_go-span'>{pages}</span>
         </div>
-        <div className='pGotoDiv'>
+        <div className='bk-pager_go-div'>
           <input
-            className='pGotoInput'
+            className='bk-pager_go-input'
             type='text'
             placeholder='page'
             name='pager'
@@ -162,11 +162,11 @@ export default React.memo(() => {
             onChange={onChange}
           />
         </div>
-        <button className='pBtn' onClick={goTo}>
+        <button className='bk-pager_btn' onClick={goTo}>
           <span />
         </button>
       </form>
-      <div className='pHolder' />
+      <div className='bk-pager_holder' />
     </section>
   );
 });

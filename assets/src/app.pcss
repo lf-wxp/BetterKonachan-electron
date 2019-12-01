@@ -1,19 +1,18 @@
 #root {
   block-size: 100vh;
   overflow: hidden;
-  background: white;
+  display: grid;
+  grid-template-columns: 120px auto;
+  grid-template-rows: 100%;
+  grid-auto-flow: column;
 }
-.bk-header {
+.bk-aside {
   position: relative;
-  block-size: 150px;
-  background: #215;
-  background-image: linear-gradient(to bottom, rgba(119, 17, 85, 0.5), transparent);
+  backdrop-filter: blur(5px);
 }
 
 .bk-section {
   position: relative;
-  margin-block-start: 50px;
-  height: calc(100% - 200px);
 }
 
 

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   cond,
   is,
@@ -15,6 +15,9 @@ import {
   multiply,
   not
 } from 'ramda';
+import { useMeasure } from 'react-use';
+
+import './style.pcss';
 
 interface CanvasProps {
   width?: string | number;
@@ -38,8 +41,8 @@ const persent2number = pipe(
   multiply
 );
 
-const parseWidthPersent = ([persent, node]: [string, HTMLElement]): number =>
-  persent2number(persent)(node.clientWidth);
+const parseWidthPersent = ([persent, width]: [string, number]): number =>
+  persent2number(persent)(width);
 
 const getSize = cond([
   [judge(is(Number), 0), nth(0)],
@@ -59,19 +62,19 @@ export default React.memo<CanvasProps>(
     const [realH, setRealH] = useState(0);
     const [realW, setRealW] = useState(0);
     const bgObj = useRef(null as any);
-    const parent = useCallback(() => canvas?.current?.parentElement, [canvas]);
+    const [ref, { width: parentW, height: parentH }] = useMeasure();
 
     useEffect(() => {
       bgObj.current = initCb(canvas.current);
     }, []);
 
     useEffect(() => {
-      setRealH(getSize([height, parent()]));
-    }, [height, parent]);
+      setRealH(getSize([height, parentH]));
+    }, [height, parentH]);
 
     useEffect(() => {
-      setRealW(getSize([width, parent()]));
-    }, [width, parent]);
+      setRealW(getSize([width, parentW]));
+    }, [width, parentW]);
 
     useEffect(() => {
       if (bgObj.current) {
@@ -80,7 +83,14 @@ export default React.memo<CanvasProps>(
     }, [realW, realH]);
 
     return (
-      <canvas className={className} ref={canvas} width={realW} height={realH} />
+      <div ref={ref} className='bk-canvas'>
+        <canvas
+          className={className}
+          ref={canvas}
+          width={realW}
+          height={realH}
+        />
+      </div>
     );
   }
 );

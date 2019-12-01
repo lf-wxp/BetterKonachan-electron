@@ -2,13 +2,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.pcss';
 
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import React, {
-  CSSProperties,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import React, { CSSProperties, useContext, useEffect, useState } from 'react';
 import { TFunc1, TFunc1Void, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
 
 import Context from '~src/context';
@@ -21,7 +15,8 @@ import Image from '~component/Image';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import fallbackImage from '~image/loaderror.png';
 import { ipcRenderer } from 'electron';
-import useSize from '~hook/useSize';
+import { useMeasure } from 'react-use';
+import useImageLoad from '~hook/useImageLoad';
 
 let columnArray: number[] = [0];
 const maxWidth = 300;
@@ -131,9 +126,13 @@ export default React.memo(() => {
     state: { items, download, security },
     dispatch
   } = useContext(Context);
-  const refDom: React.MutableRefObject<null> = useRef(null);
   const [list, setList] = useState([] as ImageDom[]);
-  const { width } = useSize(refDom.current);
+  const [refDom, { width }] = useMeasure();
+  const images = useImageLoad<ImageDetail>(
+    items,
+    (item: ImageDetail) => item.preview,
+    'preview'
+  );
 
   const handleDownload: TFunc1Void<React.FormEvent<HTMLAnchorElement>> = (
     e: React.FormEvent<HTMLAnchorElement>
@@ -160,8 +159,8 @@ export default React.memo(() => {
   };
 
   useEffect((): void => {
-    setList(updateLayout(items, width, security));
-  }, [width, items, security]);
+    setList(updateLayout(images, width, security));
+  }, [width, images, security]);
 
   const combineStyle: TFunc2<CSSProperties, number, CSSProperties> = (
     style: CSSProperties,
@@ -169,7 +168,7 @@ export default React.memo(() => {
   ): CSSProperties => {
     return {
       ...style,
-      transitionDelay: `${key * 0.02}s`
+      transitionDelay: `${key * 0.05}s`
     };
   };
 

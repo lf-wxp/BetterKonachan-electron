@@ -84,16 +84,20 @@
 
 .flip-enter {
   opacity: 0;
+  transform: translateY(20px);
 }
 .flip-exit {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .flip-enter-active {
   transition: all 0.5s ease-in-out;
+  transform: translateY(0);
   opacity: 1;
 }
 .flip-exit-active {
   opacity: 0;
+  transform: translateY(20px);
   transition: all 0.5s ease-in-out;
 }

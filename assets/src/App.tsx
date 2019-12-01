@@ -1,13 +1,12 @@
 import React from 'react';
 import ImageList from '~component/ImageList';
-// import Background from '~component/Background';
-// import Bar from '~component/Bar';
-// import Page from '~component/Page';
-// import Setting from '~component/Setting';
-// import Download from '~component/Download';
+import Background from '~component/Background';
+import Bar from '~component/Bar';
+import Page from '~component/Page';
+import Setting from '~component/Setting';
+import Download from '~component/Download';
 import Service from '~component/Service';
-// import Loading from '~component/Loading';
-import Wave from '~component/Wave';
+import Loading from '~component/Loading';
 import DotLine from '~component/DotLine';
 import { Provider } from '~src/context';
 import bg0 from '~image/bg0.jpg';
@@ -44,20 +43,19 @@ const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(
     return (
       <React.Fragment>
         <Provider value={defaultState}>
-          <header className='bk-header'>
-            <Wave height={50} />
-          </header>
+          <Background />
+          <DotLine />
+          <aside className='bk-aside'>
+            <Bar />
+            <Page />
+            <Setting />
+            <Download />
+          </aside>
           <section className='bk-section'>
-            <DotLine />
             <Service />
             <ImageList />
           </section>
-          {/* <Bar /> */}
-          {/* <Page /> */}
-          {/* <Setting /> */}
-          {/* <Download /> */}
-          {/* <Background /> */}
-          {/* <Loading /> */}
+          <Loading />
         </Provider>
       </React.Fragment>
     );
