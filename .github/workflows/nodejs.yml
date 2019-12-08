@@ -23,6 +23,5 @@ jobs:
         npm run render:build --if-present
         npm run main:build
         npm run test
-        npm run dist
       env:
         CI: true
