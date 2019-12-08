@@ -30,6 +30,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/display-name": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "@typescript-eslint/no-non-null-assertion": 0
   }
 }

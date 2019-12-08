@@ -12,6 +12,7 @@ import Context from '~src/context';
 import { EAction, UpdateProgressPayload } from '~cModel/action';
 import { TFuncVoid } from '~util';
 import { Download } from '~cModel/download';
+import { EventDownload } from '~model/event';
 
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.pcss';
@@ -24,7 +25,7 @@ export default React.memo(() => {
 
   useEffect((): TFuncVoid => {
     ipcRenderer.on(
-      'download-status',
+      EventDownload.STATUS,
       (
         event: Electron.Event,
         {
@@ -46,32 +47,32 @@ export default React.memo(() => {
     );
 
     return (): void => {
-      ipcRenderer.removeAllListeners('download-status');
+      ipcRenderer.removeAllListeners(EventDownload.STATUS);
     };
   }, []);
 
   const downloadRetry = (url: string, index: number): void => {
-    ipcRenderer.send('download', { url: url, index });
+    ipcRenderer.send(EventDownload.DOWNLOAD, { url: url, index });
   };
 
   return (
-    <section className='download'>
+    <section className='bk-download'>
       <PerfectScrollbar>
-        <div className='downloadBox'>
+        <div className='bk-download__box'>
           {download.map((item: Download, key: number) => (
-            <div className='downloadItem' key={key}>
+            <div className='bk-download__item' key={key}>
               {item.percent === '100%' && (
-                <span className='downloadIcon'>
+                <span className='bk-download__icon'>
                   <IoIosCheckmarkCircle />
                 </span>
               )}
               {item.error && (
-                <div className='downloadCatch'>
-                  <span className='downloadError'>
+                <div className='bk-download__catch'>
+                  <span className='bk-download__error'>
                     <IoMdInformationCircleOutline />
                   </span>
                   <span
-                    className='downloadRetry'
+                    className='bk-download__retry'
                     onClick={(): void => downloadRetry(item.url, key)}
                   >
                     <IoIosRefresh />

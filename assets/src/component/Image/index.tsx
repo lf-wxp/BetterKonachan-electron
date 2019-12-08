@@ -53,14 +53,14 @@ export default ({
 
   return (
     <div
-      className={`imageBox ${animationEnd ? 'anmationend' : ''}`}
+      className={`bk-image ${animationEnd ? 'anmationend' : ''}`}
       style={{ width: (width as number) - 10, height: (height as number) - 10 }}
     >
       <img
         alt='image'
         src={src}
         style={style}
-        className={`${className} image  ${state}`}
+        className={`${className} ${state}`}
         onAnimationEnd={onAnimationEnd}
         onError={onError}
         onLoad={onLoad}

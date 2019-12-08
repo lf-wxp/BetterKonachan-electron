@@ -8,7 +8,15 @@
 }
 .bk-aside {
   position: relative;
+  background: color(var(--themeBaseColor) alpha(20%));
   backdrop-filter: blur(5px);
+  padding: 0 6px;
+  display: flex;
+  flex-flow: column nowrap;
+
+  &>section {
+    margin-block-end: 10px;
+  }
 }
 
 .bk-section {

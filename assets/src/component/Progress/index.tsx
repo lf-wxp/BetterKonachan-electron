@@ -4,7 +4,7 @@ import './style.pcss';
 
 export default React.memo(({ percent }: { percent: string }) => {
   return (
-    <span className='progress'>
+    <span className='bk-progress'>
       <span style={{ width: percent }} />
     </span>
   );

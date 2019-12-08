@@ -17,7 +17,7 @@ interface ImageResData {
 export const parseXmlData = (xmlData: string): ImageResData => {
   const $: CheerioStatic = cheerio.load(xmlData);
   const pages = Math.floor(
-    Number.parseInt($('posts').attr('count'), 10) / IMAGEPAGESIZE
+    Number.parseInt($('posts').attr('count')!, 10) / IMAGEPAGESIZE
   );
   const images: ImageDetail[] = [];
   $('post').map((index, post) => {

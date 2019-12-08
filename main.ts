@@ -6,9 +6,10 @@ import { fromEvent, of, zip } from 'rxjs';
 import { map, mergeAll, debounceTime } from 'rxjs/operators';
 
 import { IRxEventPayLoad } from '~model/event';
-import { download } from 'electron-dl';
+import { download, Progress } from 'electron-dl';
 import { imageXmlObservable } from '~module/image';
 import path from 'path';
+import { EventImage, EventDownload, EventWindow } from '~model/event';
 import windowStateKeeper from 'electron-window-state';
 
 let mainWindow: Electron.BrowserWindow | null;
@@ -73,25 +74,25 @@ fromEvent(app, 'activate').subscribe(
   () => mainWindow === null && createWindow()
 );
 
-fromEvent(ipcMain, 'image-post')
+fromEvent(ipcMain, EventImage.POST)
   .pipe(
     debounceTime(1000),
     map(([e, params]) => zip(imageXmlObservable(params), of(e))),
     mergeAll()
   )
   .subscribe(([{ images, pages }, event]) => {
-    event.sender.send('image-data', { images, pages });
+    event.sender.send(EventImage.DATA, { images, pages });
   });
 
-fromEvent(ipcMain, 'window-close').subscribe(
+fromEvent(ipcMain, EventWindow.COLOSE).subscribe(
   () => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.close()
 );
 
-fromEvent(ipcMain, 'window-min').subscribe(
+fromEvent(ipcMain, EventWindow.MIN).subscribe(
   () => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.minimize()
 );
 
-fromEvent(ipcMain, 'window-max').subscribe(() => {
+fromEvent(ipcMain, EventWindow.MAX).subscribe(() => {
   if (isValidType<Electron.BrowserWindow>(mainWindow)) {
     const [width, height] = mainWindow.getSize();
     if (screen.width === width && screen.height === height) {
@@ -102,22 +103,22 @@ fromEvent(ipcMain, 'window-max').subscribe(() => {
   }
 });
 
-fromEvent(ipcMain, 'download').subscribe(
+fromEvent(ipcMain, EventDownload.DOWNLOAD).subscribe(
   ([event, { url, index }]: IRxEventPayLoad<{
     url: string;
     index: number;
   }>) => {
     download(mainWindow as BrowserWindow, url, {
-      onProgress: (progress: number): void => {
-        event.sender.send('download-status', {
+      onProgress: (progress: Progress): void => {
+        event.sender.send(EventDownload.STATUS, {
           status: 'progress',
-          progress,
+          progress: progress.percent,
           index
         });
       }
     }).catch((err: Error) => {
       console.log(err);
-      event.sender.send('download-status', { status: 'error', index });
+      event.sender.send(EventDownload.STATUS, { status: 'error', index });
     });
   }
 );

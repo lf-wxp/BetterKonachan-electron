@@ -1,10 +1,11 @@
-.listWrap {
+.bk-list__wrap {
   position: relative;
   background: none;
 }
 
-.listItem {
+.bk-list__item {
   margin: 0;
+  border-radius: 2px;
   border: calc(var(--themeListGap) / 2) solid transparent;
   box-sizing: border-box;
   border-radius: 2px;
@@ -17,7 +18,7 @@
   background-clip: content-box;
 
   &:hover {
-    @nest & :matches(.listImg, .listTool) {
+    @nest & :matches(.bk-list__img, .bk-list__tool) {
       transform: translateY(calc(var(--themeListToolHeight) * -1));
     }
   }
@@ -33,7 +34,7 @@
   }
 }
 
-.listTool {
+.bk-list__tool {
   position: absolute;
   display: flex;
   height: var(--themeListToolHeight);
@@ -42,10 +43,13 @@
   flex-flow: row nowrap;
   align-items: stretch;
   transition: transform 0.2s ease;
-  background: var(--themeListToolBgColor);
+  /* this is a performance issue  */
+  /* backdrop-filter: blur(10px); */ 
+  border-block-end: 1px solid var(--themeBaseColor);
+  box-sizing: border-box;
 }
 
-.listInfo {
+.bk-list__info {
   flex: 1 1 auto;
   font-size: 12px;
   color: white;
@@ -53,13 +57,13 @@
   text-align: center;
 }
 
-.listDown {
+.bk-list__down {
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   inline-size: var(--themeListToolHeight);
-  color: white;
+  color: var(--themeBaseColor);
   font-size: 14px;
 
   & i {
@@ -67,7 +71,7 @@
   }
 }
 
-.listImg {
+.bk-list__img {
   display: block;
   inline-size: 100%;
   box-sizing: border-box;

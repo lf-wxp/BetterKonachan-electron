@@ -1,22 +1,23 @@
+import { ipcRenderer } from 'electron';
+import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import { FaDownload } from 'react-icons/fa';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useMeasure } from 'react-use';
+import Image from '~component/Image';
+import useImageLoad from '~hook/useImageLoad';
+import fallbackImage from '~image/loaderror.png';
+import Context from '~src/context';
+
+import { TFunc1, TFunc1Void, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
+import { EventDownload } from '~model/event';
+import { ImageDetail } from '~model/image';
+import { EAction } from '~cModel/action';
+import { Download } from '~cModel/download';
+import { ImageDom } from '~cModel/imageDom';
+
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.pcss';
-
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
-import { TFunc1, TFunc1Void, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
-
-import Context from '~src/context';
-import { EAction } from '~cModel/action';
-import { FaDownload } from 'react-icons/fa';
-import { Download } from '~cModel/download';
-import { ImageDetail } from '~model/image';
-import { ImageDom } from '~cModel/imageDom';
-import Image from '~component/Image';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import fallbackImage from '~image/loaderror.png';
-import { ipcRenderer } from 'electron';
-import { useMeasure } from 'react-use';
-import useImageLoad from '~hook/useImageLoad';
 
 let columnArray: number[] = [0];
 const maxWidth = 300;
@@ -38,11 +39,11 @@ const shortestColumn: TFuncVoidReturn<{ height: number; index: number }> = (): {
 const calcColumnWidth: TFunc1<number, { column: number; colWidth: number }> = (
   width: number
 ): { column: number; colWidth: number } => {
+  let column = 0;
+  let colWidth = 0;
   if (width) {
     const w: number = width;
     const l: number = w % maxWidth;
-    let column: number;
-    let colWidth: number;
     if (l) {
       column = Math.ceil(w / maxWidth);
       colWidth = w / column;
@@ -54,17 +55,11 @@ const calcColumnWidth: TFunc1<number, { column: number; colWidth: number }> = (
       column = 1;
       colWidth = w;
     }
-
-    return {
-      column,
-      colWidth
-    };
-  } else {
-    return {
-      column: 0,
-      colWidth: 0
-    };
   }
+  return {
+    column,
+    colWidth
+  };
 };
 
 const calcColumnArray: TFunc1Void<number> = (h: number): void => {
@@ -128,11 +123,7 @@ export default React.memo(() => {
   } = useContext(Context);
   const [list, setList] = useState([] as ImageDom[]);
   const [refDom, { width }] = useMeasure();
-  const images = useImageLoad<ImageDetail>(
-    items,
-    (item: ImageDetail) => item.preview,
-    'preview'
-  );
+  const images = useImageLoad<ImageDetail>(items, 'preview');
 
   const handleDownload: TFunc1Void<React.FormEvent<HTMLAnchorElement>> = (
     e: React.FormEvent<HTMLAnchorElement>
@@ -154,7 +145,10 @@ export default React.memo(() => {
         type: EAction.setDownload,
         payload: [...download, data]
       });
-      ipcRenderer.send('download', { url: item.url, index: download.length });
+      ipcRenderer.send(EventDownload.DOWNLOAD, {
+        url: item.url,
+        index: download.length
+      });
     }
   };
 
@@ -174,30 +168,30 @@ export default React.memo(() => {
 
   return (
     <PerfectScrollbar>
-      <div ref={refDom} className='listWrap'>
+      <div ref={refDom} className='bk-list__wrap'>
         <TransitionGroup>
           {list.map((item: ImageDom, key: number) => (
             <CSSTransition key={item.name} timeout={5000} classNames='flip'>
               <figure
                 key={item.name}
                 style={combineStyle(item.style as CSSProperties, key)}
-                className='listItem'
+                className='bk-list__item'
               >
                 <Image
                   fallback={fallbackImage}
-                  className='listImg'
+                  className='bk-list__img'
                   width={item.styleW}
                   height={item.styleH}
                   style={{ animationDelay: `${key * 0.1}s` }}
                   src={item.preview}
                 />
-                <div className='listTool'>
-                  <p className='listInfo'>
+                <div className='bk-list__tool'>
+                  <p className='bk-list__info'>
                     {item.width} / {item.height}
                   </p>
                   <a
                     href={item.url}
-                    className='listDown'
+                    className='bk-list__down'
                     target='_blank'
                     rel='noopener noreferrer'
                     data-index={key}

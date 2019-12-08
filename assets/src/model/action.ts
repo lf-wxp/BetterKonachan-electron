@@ -1,7 +1,6 @@
 import { Ctx } from './ctx';
 
 export enum EAction {
-  setBgUri = 'setBgUri',
   setItems = 'setItems',
   setPage = 'setPage',
   setPages = 'setPages',
@@ -9,7 +8,8 @@ export enum EAction {
   setExpand = 'setExpand',
   setDownload = 'setDownload',
   setLoading = 'setLoading',
-  setDownloadStatus = 'setDownloadStatus'
+  setDownloadStatus = 'setDownloadStatus',
+  setBaseColor = 'setBaseColor'
 }
 
 export interface UpdateProgressPayload {

@@ -98,10 +98,19 @@ export default class DotLine {
   private ctx: CanvasRenderingContext2D;
   private lineNum: number;
   private lines: Line[];
+  private lineColor: string;
+  private dotColor: string;
 
-  constructor(canvas: HTMLCanvasElement, lineNum: number) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    lineNum: number,
+    lineColor = '#ccc',
+    dotColor = '#000'
+  ) {
     this.lineNum = lineNum;
     this.canvas = canvas;
+    this.lineColor = lineColor;
+    this.dotColor = dotColor;
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.lines = this.createLines();
     this.render();
@@ -127,10 +136,21 @@ export default class DotLine {
     this.lines = this.createLines();
   }
 
+  public setColor({
+    lineColor,
+    dotColor
+  }: {
+    lineColor?: string;
+    dotColor?: string;
+  }): void {
+    lineColor && (this.lineColor = lineColor);
+    dotColor && (this.dotColor = dotColor);
+  }
+
   private draw(): void {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.lines.forEach(line => {
-      this.ctx.strokeStyle = '#ccc';
+      this.ctx.strokeStyle = this.lineColor;
       this.ctx.beginPath();
       this.ctx.moveTo(line.a.x, line.a.y);
       this.ctx.lineTo(line.b.x, line.b.y);
@@ -151,6 +171,7 @@ export default class DotLine {
     points.forEach(point => {
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, 2, 0, 2 * Math.PI);
+      this.ctx.fillStyle = this.dotColor;
       this.ctx.fill();
     });
   }

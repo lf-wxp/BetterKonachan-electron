@@ -2,7 +2,6 @@ import { ImageDetail } from '~model/image';
 import { Download } from '~cModel/download';
 
 export interface Ctx {
-  bgUri: string;
   items: ImageDetail[];
   pages: number;
   page: number;
@@ -10,4 +9,5 @@ export interface Ctx {
   expand: boolean;
   download: Download[];
   loading: boolean;
+  colorSet: Record<string, string>;
 }

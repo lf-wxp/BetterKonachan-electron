@@ -4,6 +4,7 @@ import { ipcRenderer } from 'electron';
 import Context from '~src/context';
 import { EAction } from '~cModel/action';
 import { TFuncVoid, TFunc2, TFunc1Void } from '~util';
+import { EventImage } from '~model/event';
 
 import './style.pcss';
 
@@ -60,7 +61,7 @@ export default React.memo(() => {
     p: number,
     tags = ''
   ): void => {
-    ipcRenderer.send('image-post', { page: p, tags });
+    ipcRenderer.send(EventImage.POST, { page: p, tags });
     dispatch({
       type: EAction.setPage,
       payload: p

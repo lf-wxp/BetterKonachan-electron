@@ -3,10 +3,10 @@ import { ipcRenderer } from 'electron';
 import Context from '~src/context';
 
 import { EAction } from '~cModel/action';
+import { EventImage } from '~model/event';
+import { TFuncVoid } from '~util';
 
 import './style.pcss';
-
-import { TFuncVoid } from '~util';
 
 export default React.memo(() => {
   const {
@@ -21,7 +21,7 @@ export default React.memo(() => {
   };
 
   const handleRefreshClick: TFuncVoid = (): void => {
-    ipcRenderer.send('image-post', { page, tags: '' });
+    ipcRenderer.send(EventImage.POST, { page, tags: '' });
     dispatch({
       type: EAction.setLoading,
       payload: true
@@ -29,14 +29,14 @@ export default React.memo(() => {
   };
 
   return (
-    <section className='setting'>
-      <article className={`sSecurity ${security ? 'active' : ''}`}>
-        <label className='sToggle' onClick={handleSecurityClick}>
-          <span className='sFake' />
+    <section className='bk-setting'>
+      <article className={`bk-setting__security ${security ? 'active' : ''}`}>
+        <label className='bk-setting__toggle' onClick={handleSecurityClick}>
+          <span className='bk-setting__fake' />
         </label>
       </article>
       <article
-        className={`sRefresh ${loading ? 'active' : ''}`}
+        className={`bk-setting__refresh ${loading ? 'active' : ''}`}
         onClick={handleRefreshClick}
       >
         <div />

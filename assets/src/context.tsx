@@ -15,12 +15,15 @@ interface CtxProps {
 }
 
 const initState: Ctx = {
-  bgUri: '',
   pages: 0,
   page: 0,
   security: true,
   expand: false,
   download: [],
+  colorSet: {
+    vibrant: '#39cccc',
+    muted: '#0984e3'
+  },
   items: [
     {
       id: 0,
@@ -43,8 +46,6 @@ const initState: Ctx = {
 
 const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
   switch (type) {
-    case EAction.setBgUri:
-      return { ...state, bgUri: payload as string };
     case EAction.setExpand:
       return { ...state, expand: payload as boolean };
     case EAction.setPage:
@@ -71,6 +72,8 @@ const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
       }
 
       return { ...state, download: tmp };
+    case EAction.setBaseColor:
+      return { ...state, colorSet: payload as Record<string, string> };
     default:
       return { ...state };
   }
@@ -78,6 +81,7 @@ const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
 
 const Context: React.Context<Context> = React.createContext<Context>({
   state: initState,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   dispatch: (): void => {}
 });
 

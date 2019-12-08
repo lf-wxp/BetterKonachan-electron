@@ -14,7 +14,7 @@ export default React.memo(() => {
   }
 
   return (
-    <section className='loading'>
+    <section className='bk-loading'>
       <Spinner name='cube-grid' />
     </section>
   );

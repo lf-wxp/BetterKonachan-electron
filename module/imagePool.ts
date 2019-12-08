@@ -13,34 +13,38 @@ const imagePromise = (url: string): Promise<string> =>
     img.src = url;
   });
 
-class ImagePool {
-  private images: string[];
+class ImagePool<T> {
+  private images: T[];
+  private urls: string[];
   private limit: number;
   private pool: Map<string, unknown>;
-  private onLoad: (image: string) => void;
+  private prop: string;
+  private onLoad: (image: T) => void;
   private onError: (err: Event | string) => void;
 
   constructor({
-    images,
     onLoad,
     onError,
     limit
   }: {
-    images: string[];
-    onLoad: (image: string) => void;
+    onLoad: (image: T) => void;
     onError: (err: Event | string) => void;
     limit: number;
   }) {
-    this.images = images;
     this.onLoad = onLoad;
     this.onError = onError;
     this.limit = limit;
     this.pool = new Map();
-    this.init();
   }
 
-  init(): void {
-    this.addImage();
+  start(images: T[], prop: string): void {
+    this.urls = images.map(imgs => imgs[prop]);
+    this.images = images;
+    this.prop = prop;
+    this.pool.clear();
+    while (this.urls.length > 0 && this.pool.size < this.limit) {
+      this.addImage();
+    }
   }
 
   createImage(url: string): Subscription {
@@ -51,7 +55,7 @@ class ImagePool {
       )
       .subscribe(
         url => {
-          this.onLoad(url);
+          this.onLoad(this.images.find(image => image[this.prop] === url)!);
         },
         err => {
           this.onError(err);
@@ -64,11 +68,11 @@ class ImagePool {
   }
 
   addImage(): void {
-    if (this.images.length <= 0) {
+    if (this.urls.length <= 0 || this.pool.size >= this.limit) {
       return;
     }
-    const url = this.images.pop();
-    if (this.pool.size < this.limit) {
+    const url = this.urls.pop();
+    if (url) {
       this.pool.set(url as string, this.createImage(url as string));
     }
   }

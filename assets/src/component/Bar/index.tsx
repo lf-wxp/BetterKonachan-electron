@@ -1,28 +1,28 @@
 import React from 'react';
 import { ipcRenderer } from 'electron';
-
+import { EventWindow } from '~model/event';
 import { TFuncVoid } from '~util';
 
 import './style.pcss';
 
 export default React.memo(() => {
   const close: TFuncVoid = (): void => {
-    ipcRenderer.send('window-close');
+    ipcRenderer.send(EventWindow.COLOSE);
   };
   const max: TFuncVoid = (): void => {
-    ipcRenderer.send('window-max');
+    ipcRenderer.send(EventWindow.MAX);
   };
   const min: TFuncVoid = (): void => {
-    ipcRenderer.send('window-min');
+    ipcRenderer.send(EventWindow.MIN);
   };
 
   return (
-    <section className='bar'>
-      <span className='barClose' onClick={close} role='button' />
-      <span className='barExpand' onClick={max} role='button'>
+    <section className='bk-bar'>
+      <span className='bk-bar__close' onClick={close} role='button' />
+      <span className='bk-bar__expand' onClick={max} role='button'>
         <span />
       </span>
-      <span className='barMini' onClick={min} role='button' />
+      <span className='bk-bar__mini' onClick={min} role='button' />
     </section>
   );
 });
