@@ -2,5 +2,5 @@ export interface Download {
   url: string;
   sample: string;
   percent: string;
-  error?: boolean;
+  status: 'error' | 'progress' | 'success' | 'init';
 }

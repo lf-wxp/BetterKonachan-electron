@@ -36,7 +36,7 @@ export default React.memo(() => {
     return (): void => {
       ipcRenderer.removeAllListeners(EventImage.DATA);
     };
-  }, []);
+  }, [dispatch]);
 
   return null;
 });

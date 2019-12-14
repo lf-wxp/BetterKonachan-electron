@@ -1,20 +1,24 @@
 import * as Splashscreen from '@trodi/electron-splashscreen';
 
 import { TFuncVoid, isValidType } from '~util';
-import electron, { BrowserWindow, app, ipcMain } from 'electron';
+import electron, { app, ipcMain } from 'electron';
 import { fromEvent, of, zip } from 'rxjs';
 import { map, mergeAll, debounceTime } from 'rxjs/operators';
 
 import { IRxEventPayLoad } from '~model/event';
-import { download, Progress } from 'electron-dl';
 import { imageXmlObservable } from '~module/image';
 import path from 'path';
 import { EventImage, EventDownload, EventWindow } from '~model/event';
 import windowStateKeeper from 'electron-window-state';
+import DownloadManager from 'electron-download-manager';
+import unhandled from 'electron-unhandled';
 
 let mainWindow: Electron.BrowserWindow | null;
 let mainWindowState: windowStateKeeper.State;
 let screen: { width: number; height: number };
+
+DownloadManager.register();
+unhandled();
 
 const createWindow: TFuncVoid = (): void => {
   screen = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -104,21 +108,43 @@ fromEvent(ipcMain, EventWindow.MAX).subscribe(() => {
 });
 
 fromEvent(ipcMain, EventDownload.DOWNLOAD).subscribe(
-  ([event, { url, index }]: IRxEventPayLoad<{
+  ([event, { url }]: IRxEventPayLoad<{
     url: string;
-    index: number;
   }>) => {
-    download(mainWindow as BrowserWindow, url, {
-      onProgress: (progress: Progress): void => {
+    let zeroCount = 0;
+    DownloadManager.download(
+      {
+        url,
+        onProgress: (progress: any, item: any): void => {
+          const speed = Number.parseFloat(
+            /(\d+\.?\d*)/.exec(progress.speed)?.[0] || '0'
+          );
+          if (speed === 0) {
+            zeroCount += 1;
+          }
+          if (zeroCount > 300000 || item.getState() === 'interrupted') {
+            item.cancel();
+            event.sender.send(EventDownload.STATUS, {
+              status: 'error',
+              progress: progress.progress,
+              url
+            });
+          } else {
+            event.sender.send(EventDownload.STATUS, {
+              status: 'progress',
+              progress: progress.progress,
+              url
+            });
+          }
+        }
+      },
+      (err: Error, { url }: { url: string }) => {
         event.sender.send(EventDownload.STATUS, {
-          status: 'progress',
-          progress: progress.percent,
-          index
+          status: err ? 'error' : 'success',
+          url,
+          ...(!err ? { progress: 100 } : {})
         });
       }
-    }).catch((err: Error) => {
-      console.log(err);
-      event.sender.send(EventDownload.STATUS, { status: 'error', index });
-    });
+    );
   }
 );

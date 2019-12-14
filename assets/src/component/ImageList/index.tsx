@@ -130,15 +130,16 @@ export default React.memo(() => {
   ): void => {
     e.preventDefault();
     const target: HTMLElement = e.currentTarget;
-    const { index } = target.dataset;
-    const filterItem: ImageDetail[] = items.filter((it: ImageDetail) =>
-      security ? it.security : true
-    );
-    const item: ImageDetail = filterItem[Number.parseInt(index as string, 10)];
+    const { id } = target.dataset;
+    const item = items.find((it: ImageDetail) => `${it.id}` === id);
+    if (!item) {
+      return;
+    }
     const data: Download = {
       url: item.url,
       sample: item.preview,
-      percent: '0%'
+      percent: '0%',
+      status: 'init'
     };
     if (!download.find(({ url }: { url: string }) => url === data.url)) {
       dispatch({
@@ -146,8 +147,7 @@ export default React.memo(() => {
         payload: [...download, data]
       });
       ipcRenderer.send(EventDownload.DOWNLOAD, {
-        url: item.url,
-        index: download.length
+        url: item.url
       });
     }
   };
@@ -194,7 +194,7 @@ export default React.memo(() => {
                     className='bk-list__down'
                     target='_blank'
                     rel='noopener noreferrer'
-                    data-index={key}
+                    data-id={item.id}
                     onClick={handleDownload}
                   >
                     <FaDownload />

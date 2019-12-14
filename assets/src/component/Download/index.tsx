@@ -27,18 +27,18 @@ export default React.memo(() => {
     ipcRenderer.on(
       EventDownload.STATUS,
       (
-        event: Electron.Event,
+        __: Electron.Event,
         {
           progress,
-          index,
+          url,
           status
-        }: { progress: number; index: number; status: 'error' | 'progress' }
+        }: Omit<UpdateProgressPayload, 'percent'> & { progress: number }
       ) => {
-        const percent = `${progress * 100}%`;
+        const percent = `${progress}%`;
         dispatch({
           type: EAction.setDownloadStatus,
           payload: {
-            index,
+            url,
             percent,
             status
           } as UpdateProgressPayload
@@ -49,10 +49,10 @@ export default React.memo(() => {
     return (): void => {
       ipcRenderer.removeAllListeners(EventDownload.STATUS);
     };
-  }, []);
+  }, [dispatch]);
 
-  const downloadRetry = (url: string, index: number): void => {
-    ipcRenderer.send(EventDownload.DOWNLOAD, { url: url, index });
+  const downloadRetry = (url: string): void => {
+    ipcRenderer.send(EventDownload.DOWNLOAD, { url: url });
   };
 
   return (
@@ -61,26 +61,29 @@ export default React.memo(() => {
         <div className='bk-download__box'>
           {download.map((item: Download, key: number) => (
             <div className='bk-download__item' key={key}>
-              {item.percent === '100%' && (
+              {item.status === 'success' && (
                 <span className='bk-download__icon'>
                   <IoIosCheckmarkCircle />
                 </span>
               )}
-              {item.error && (
+              {item.status === 'error' && (
                 <div className='bk-download__catch'>
                   <span className='bk-download__error'>
                     <IoMdInformationCircleOutline />
                   </span>
                   <span
                     className='bk-download__retry'
-                    onClick={(): void => downloadRetry(item.url, key)}
+                    onClick={(): void => downloadRetry(item.url)}
                   >
                     <IoIosRefresh />
                   </span>
                 </div>
               )}
               <img src={item.sample} alt='preview' />
-              <Progress percent={item.percent} />
+              <Progress
+                percent={item.percent}
+                error={item.status === 'error'}
+              />
             </div>
           ))}
         </div>

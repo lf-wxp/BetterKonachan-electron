@@ -13,9 +13,9 @@ export enum EAction {
 }
 
 export interface UpdateProgressPayload {
-  index: number;
+  url: string;
   percent: string;
-  status: 'error' | 'progress';
+  status: 'error' | 'progress' | 'success';
 }
 export interface Action {
   // tslint:disable-next-line: no-reserved-keywords

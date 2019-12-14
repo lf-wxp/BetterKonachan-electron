@@ -1,5 +1,6 @@
 import React from 'react';
 import { Ctx } from '~cModel/ctx';
+import { ColorSet } from '~cModel/colorSet';
 import {
   Action,
   EAction,
@@ -9,6 +10,7 @@ import {
 } from '~cModel/action';
 import { ImageDetail } from '~model/image';
 import { Download } from '~cModel/download';
+import { clone } from 'ramda';
 
 interface CtxProps {
   value: Ctx;
@@ -62,18 +64,20 @@ const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
       return { ...state, loading: payload as boolean };
     case EAction.setDownloadStatus:
       const { download } = state;
-      const { index, percent, status } = payload as UpdateProgressPayload;
-      const tmp: Download[] = [...download];
-      if (status === 'progress') {
-        tmp[index].percent = percent;
+      const { percent, status, url } = payload as UpdateProgressPayload;
+      const tmp: Download[] = clone(download);
+      const target = tmp.find(item => decodeURI(item.url) === decodeURI(url));
+      if (!target) {
+        return { ...state };
       }
-      if (status === 'error') {
-        tmp[index].error = true;
+      if (['progress', 'success'].includes(status)) {
+        target.percent = percent;
       }
+      target.status = status;
 
       return { ...state, download: tmp };
     case EAction.setBaseColor:
-      return { ...state, colorSet: payload as Record<string, string> };
+      return { ...state, colorSet: payload as ColorSet };
     default:
       return { ...state };
   }

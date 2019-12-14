@@ -1,5 +1,6 @@
 import { ImageDetail } from '~model/image';
 import { Download } from '~cModel/download';
+import { ColorSet } from '~cModel/colorSet';
 
 export interface Ctx {
   items: ImageDetail[];
@@ -9,5 +10,5 @@ export interface Ctx {
   expand: boolean;
   download: Download[];
   loading: boolean;
-  colorSet: Record<string, string>;
+  colorSet: ColorSet;
 }

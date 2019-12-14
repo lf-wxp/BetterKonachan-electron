@@ -13,7 +13,7 @@ const getPageArray: TFunc2<number, number, number[]> = (
   page: number,
   pages: number
 ): number[] => {
-  if (pages === 0) {
+  if (pages <= 0) {
     return [];
   }
   const half: number = Math.floor(size / 2);

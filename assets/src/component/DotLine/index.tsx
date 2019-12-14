@@ -65,7 +65,7 @@ export default React.memo<DotLineProps>(
     const [ref, { width: parentW, height: parentH }] = useMeasure();
     const {
       state: {
-        colorSet: { vibrant }
+        colorSet: { vibrant, muted }
       }
     } = useContext(Context);
 
@@ -89,9 +89,9 @@ export default React.memo<DotLineProps>(
 
     useEffect(() => {
       if (bgObj.current) {
-        bgObj.current.setColor({ dotColor: vibrant });
+        bgObj.current.setColor({ dotColor: vibrant, lineColor: muted });
       }
-    }, [vibrant]);
+    }, [vibrant, muted]);
 
     return (
       <div ref={ref} className='bk-canvas'>
