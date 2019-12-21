@@ -1,10 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 
 import Context from '~src/context';
 import { EAction } from '~cModel/action';
 import { TFuncVoid, TFunc2, TFunc1Void } from '~util';
 import { EventImage } from '~model/event';
+import mousetrap from 'mousetrap';
+import 'mousetrap/plugins/global-bind/mousetrap-global-bind';
 
 import './style.pcss';
 
@@ -114,6 +116,20 @@ export default React.memo(() => {
       getData(page + 1);
     }
   };
+
+  useEffect(() => {
+    mousetrap.bindGlobal('right', () => {
+      next();
+    });
+    mousetrap.bindGlobal('left', () => {
+      prev();
+    });
+
+    return () => {
+      mousetrap.unbind('right');
+      mousetrap.unbind('left');
+    };
+  }, [next, prev]);
 
   return (
     <section className={`bk-pager ${pageArray.length ? 'active' : ''}`}>
