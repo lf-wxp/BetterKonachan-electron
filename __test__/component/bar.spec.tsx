@@ -2,11 +2,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import 'jest';
 
-import Page from '~component/Page';
+import Bar from '~component/Bar';
 
-describe('<Page />', () => {
+describe('<Bar />', () => {
   it('render correctly', () => {
-    const result = shallow(<Page />);
+    const result = shallow(<Bar />);
     expect(result).toBeTruthy();
   });
 });
