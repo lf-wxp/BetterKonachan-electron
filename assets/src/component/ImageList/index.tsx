@@ -187,19 +187,20 @@ export default React.memo(() => {
                 />
                 <div className='bk-list__tool'>
                   <p className='bk-list__info'>
-                    {item.width} / {item.height}
+                    {item.width} <span>{item.width}</span> / {item.height}
+                    <span>{item.height}</span>
                   </p>
-                  <a
-                    href={item.url}
-                    className='bk-list__down'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    data-id={item.id}
-                    onClick={handleDownload}
-                  >
-                    <FaDownload />
-                  </a>
                 </div>
+                <a
+                  href={item.url}
+                  className='bk-list__down'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  data-id={item.id}
+                  onClick={handleDownload}
+                >
+                  <FaDownload />
+                </a>
               </figure>
             </CSSTransition>
           ))}

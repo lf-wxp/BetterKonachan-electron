@@ -15,3 +15,8 @@ export enum EventImage {
   POST = 'image-post',
   DATA = 'image-data'
 }
+
+export enum EventAction {
+  SET_BACKGROUND_DIR = 'set-background-dir',
+  SET_BACKGROUND = 'set-background'
+}
