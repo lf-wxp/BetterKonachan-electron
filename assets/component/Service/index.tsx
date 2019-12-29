@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
-import Context from '~src/context';
+import Context from '~assets/context';
 
 import { EAction } from '~cModel/action';
 import { ImageList } from '~model/image';

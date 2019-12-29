@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState
 } from 'react';
-import Context from '~src/context';
+import Context from '~assets/context';
 import Vibrant from 'node-vibrant';
 import { CSSVariable } from '~module/cssVariable';
 import { EAction } from '~cModel/action';

@@ -29,14 +29,14 @@
             "~module/*": [ "module/*" ],
             "~model/*": [ "model/*" ],
             "~config": [ "config/index" ],
-            "~component/*": [ "assets/src/component/*" ],
-            "~service": [ "assets/src/service" ],
-            "~cModule/*": [ "assets/src/module/*" ],
-            "~cModel/*": [ "assets/src/model/*" ],
-            "~css/*": [ "assets/src/css" ],
-            "~src/*": [ "assets/src/*" ],
-            "~image/*": [ "assets/src/image/*" ],
-            "~hook/*": [ "assets/src/hook/*" ]
+            "~component/*": [ "assets/component/*" ],
+            "~service": [ "assets/service" ],
+            "~cModule/*": [ "assets/module/*" ],
+            "~cModel/*": [ "assets/model/*" ],
+            "~css/*": [ "assets/css" ],
+            "~assets/*": [ "assets/*" ],
+            "~image/*": [ "assets/image/*" ],
+            "~hook/*": [ "assets/hook/*" ]
         }
     },
     "exclude": [

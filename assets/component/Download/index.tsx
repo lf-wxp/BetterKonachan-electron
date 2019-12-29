@@ -7,7 +7,7 @@ import {
 } from 'react-icons/io';
 import Progress from '~component/Progress';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import Context from '~src/context';
+import Context from '~assets/context';
 
 import { EAction, UpdateProgressPayload } from '~cModel/action';
 import { TFuncVoid } from '~util';

@@ -9,7 +9,7 @@ import Service from '~component/Service';
 import Loading from '~component/Loading';
 import DotLine from '~component/DotLine';
 import Selector from '~component/Selector';
-import { Provider } from '~src/context';
+import { Provider } from '~assets/context';
 
 import { Ctx } from '~cModel/ctx';
 

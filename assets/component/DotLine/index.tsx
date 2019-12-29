@@ -16,7 +16,7 @@ import {
 } from 'ramda';
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import { useMeasure } from 'react-use';
-import Context from '~src/context';
+import Context from '~assets/context';
 import DotLine from './DotLine';
 
 import './style.pcss';

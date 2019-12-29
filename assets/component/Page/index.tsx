@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 
-import Context from '~src/context';
+import Context from '~assets/context';
 import { EAction } from '~cModel/action';
 import { TFuncVoid, TFunc2, TFunc1Void } from '~util';
 import { EventImage } from '~model/event';

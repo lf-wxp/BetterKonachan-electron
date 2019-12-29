@@ -8,7 +8,7 @@ import path from 'path';
 export default merge(basicConfig, {
   mode: 'development',
   entry: { index: './index.tsx' },
-  context: path.resolve(__dirname, '../assets/src/'),
+  context: path.resolve(__dirname, '../assets'),
   output: {
     filename: '[name].js',
     chunkFilename: '[name].js',
@@ -27,7 +27,7 @@ export default merge(basicConfig, {
   target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../assets/src/index.html')
+      template: path.resolve(__dirname, '../assets/index.html')
     }),
     new webpack.HotModuleReplacementPlugin(), // enable HMR globally
     new webpack.NamedModulesPlugin() // prints more readable module names in the browser console on HMR updates

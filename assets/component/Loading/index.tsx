@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Context from '~src/context';
+import Context from '~assets/context';
 import Spinner from 'react-spinkit';
 
 import './style.pcss';

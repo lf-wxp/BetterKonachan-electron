@@ -7,7 +7,7 @@ import { useMeasure } from 'react-use';
 import Image from '~component/Image';
 import useImageLoad from '~hook/useImageLoad';
 import fallbackImage from '~image/loaderror.png';
-import Context from '~src/context';
+import Context from '~assets/context';
 
 import { TFunc1, TFunc1Void, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
 import { EventDownload } from '~model/event';
