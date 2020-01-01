@@ -106,7 +106,6 @@ const createWindow: TFuncVoid = (): void => {
 };
 
 fromEvent(app, 'ready').subscribe(() => {
-  setBackground();
   createWindow();
 });
 
