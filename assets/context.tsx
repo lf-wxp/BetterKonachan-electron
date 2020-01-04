@@ -43,7 +43,8 @@ const initState: Ctx = {
       name: ''
     }
   ],
-  loading: true
+  loading: true,
+  tags: ''
 };
 
 const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
@@ -78,6 +79,8 @@ const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
       return { ...state, download: tmp };
     case EAction.setBaseColor:
       return { ...state, colorSet: payload as ColorSet };
+    case EAction.setTags:
+      return { ...state, tags: payload as string };
     default:
       return { ...state };
   }

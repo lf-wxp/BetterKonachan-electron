@@ -9,7 +9,8 @@ export enum EAction {
   setDownload = 'setDownload',
   setLoading = 'setLoading',
   setDownloadStatus = 'setDownloadStatus',
-  setBaseColor = 'setBaseColor'
+  setBaseColor = 'setBaseColor',
+  setTags = 'setTags'
 }
 
 export interface UpdateProgressPayload {

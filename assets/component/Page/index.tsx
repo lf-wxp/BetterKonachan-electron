@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { ipcRenderer } from 'electron';
 
 import Context from '~assets/context';
@@ -53,26 +53,26 @@ const getPageArray: TFunc2<number, number, number[]> = (
 
 export default React.memo(() => {
   const {
-    state: { page, pages },
+    state: { page, pages, tags },
     dispatch
   } = useContext(Context);
   const pageArray: number[] = getPageArray(page, pages);
   const [statePage, setStatePage] = useState();
 
-  const getData: (p: number, tags?: string) => void = (
-    p: number,
-    tags = ''
-  ): void => {
-    ipcRenderer.send(EventImage.POST, { page: p, tags });
-    dispatch({
-      type: EAction.setPage,
-      payload: p
-    });
-    dispatch({
-      type: EAction.setLoading,
-      payload: true
-    });
-  };
+  const getData: (p: number, tags?: string) => void = useCallback(
+    (p: number): void => {
+      ipcRenderer.send(EventImage.POST, { page: p, tags });
+      dispatch({
+        type: EAction.setPage,
+        payload: p
+      });
+      dispatch({
+        type: EAction.setLoading,
+        payload: true
+      });
+    },
+    [dispatch, tags]
+  );
 
   const invoke: TFunc1Void<React.FormEvent<HTMLLIElement>> = (
     event: React.FormEvent<HTMLLIElement>
@@ -105,17 +105,17 @@ export default React.memo(() => {
     getData(statePage);
   };
 
-  const prev: TFuncVoid = (): void => {
+  const prev: TFuncVoid = useCallback((): void => {
     if (page - 1 > 0) {
       getData(page - 1);
     }
-  };
+  }, [getData, page]);
 
-  const next: TFuncVoid = (): void => {
+  const next: TFuncVoid = useCallback((): void => {
     if (page + 1 < pages) {
       getData(page + 1);
     }
-  };
+  }, [getData, page, pages]);
 
   useEffect(() => {
     mousetrap.bindGlobal('right', () => {
@@ -125,7 +125,7 @@ export default React.memo(() => {
       prev();
     });
 
-    return () => {
+    return (): void => {
       mousetrap.unbind('right');
       mousetrap.unbind('left');
     };

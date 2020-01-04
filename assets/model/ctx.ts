@@ -11,4 +11,5 @@ export interface Ctx {
   download: Download[];
   loading: boolean;
   colorSet: ColorSet;
+  tags: string;
 }

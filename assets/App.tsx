@@ -9,6 +9,7 @@ import Service from '~component/Service';
 import Loading from '~component/Loading';
 import DotLine from '~component/DotLine';
 import Selector from '~component/Selector';
+import Search from '~component/Search';
 import { Provider } from '~assets/context';
 
 import { Ctx } from '~cModel/ctx';
@@ -30,7 +31,8 @@ const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(
       },
       security: true,
       expand: true,
-      loading: true
+      loading: true,
+      tags: ''
     };
 
     return (
@@ -42,6 +44,7 @@ const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(
             <Bar />
             <Page />
             <Setting />
+            <Search />
             <Download />
             <Selector />
           </aside>

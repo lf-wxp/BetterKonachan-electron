@@ -7,12 +7,16 @@ import { ImageList } from '~model/image';
 import { EventImage } from '~model/event';
 
 export default React.memo(() => {
-  const { dispatch } = useContext(Context);
+  const {
+    dispatch,
+    state: { tags }
+  } = useContext(Context);
 
   useEffect((): (() => void) => {
     ipcRenderer.on(
       EventImage.DATA,
       (event: Electron.Event, { images, pages }: ImageList) => {
+        console.log('items', images);
         dispatch({
           type: EAction.setItems,
           payload: images
@@ -27,7 +31,7 @@ export default React.memo(() => {
         });
       }
     );
-    ipcRenderer.send(EventImage.POST, { page: 1, tags: '' });
+    ipcRenderer.send(EventImage.POST, { page: 1, tags });
     dispatch({
       type: EAction.setPage,
       payload: 1
@@ -36,7 +40,7 @@ export default React.memo(() => {
     return (): void => {
       ipcRenderer.removeAllListeners(EventImage.DATA);
     };
-  }, [dispatch]);
+  }, [dispatch, tags]);
 
   return null;
 });
