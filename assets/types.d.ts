@@ -34,3 +34,5 @@ declare module 'electron-download-manager' {
   const DownloadManager: any;
   export default DownloadManager;
 }
+
+declare module 'electron-ipc-mock';
