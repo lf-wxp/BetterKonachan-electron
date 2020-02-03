@@ -19,6 +19,7 @@
         "removeComments": true,
         "noUnusedLocals": true,
         "noImplicitReturns": false,
+        "skipLibCheck": true,
         "jsx": "react",
         "lib": [ "dom", "es7", "es6", "es2015" ],
         "typeRoots": [ "node_modules/@types" ],

@@ -4,13 +4,13 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig.json');
 module.exports = {
   preset: 'ts-jest',
-  testEnvironment: 'node',
+  // testEnvironment: 'node',
   // testEnvironment: '@jest-runner/electron/environment',
   // runner: '@jest-runner/electron',
   testEnvironmentOptions: {
     resources: 'usable',
   },
-  setupFiles: ['<rootDir>/test-setup.js'],
+  // setupFiles: ['<rootDir>/test-setup.js'],
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.json'
@@ -18,10 +18,15 @@ module.exports = {
   },
   collectCoverage: true,
   coverageDirectory: '<rootDir>/coverage',
+  collectCoverageFrom: [
+    './assets/**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/test/**'
+  ],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png)$': '<rootDir>/test/mock/file.ts',
     '\\.pcss$': 'identity-obj-proxy',
-    // 'node-vibrant': '<rootDir>/test/mock/vibrant.ts',
+    'node-vibrant': '<rootDir>/test/mock/vibrant.ts',
     'electron': "<rootDir>/test/mock/electron.ts",
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' })
   },

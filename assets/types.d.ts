@@ -25,11 +25,6 @@ declare module '*.jpg' {
   export default value;
 }
 
-declare module 'react-perfect-scrollbar' {
-  const PerfectScrollbar: any;
-  export default PerfectScrollbar;
-}
-
 declare module 'electron-download-manager' {
   const DownloadManager: any;
   export default DownloadManager;
