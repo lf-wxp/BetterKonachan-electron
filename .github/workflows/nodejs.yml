@@ -20,8 +20,10 @@ jobs:
     - name: npm install, build
       run: |
         npm install
+        npm install -g codecov
         npm run render:build --if-present
         npm run main:build
         npm run test
+        codecov -t 792fa87c-d976-4bfe-8857-9780072c08fc
       env:
         CI: true

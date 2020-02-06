@@ -12,6 +12,7 @@
     "lint": "eslint ./**/*.{ts,tsx,js}",
     "prettier": "prettier ./**/*.{ts,tsx,js,css} --write",
     "test": "jest",
+    "codecov": "codecov",
     "main:start": "electron .",
     "main:watch": "webpack --mode development --watch --config ./webpack/main.ts",
     "main:build": "webpack --mode production --config ./webpack/main.ts"
