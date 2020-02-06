@@ -1,3 +1,8 @@
+import fs from 'fs';
 import path from 'path';
 
-export default path.resolve('../../assets/image/bg0.jpg');
+const imgBase64 = `data:image/png;base64,${fs
+  .readFileSync(path.resolve(__dirname, '../../assets/image/ablum.png'))
+  .toString('base64')}`;
+
+export default imgBase64;

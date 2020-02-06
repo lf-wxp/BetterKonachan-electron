@@ -20,7 +20,6 @@ const initState: Ctx = {
   pages: 0,
   page: 0,
   security: true,
-  expand: false,
   download: [],
   colorSet: {
     vibrant: '#39cccc',
@@ -49,8 +48,6 @@ const initState: Ctx = {
 
 const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
   switch (type) {
-    case EAction.setExpand:
-      return { ...state, expand: payload as boolean };
     case EAction.setPage:
       return { ...state, page: payload as number };
     case EAction.setPages:

@@ -29,14 +29,16 @@ export default React.memo(() => {
 
   const onLoad = useCallback(async () => {
     const palette = await Vibrant.from(img.current).getSwatches();
-    const vibrantColor = palette.Vibrant?.hex!;
-    const mutedColor = palette.Muted?.hex!;
-    CSSVariable.setValue('--themeBaseColor', vibrantColor);
-    CSSVariable.setValue('--themeMutedColor', mutedColor);
-    dispatch({
-      type: EAction.setBaseColor,
-      payload: { vibrant: vibrantColor, muted: mutedColor }
-    });
+    const vibrantColor = palette.Vibrant?.hex;
+    const mutedColor = palette.Muted?.hex;
+    if (vibrantColor && mutedColor) {
+      CSSVariable.setValue('--themeBaseColor', vibrantColor);
+      CSSVariable.setValue('--themeMutedColor', mutedColor);
+      dispatch({
+        type: EAction.setBaseColor,
+        payload: { vibrant: vibrantColor, muted: mutedColor }
+      });
+    }
   }, [img, dispatch]);
 
   useEffect(() => {

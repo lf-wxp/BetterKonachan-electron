@@ -30,7 +30,6 @@ const App: React.MemoExoticComponent<() => React.ReactElement> = React.memo(
         muted: '#0984e3'
       },
       security: true,
-      expand: true,
       loading: true,
       tags: ''
     };

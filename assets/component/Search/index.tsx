@@ -31,6 +31,7 @@ export default React.memo(() => {
   const onInput = useCallback((e): void => {
     setValue(e.target.value);
   }, []);
+
   return (
     <input
       className='bk-search'

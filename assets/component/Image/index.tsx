@@ -53,7 +53,7 @@ export default ({
 
   return (
     <div
-      className={`bk-image ${animationEnd ? 'anmationend' : ''}`}
+      className={`bk-image ${animationEnd ? 'animationend' : ''}`}
       style={{ width: (width as number) - 10, height: (height as number) - 10 }}
     >
       <img

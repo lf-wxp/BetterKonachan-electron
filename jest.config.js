@@ -8,9 +8,9 @@ module.exports = {
   // testEnvironment: '@jest-runner/electron/environment',
   // runner: '@jest-runner/electron',
   testEnvironmentOptions: {
-    resources: 'usable',
+    resources: 'usable'
   },
-  // setupFiles: ['<rootDir>/test-setup.js'],
+  setupFiles: ['<rootDir>/test-setup.js'],
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.json'
@@ -20,16 +20,19 @@ module.exports = {
   coverageDirectory: '<rootDir>/coverage',
   collectCoverageFrom: [
     './assets/**/*.{ts,tsx}',
+    '!./assets/**/*.d.{ts,tsx}',
+    '!./assets/index.tsx',
     '!**/node_modules/**',
     '!**/test/**'
   ],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png)$': '<rootDir>/test/mock/file.ts',
-    '\\.pcss$': 'identity-obj-proxy',
+    '\\.p?css$': 'identity-obj-proxy',
     'node-vibrant': '<rootDir>/test/mock/vibrant.ts',
-    'electron': "<rootDir>/test/mock/electron.ts",
+    electron: '<rootDir>/test/mock/electron.ts',
+    mousetrap: '<rootDir>/test/mock/mousetrap.ts',
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' })
   },
   moduleFileExtensions: ['ts', 'tsx', 'js'],
-  testMatch: ['<rootDir>assets/**/test.(ts|tsx|js)']
+  testMatch: ['<rootDir>/**/*.test.(ts|tsx)', '<rootDir>/**/test.(ts|tsx)']
 };

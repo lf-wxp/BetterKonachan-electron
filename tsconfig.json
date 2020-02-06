@@ -37,7 +37,8 @@
             "~css/*": [ "assets/css" ],
             "~assets/*": [ "assets/*" ],
             "~image/*": [ "assets/image/*" ],
-            "~hook/*": [ "assets/hook/*" ]
+            "~hook/*": [ "assets/hook/*" ],
+            "~test/*": [ "test/*" ]
         }
     },
     "exclude": [

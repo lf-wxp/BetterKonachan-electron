@@ -7,7 +7,6 @@ export interface Ctx {
   pages: number;
   page: number;
   security: boolean;
-  expand: boolean;
   download: Download[];
   loading: boolean;
   colorSet: ColorSet;

@@ -88,11 +88,12 @@ export default React.memo(() => {
     const target: HTMLInputElement = event.currentTarget as HTMLInputElement;
     const val: string = target.value;
     const value: string = val.replace(/[^0-9]/g, '');
-    let num: number | string = Number.parseInt(value, 10) || '';
+    const numTmp = Number.parseInt(value, 10);
+    let num: number = Number.isNaN(numTmp) ? 1 : numTmp;
     if (num > pages) {
       num = pages;
     }
-    if (num < 0) {
+    if (num <= 0) {
       num = 1;
     }
     setStatePage(num);

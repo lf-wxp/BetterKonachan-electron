@@ -16,7 +16,6 @@ export default React.memo(() => {
     ipcRenderer.on(
       EventImage.DATA,
       (event: Electron.Event, { images, pages }: ImageList) => {
-        console.log('items', images);
         dispatch({
           type: EAction.setItems,
           payload: images

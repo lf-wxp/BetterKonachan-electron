@@ -4,7 +4,7 @@ export const ipcRenderer = {
     this.events[event] = handler;
   },
   send(event: string | number, data: any) {
-    this.events[event](event, data);
+    this.events?.[event]?.(event, data);
   },
   removeAllListeners(event: string | number) {
     this.events[event] = undefined;
