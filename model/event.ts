@@ -1,7 +1,7 @@
 export type IRxEventPayLoad<T> = [Electron.IpcMainEvent, T];
 
 export enum EventWindow {
-  COLOSE = 'window-close',
+  CLOSE = 'window-close',
   MAX = 'window-max',
   MIN = 'window-min'
 }

@@ -141,7 +141,7 @@ fromEvent(ipcMain, EventImage.POST)
     event.sender.send(EventImage.DATA, { images, pages });
   });
 
-fromEvent(ipcMain, EventWindow.COLOSE).subscribe(
+fromEvent(ipcMain, EventWindow.CLOSE).subscribe(
   () => isValidType<Electron.BrowserWindow>(mainWindow) && mainWindow.close()
 );
 

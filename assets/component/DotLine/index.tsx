@@ -33,7 +33,7 @@ const judge = (
 
 const int = curry(Number.parseInt);
 
-const persent2number = pipe(
+const percent2number = pipe(
   match(/(\d+)/),
   nth(0),
   int(__, 10),
@@ -41,8 +41,8 @@ const persent2number = pipe(
   multiply
 );
 
-const parseWidthPersent = ([persent, width]: [string, number]): number =>
-  persent2number(persent)(width);
+const parseWidthPercent = ([percent, width]: [string, number]): number =>
+  percent2number(percent)(width);
 
 const getSize = cond([
   [judge(is(Number), 0), nth(0)],
@@ -52,7 +52,7 @@ const getSize = cond([
       judge(test(/^\d+%$/), 0),
       judge(pipe(isNil, not), 1)
     ]),
-    parseWidthPersent
+    parseWidthPercent
   ]
 ]);
 

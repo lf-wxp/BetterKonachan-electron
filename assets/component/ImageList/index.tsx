@@ -4,6 +4,20 @@ import { FaDownload } from 'react-icons/fa';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useMeasure } from 'react-use';
+import {
+  flip,
+  gt,
+  nth,
+  ifElse,
+  always,
+  mathMod,
+  divide,
+  nthArg,
+  tap,
+  pipe,
+  lt,
+  prop
+} from 'ramda';
 import Image from '~component/Image';
 import useImageLoad from '~hook/useImageLoad';
 import fallbackImage from '~image/loaderror.png';
@@ -36,31 +50,41 @@ const shortestColumn: TFuncVoidReturn<{ height: number; index: number }> = (): {
   };
 };
 
-const calcColumnWidth: TFunc1<number, { column: number; colWidth: number }> = (
-  width: number
-): { column: number; colWidth: number } => {
-  let column = 0;
-  let colWidth = 0;
-  if (width) {
-    const w: number = width;
-    const l: number = w % maxWidth;
-    if (l) {
-      column = Math.ceil(w / maxWidth);
-      colWidth = w / column;
-    } else {
-      column = w / maxWidth;
-      colWidth = maxWidth;
-    }
-    if (colWidth < minWidth) {
-      column = 1;
-      colWidth = w;
-    }
-  }
-  return {
-    column,
-    colWidth
-  };
-};
+const calcColumnWidth = (
+  w: number,
+  mW: number,
+  mM: number
+): { column: number; colWidth: number } =>
+  ifElse(
+    pipe(nthArg(0), flip(gt)(0)),
+    pipe(
+      (w: number) => [w, mathMod(w, mW)],
+      ifElse(
+        pipe(nth(1), flip(gt)(0)),
+        always({
+          column: Math.ceil(w / mW),
+          colWidth: divide(w, Math.ceil(w / mW))
+        }),
+        always({
+          column: divide(w, mW),
+          colWidth: mW
+        })
+      ),
+      ifElse(
+        pipe(prop('colWidth'), flip(lt)(mM)),
+        always({
+          column: 1,
+          colWidth: w
+        }),
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        tap(() => {})
+      )
+    ),
+    always({
+      column: 0,
+      colWidth: 0
+    })
+  )(w);
 
 const calcColumnArray: TFunc1Void<number> = (h: number): void => {
   const { index, height } = shortestColumn();
@@ -106,7 +130,7 @@ const updateLayout: TFunc3<ImageDetail[], number, boolean, ImageDom[]> = (
   width: number,
   security: boolean
 ): ImageDom[] => {
-  const { column, colWidth } = calcColumnWidth(width);
+  const { column, colWidth } = calcColumnWidth(width, maxWidth, minWidth);
   // tslint:disable-next-line: prefer-array-literal
   columnArray = new Array(column).fill(0);
   const filterItem: ImageDetail[] = items.filter((item: ImageDetail) =>

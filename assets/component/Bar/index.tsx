@@ -7,7 +7,7 @@ import './style.pcss';
 
 export default React.memo(() => {
   const close: TFuncVoid = (): void => {
-    ipcRenderer.send(EventWindow.COLOSE);
+    ipcRenderer.send(EventWindow.CLOSE);
   };
   const max: TFuncVoid = (): void => {
     ipcRenderer.send(EventWindow.MAX);

@@ -19,7 +19,7 @@ describe('<Bar />', () => {
   it('fire the event', () => {
     const { container } = render(<Bar />);
     fireEvent.click(container.querySelector('.bk-bar__close')!);
-    expect(ipcRenderer.send).toBeCalledWith(EventWindow.COLOSE);
+    expect(ipcRenderer.send).toBeCalledWith(EventWindow.CLOSE);
     fireEvent.click(container.querySelector('.bk-bar__expand')!);
     expect(ipcRenderer.send).toBeCalledWith(EventWindow.MAX);
     fireEvent.click(container.querySelector('.bk-bar__mini')!);
