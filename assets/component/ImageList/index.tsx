@@ -7,16 +7,19 @@ import { useMeasure } from 'react-use';
 import {
   flip,
   gt,
-  nth,
   ifElse,
-  always,
   mathMod,
   divide,
-  nthArg,
-  tap,
+  when,
   pipe,
   lt,
-  prop
+  prop,
+  update,
+  add,
+  multiply,
+  merge,
+  reduce,
+  filter
 } from 'ramda';
 import Image from '~component/Image';
 import useImageLoad from '~hook/useImageLoad';
@@ -50,46 +53,71 @@ const shortestColumn: TFuncVoidReturn<{ height: number; index: number }> = (): {
   };
 };
 
-const calcColumnWidth = (
-  w: number,
-  mW: number,
+const shortestColumnPure: TFunc1<
+  number[],
+  { height: number; index: number; colArray: number[] }
+> = (colArray: number[]) => {
+  const min: number = Math.min(...colArray);
+  const index: number = colArray.indexOf(min);
+
+  return {
+    height: min,
+    index,
+    colArray
+  };
+};
+
+const calcColumnWidth = (mW: number) => (
   mM: number
-): { column: number; colWidth: number } =>
-  ifElse(
-    pipe(nthArg(0), flip(gt)(0)),
-    pipe(
-      (w: number) => [w, mathMod(w, mW)],
-      ifElse(
-        pipe(nth(1), flip(gt)(0)),
-        always({
-          column: Math.ceil(w / mW),
-          colWidth: divide(w, Math.ceil(w / mW))
-        }),
-        always({
-          column: divide(w, mW),
-          colWidth: mW
-        })
-      ),
-      ifElse(
-        pipe(prop('colWidth'), flip(lt)(mM)),
-        always({
+): TFunc1<number, { column: number; colWidth: number; width: number }> =>
+  pipe(
+    ifElse(
+      flip(gt)(0),
+      pipe(
+        ifElse(
+          pipe(flip(mathMod)(mW), flip(gt)(0)),
+          w => ({
+            column: Math.ceil(w / mW),
+            colWidth: divide(w, Math.ceil(w / mW)),
+            width: w
+          }),
+          w => ({
+            column: divide(w, mW),
+            colWidth: mW,
+            width: w
+          })
+        ),
+        when(pipe(prop('colWidth'), flip(lt)(mM)), p => ({
           column: 1,
-          colWidth: w
-        }),
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        tap(() => {})
-      )
-    ),
-    always({
-      column: 0,
-      colWidth: 0
-    })
-  )(w);
+          colWidth: prop('width', p),
+          width: prop('width', p)
+        }))
+      ),
+      w => ({
+        column: 0,
+        colWidth: 0,
+        width: w
+      })
+    )
+  );
 
 const calcColumnArray: TFunc1Void<number> = (h: number): void => {
   const { index, height } = shortestColumn();
   columnArray.splice(index, 1, height + h);
 };
+
+const calcColumnArrayPure = (h: number): TFunc1<number[], number[]> =>
+  pipe(shortestColumnPure, p =>
+    update(prop('index')(p), add(prop('height')(p), h), prop('colArray')(p))
+  );
+
+const calcPositionPure = (
+  colWidth: number
+): TFunc1<number[], { x: number; y: number }> =>
+  pipe(shortestColumnPure, o => ({
+    x: multiply(prop('index', o), colWidth),
+    y: prop('height', o)
+  }));
 
 const calcPosition: TFunc1<number, { x: number; y: number }> = (
   w: number
@@ -104,11 +132,33 @@ const calcPosition: TFunc1<number, { x: number; y: number }> = (
   };
 };
 
+const calcListItemSize = (
+  item: ImageDetail,
+  colWidth: number,
+  cols: number[]
+): ImageDom => {
+  const ratio = (divide(
+    prop('height')(item),
+    prop('width')(item)
+  ) as unknown) as number;
+  const height = multiply(colWidth)(ratio);
+  const { x, y } = calcPositionPure(colWidth)(cols);
+  return merge({
+    styleW: colWidth,
+    styleH: height,
+    style: {
+      width: colWidth,
+      height,
+      transform: `translateX(${x}px) translateY(${y}px)`
+    }
+  })(item);
+};
+
 const calcList: TFunc2<ImageDetail[], number, ImageDom[]> = (
   items: ImageDetail[],
   width: number
-): ImageDom[] => {
-  return items.map((item: ImageDetail) => {
+): ImageDom[] =>
+  items.map((item: ImageDetail) => {
     const newItem: ImageDom = { ...item };
     const h: number = (item.height / item.width) * width;
     newItem.styleW = width;
@@ -123,6 +173,37 @@ const calcList: TFunc2<ImageDetail[], number, ImageDom[]> = (
 
     return newItem;
   });
+
+const updateLayoutPure = (security: boolean) => (colWidth: number) => (
+  colArray: number[]
+): TFunc1<ImageDetail[], { cols: number[]; items: ImageDom[] }> =>
+  pipe(
+    filter<ImageDetail>(item => (security ? item.security : true)),
+    reduce(
+      ({ cols, items }, item) => {
+        const newItem = calcListItemSize(item, colWidth, cols);
+        const newCols = calcColumnArrayPure(prop('styleH', newItem) as number)(
+          cols
+        );
+        items.push(newItem);
+        return {
+          cols: newCols,
+          items: [...items]
+        };
+      },
+      { cols: colArray, items: [] as ImageDom[] }
+    )
+  );
+
+const updateAll = (
+  security: boolean,
+  width: number,
+  images: ImageDetail[]
+): void => {
+  const { column, colWidth } = calcColumnWidth(maxWidth)(minWidth)(width);
+  const colArray = new Array(column).fill(0);
+  const layout = updateLayoutPure(security)(colWidth)(colArray)(images);
+  console.log('layout', layout);
 };
 
 const updateLayout: TFunc3<ImageDetail[], number, boolean, ImageDom[]> = (
@@ -130,7 +211,7 @@ const updateLayout: TFunc3<ImageDetail[], number, boolean, ImageDom[]> = (
   width: number,
   security: boolean
 ): ImageDom[] => {
-  const { column, colWidth } = calcColumnWidth(width, maxWidth, minWidth);
+  const { column, colWidth } = calcColumnWidth(maxWidth)(minWidth)(width);
   // tslint:disable-next-line: prefer-array-literal
   columnArray = new Array(column).fill(0);
   const filterItem: ImageDetail[] = items.filter((item: ImageDetail) =>
@@ -183,12 +264,10 @@ export default React.memo(() => {
   const combineStyle: TFunc2<CSSProperties, number, CSSProperties> = (
     style: CSSProperties,
     key: number
-  ): CSSProperties => {
-    return {
-      ...style,
-      transitionDelay: `${key * 0.05}s`
-    };
-  };
+  ): CSSProperties => ({
+    ...style,
+    transitionDelay: `${key * 0.05}s`
+  });
 
   return (
     <PerfectScrollbar>
