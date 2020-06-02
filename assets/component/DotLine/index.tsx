@@ -62,7 +62,9 @@ export default React.memo<DotLineProps>(
     const [realH, setRealH] = useState(0);
     const [realW, setRealW] = useState(0);
     const bgObj = useRef((null as unknown) as DotLine);
-    const [ref, { width: parentW, height: parentH }] = useMeasure();
+    const [ref, { width: parentW, height: parentH }] = useMeasure<
+      HTMLDivElement
+    >();
     const {
       state: {
         colorSet: { vibrant, muted }

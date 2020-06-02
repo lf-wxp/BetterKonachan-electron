@@ -24,7 +24,7 @@
         "lib": [ "dom", "es7", "es6", "es2015" ],
         "typeRoots": [ "node_modules/@types" ],
         "outDir": "./dist",
-        "types": [ "node", "electron" ],
+        "types": [ "node", "electron", "jest" ],
         "paths": {
             "~util": [ "util/index" ],
             "~module/*": [ "module/*" ],

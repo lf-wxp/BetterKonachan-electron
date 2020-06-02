@@ -1,32 +1,16 @@
 import { ipcRenderer } from 'electron';
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useCallback } from 'react';
 import { FaDownload } from 'react-icons/fa';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useMeasure } from 'react-use';
-import {
-  flip,
-  gt,
-  ifElse,
-  mathMod,
-  divide,
-  when,
-  pipe,
-  lt,
-  prop,
-  update,
-  add,
-  multiply,
-  merge,
-  reduce,
-  filter
-} from 'ramda';
 import Image from '~component/Image';
 import useImageLoad from '~hook/useImageLoad';
+import useWaterfall from '~hook/useWaterfall';
 import fallbackImage from '~image/loaderror.png';
 import Context from '~assets/context';
 
-import { TFunc1, TFunc1Void, TFunc2, TFunc3, TFuncVoidReturn } from '~util';
+import { TFunc1Void, TFunc2 } from '~util';
 import { EventDownload } from '~model/event';
 import { ImageDetail } from '~model/image';
 import { EAction } from '~cModel/action';
@@ -36,238 +20,65 @@ import { ImageDom } from '~cModel/imageDom';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './style.pcss';
 
-let columnArray: number[] = [0];
 const maxWidth = 300;
 const minWidth = 200;
-
-const shortestColumn: TFuncVoidReturn<{ height: number; index: number }> = (): {
-  height: number;
-  index: number;
-} => {
-  const min: number = Math.min(...columnArray);
-  const index: number = columnArray.indexOf(min);
-
-  return {
-    height: min,
-    index
-  };
-};
-
-const shortestColumnPure: TFunc1<
-  number[],
-  { height: number; index: number; colArray: number[] }
-> = (colArray: number[]) => {
-  const min: number = Math.min(...colArray);
-  const index: number = colArray.indexOf(min);
-
-  return {
-    height: min,
-    index,
-    colArray
-  };
-};
-
-const calcColumnWidth = (mW: number) => (
-  mM: number
-): TFunc1<number, { column: number; colWidth: number; width: number }> =>
-  pipe(
-    ifElse(
-      flip(gt)(0),
-      pipe(
-        ifElse(
-          pipe(flip(mathMod)(mW), flip(gt)(0)),
-          w => ({
-            column: Math.ceil(w / mW),
-            colWidth: divide(w, Math.ceil(w / mW)),
-            width: w
-          }),
-          w => ({
-            column: divide(w, mW),
-            colWidth: mW,
-            width: w
-          })
-        ),
-        when(pipe(prop('colWidth'), flip(lt)(mM)), p => ({
-          column: 1,
-          colWidth: prop('width', p),
-          width: prop('width', p)
-        }))
-      ),
-      w => ({
-        column: 0,
-        colWidth: 0,
-        width: w
-      })
-    )
-  );
-
-const calcColumnArray: TFunc1Void<number> = (h: number): void => {
-  const { index, height } = shortestColumn();
-  columnArray.splice(index, 1, height + h);
-};
-
-const calcColumnArrayPure = (h: number): TFunc1<number[], number[]> =>
-  pipe(shortestColumnPure, p =>
-    update(prop('index')(p), add(prop('height')(p), h), prop('colArray')(p))
-  );
-
-const calcPositionPure = (
-  colWidth: number
-): TFunc1<number[], { x: number; y: number }> =>
-  pipe(shortestColumnPure, o => ({
-    x: multiply(prop('index', o), colWidth),
-    y: prop('height', o)
-  }));
-
-const calcPosition: TFunc1<number, { x: number; y: number }> = (
-  w: number
-): { x: number; y: number } => {
-  const { height, index } = shortestColumn();
-  const offsetX: number = index * w;
-  const offsetY: number = height;
-
-  return {
-    x: offsetX,
-    y: offsetY
-  };
-};
-
-const calcListItemSize = (
-  item: ImageDetail,
-  colWidth: number,
-  cols: number[]
-): ImageDom => {
-  const ratio = (divide(
-    prop('height')(item),
-    prop('width')(item)
-  ) as unknown) as number;
-  const height = multiply(colWidth)(ratio);
-  const { x, y } = calcPositionPure(colWidth)(cols);
-  return merge({
-    styleW: colWidth,
-    styleH: height,
-    style: {
-      width: colWidth,
-      height,
-      transform: `translateX(${x}px) translateY(${y}px)`
-    }
-  })(item);
-};
-
-const calcList: TFunc2<ImageDetail[], number, ImageDom[]> = (
-  items: ImageDetail[],
-  width: number
-): ImageDom[] =>
-  items.map((item: ImageDetail) => {
-    const newItem: ImageDom = { ...item };
-    const h: number = (item.height / item.width) * width;
-    newItem.styleW = width;
-    newItem.styleH = h;
-    const { x, y } = calcPosition(width);
-    calcColumnArray(h);
-    newItem.style = {
-      width: `${width}px`,
-      height: `${h}px`,
-      transform: `translateX(${x}px) translateY(${y}px)`
-    };
-
-    return newItem;
-  });
-
-const updateLayoutPure = (security: boolean) => (colWidth: number) => (
-  colArray: number[]
-): TFunc1<ImageDetail[], { cols: number[]; items: ImageDom[] }> =>
-  pipe(
-    filter<ImageDetail>(item => (security ? item.security : true)),
-    reduce(
-      ({ cols, items }, item) => {
-        const newItem = calcListItemSize(item, colWidth, cols);
-        const newCols = calcColumnArrayPure(prop('styleH', newItem) as number)(
-          cols
-        );
-        items.push(newItem);
-        return {
-          cols: newCols,
-          items: [...items]
-        };
-      },
-      { cols: colArray, items: [] as ImageDom[] }
-    )
-  );
-
-const updateAll = (
-  security: boolean,
-  width: number,
-  images: ImageDetail[]
-): void => {
-  const { column, colWidth } = calcColumnWidth(maxWidth)(minWidth)(width);
-  const colArray = new Array(column).fill(0);
-  const layout = updateLayoutPure(security)(colWidth)(colArray)(images);
-  console.log('layout', layout);
-};
-
-const updateLayout: TFunc3<ImageDetail[], number, boolean, ImageDom[]> = (
-  items: ImageDetail[],
-  width: number,
-  security: boolean
-): ImageDom[] => {
-  const { column, colWidth } = calcColumnWidth(maxWidth)(minWidth)(width);
-  // tslint:disable-next-line: prefer-array-literal
-  columnArray = new Array(column).fill(0);
-  const filterItem: ImageDetail[] = items.filter((item: ImageDetail) =>
-    security ? item.security : true
-  );
-
-  return calcList(filterItem, colWidth);
-};
 
 export default React.memo(() => {
   const {
     state: { items, download, security },
     dispatch
   } = useContext(Context);
-  const [list, setList] = useState([] as ImageDom[]);
-  const [refDom, { width }] = useMeasure();
+  const [refDom, { width }] = useMeasure<HTMLDivElement>();
   const images = useImageLoad<ImageDetail>(items, 'preview');
-
-  const handleDownload: TFunc1Void<React.FormEvent<HTMLAnchorElement>> = (
-    e: React.FormEvent<HTMLAnchorElement>
-  ): void => {
-    e.preventDefault();
-    const target: HTMLElement = e.currentTarget;
-    const { id } = target.dataset;
-    const item = items.find((it: ImageDetail) => `${it.id}` === id);
-    if (!item) {
-      return;
-    }
-    const data: Download = {
-      url: item.url,
-      sample: item.preview,
-      percent: '0%',
-      status: 'init'
-    };
-    if (!download.find(({ url }: { url: string }) => url === data.url)) {
-      dispatch({
-        type: EAction.setDownload,
-        payload: [...download, data]
-      });
-      ipcRenderer.send(EventDownload.DOWNLOAD, {
-        url: item.url
-      });
-    }
-  };
-
-  useEffect((): void => {
-    setList(updateLayout(images, width, security));
-  }, [width, images, security]);
-
-  const combineStyle: TFunc2<CSSProperties, number, CSSProperties> = (
-    style: CSSProperties,
-    key: number
-  ): CSSProperties => ({
-    ...style,
-    transitionDelay: `${key * 0.05}s`
+  const list = useWaterfall({
+    security,
+    maxWidth,
+    minWidth,
+    width,
+    images
   });
+
+  const handleDownload: TFunc1Void<React.FormEvent<
+    HTMLAnchorElement
+  >> = useCallback(
+    (e: React.FormEvent<HTMLAnchorElement>): void => {
+      e.preventDefault();
+      const target: HTMLElement = e.currentTarget;
+      const { id } = target.dataset;
+      const item = items.find((it: ImageDetail) => `${it.id}` === id);
+      if (!item) {
+        return;
+      }
+      const data: Download = {
+        url: item.url,
+        sample: item.preview,
+        percent: '0%',
+        status: 'init'
+      };
+      if (!download.find(({ url }: { url: string }) => url === data.url)) {
+        dispatch({
+          type: EAction.setDownload,
+          payload: [...download, data]
+        });
+        ipcRenderer.send(EventDownload.DOWNLOAD, {
+          url: item.url
+        });
+      }
+    },
+    [dispatch, download, items]
+  );
+
+  const combineStyle: TFunc2<
+    CSSProperties,
+    number,
+    CSSProperties
+  > = useCallback(
+    (style: CSSProperties, key: number): CSSProperties => ({
+      ...style,
+      transitionDelay: `${key * 0.05}s`
+    }),
+    []
+  );
 
   return (
     <PerfectScrollbar>

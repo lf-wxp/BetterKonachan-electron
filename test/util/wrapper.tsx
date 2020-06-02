@@ -17,7 +17,11 @@ const defaultState = {
 
 const wrapper = (
   component: React.ReactElement
-): React.FC<{ value?: object }> => ({ value }): React.ReactElement => (
+): React.FC<{ value?: Record<string, any> }> => ({
+  value
+}: {
+  value: any;
+}): React.ReactElement => (
   <Provider value={{ ...defaultState, ...value }}>{component}</Provider>
 );
 

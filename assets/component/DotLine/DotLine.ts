@@ -149,7 +149,7 @@ export default class DotLine {
 
   private draw(): void {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.lines.forEach(line => {
+    this.lines.forEach((line) => {
       this.ctx.strokeStyle = this.lineColor;
       this.ctx.beginPath();
       this.ctx.moveTo(line.a.x, line.a.y);
@@ -160,7 +160,7 @@ export default class DotLine {
 
     const points: Point[] = [];
     this.lines.forEach((line, idx) => {
-      this.lines.slice(idx + 1).forEach(l => {
+      this.lines.slice(idx + 1).forEach((l) => {
         const point = intersect2lines(line, l);
         if (point) {
           points.push(point);
@@ -168,7 +168,7 @@ export default class DotLine {
       });
     });
 
-    points.forEach(point => {
+    points.forEach((point) => {
       this.ctx.beginPath();
       this.ctx.arc(point.x, point.y, 2, 0, 2 * Math.PI);
       this.ctx.fillStyle = this.dotColor;

@@ -6,7 +6,7 @@ export default <T>(imgs: T[], prop: string, limit = 4): T[] => {
   const imagePool = useRef(
     new ImagePool<T>({
       onLoad: (image: T): void => {
-        setImages(prev => [...prev, image]);
+        setImages((prev) => [...prev, image]);
       },
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onError: (): void => {},

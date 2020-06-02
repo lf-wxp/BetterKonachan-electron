@@ -122,7 +122,7 @@ fromEvent(ipcMain, EventAction.SET_BACKGROUND_DIR).subscribe(() => {
     .showOpenDialog(mainWindow!, {
       properties: ['openDirectory']
     })
-    .then(result => {
+    .then((result) => {
       const { filePaths, canceled } = result;
       if (!canceled && filePaths) {
         storeBackgroundDir(filePaths[0]);

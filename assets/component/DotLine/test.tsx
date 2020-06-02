@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import 'jest';
 import React from 'react';
 import { render } from '@testing-library/react';

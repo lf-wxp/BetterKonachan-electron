@@ -57,7 +57,7 @@ export default React.memo(() => {
     dispatch
   } = useContext(Context);
   const pageArray: number[] = getPageArray(page, pages);
-  const [statePage, setStatePage] = useState();
+  const [statePage, setStatePage] = useState<number>();
 
   const getData: (p: number, tags?: string) => void = useCallback(
     (p: number): void => {
@@ -103,7 +103,7 @@ export default React.memo(() => {
     event: React.FormEvent<HTMLButtonElement>
   ): void => {
     event.preventDefault();
-    getData(statePage);
+    getData(statePage || 1);
   };
 
   const prev: TFuncVoid = useCallback((): void => {

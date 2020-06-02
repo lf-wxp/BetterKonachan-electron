@@ -54,8 +54,8 @@ export default class Wave {
     // ctx.fillRect(0, 0, cvs.width, cvs.height);
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.globalCompositeOperation = 'screen';
-    this.wave.forEach(wave => {
-      wave.nodes.forEach(node => {
+    this.wave.forEach((wave) => {
+      wave.nodes.forEach((node) => {
         this.bounce(node);
       });
       this.draw(wave);

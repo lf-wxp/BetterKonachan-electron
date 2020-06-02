@@ -38,7 +38,7 @@ class ImagePool<T> {
   }
 
   start(images: T[], prop: string): void {
-    this.urls = images.map(imgs => imgs[prop]);
+    this.urls = images.map((imgs) => imgs[prop]);
     this.images = images;
     this.prop = prop;
     this.pool.clear();
@@ -50,14 +50,14 @@ class ImagePool<T> {
   createImage(url: string): Subscription {
     return of(url)
       .pipe(
-        mergeMap(url => imagePromise(url)),
+        mergeMap((url) => imagePromise(url)),
         retry(2)
       )
       .subscribe(
-        url => {
-          this.onLoad(this.images.find(image => image[this.prop] === url)!);
+        (url) => {
+          this.onLoad(this.images.find((image) => image[this.prop] === url)!);
         },
-        err => {
+        (err) => {
           this.onError(err);
         },
         () => {

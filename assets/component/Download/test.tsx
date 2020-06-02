@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import 'jest';
 import React from 'react';
 import { render, fireEvent, act } from '@testing-library/react';
@@ -50,8 +49,7 @@ describe('<Download />', () => {
       url: mockImage
     });
     expect(ipcRenderer.send).toBeCalledTimes(1);
-    //@ts-ignore
-    ipcRenderer.send.mockRestore();
+    (ipcRenderer.send as any).mockRestore();
   });
 
   it('update the status and percent', () => {

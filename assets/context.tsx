@@ -64,7 +64,7 @@ const reducer: TReducer = (state: Ctx, { type, payload }: Action): Ctx => {
       const { download } = state;
       const { percent, status, url } = payload as UpdateProgressPayload;
       const tmp: Download[] = clone(download);
-      const target = tmp.find(item => decodeURI(item.url) === decodeURI(url));
+      const target = tmp.find((item) => decodeURI(item.url) === decodeURI(url));
       if (!target) {
         return { ...state };
       }
