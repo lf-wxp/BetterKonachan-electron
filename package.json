@@ -4,9 +4,10 @@
   "description": "betterkonachan electron version",
   "main": "dist/main.js",
   "scripts": {
-    "dist": "npx rimraf dist/* && npm run main:build && npm run render:build && npm run copy && electron-builder --win --x64",
+    "dist": "npx rimraf dist/* && npm run main:build && npm run render:build && npm run copy && npm run copy:icon",
     "convert": "convert -density 512x512 -background transparent ./assets/image/icon.svg -define icon:auto-resize -colors 512 ./assets/image/icon.ico",
     "copy": "copyfiles -f ./assets/image/splash.svg ./assets/image/icon.ico dist",
+    "copy:icon": "copyfiles -f ./icon/* dist",
     "render:dev": "webpack-dev-server --inline --config ./webpack/render.dev.ts",
     "render:build": "webpack --config ./webpack/render.prod.ts",
     "lint": "eslint ./**/*.{ts,tsx,js}",
@@ -15,7 +16,10 @@
     "codecov": "codecov",
     "main:start": "electron .",
     "main:watch": "webpack --mode development --watch --config ./webpack/main.ts",
-    "main:build": "webpack --mode production --config ./webpack/main.ts"
+    "main:build": "webpack --mode production --config ./webpack/main.ts",
+    "postinstall": "electron-builder install-app-deps",
+		"build": "electron-builder",
+		"release": "electron-builder  --publish"
   },
   "keywords": [
     "betterkonachan",
@@ -23,16 +27,25 @@
   ],
   "author": "franciscowxp@github.com",
   "build": {
-    "appId": "BetterKonacha",
+    "appId": "Konachan",
     "files": [
       "./dist/**/*"
     ],
+    "mac": {
+      "target": ["default"],
+      "category": "public.app-category.lifestyle",
+      "icon": "dist/icon.icns"
+    },
     "win": {
       "target": [
         "nsis",
         "zip"
       ],
       "icon": "dist/icon.ico"
+    },
+    "linux": {
+      "target": ["AppImage"],
+			"category": "Office"
     }
   },
   "pre-commit": [
